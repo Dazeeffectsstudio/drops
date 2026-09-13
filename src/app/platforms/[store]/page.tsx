@@ -25,5 +25,8 @@ export default async function PlatformPage({ params }: { params: Promise<{ store
     offers={offersByStore(platform.store)}
     emptyTitle="Aucune offre disponible ici pour l'instant."
     emptyDescription={`Reviens bientôt pour voir les prochaines offres ${platform.label}.`}
+    logo={platform.logo}
+    color={platform.color}
+    categoryFilter
   />;
 }

@@ -13,6 +13,7 @@ export type Offer = {
   description: string;
   originalPrice: number | null;
   currentPrice: number;
+  startsAt?: string;
   expiresAt: string;
   url: string;
   image: string;

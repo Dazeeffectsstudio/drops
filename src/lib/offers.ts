@@ -21,11 +21,27 @@ export function offerExpiresAt(offer: Offer): number {
   return new Date(offer.expiresAt).getTime();
 }
 
+export function offerStartsAt(offer: Offer): number | null {
+  return offer.startsAt ? new Date(offer.startsAt).getTime() : null;
+}
+
 export function expiryProgress(remaining: number | null): number {
   if (remaining === null) return 100;
   return Math.max(0, Math.min(100, (remaining / (7 * 24 * 3_600_000)) * 100));
 }
 
+export type OfferStatus = "upcoming" | "active" | "expired";
+
+export function getOfferStatus(offer: Offer, now = Date.now()): OfferStatus {
+  const startsAt = offerStartsAt(offer);
+  if (startsAt !== null && startsAt > now) return "upcoming";
+  return offerExpiresAt(offer) > now ? "active" : "expired";
+}
+
 export function isOfferActive(offer: Offer, now = Date.now()): boolean {
-  return offerExpiresAt(offer) > now;
+  return getOfferStatus(offer, now) === "active";
+}
+
+export function isOfferUpcoming(offer: Offer, now = Date.now()): boolean {
+  return getOfferStatus(offer, now) === "upcoming";
 }
