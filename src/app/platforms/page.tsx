@@ -6,10 +6,12 @@ export const metadata: Metadata = { title: "Plateformes — DROPS" };
 
 export default function PlatformsIndexPage() {
   const entries = platforms.map((platform) => ({
-    href: `/plateformes/${platform.slug}`,
+    href: `/platforms/${platform.slug}`,
     label: platform.label,
     description: platform.description,
     count: offersByStore(platform.store).length,
+    logo: platform.logo,
+    color: platform.color,
   }));
 
   return <BrowseIndex

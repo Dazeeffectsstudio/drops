@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { offers } from "@/data/offers";
+import { categories as categoryEntries, platforms as platformEntries } from "@/lib/catalog";
 import { useFavorites } from "@/lib/favorites";
 import { formatPrice, isOfferActive, offerExpiresAt, totalFreeValue } from "@/lib/offers";
 import type { OfferCategory, OfferStore } from "@/types/offer";
 import { ArrowIcon, SearchIcon, SparkIcon } from "./icons";
 import { OfferCard } from "./offer-card";
 
-const stores: Array<OfferStore | "TOUT"> = ["TOUT", "Steam", "Epic Games", "PlayStation", "Xbox", "Twitch", "Roblox"];
-const categories: Array<OfferCategory | "TOUT"> = ["TOUT", "JEUX", "ITEMS", "TWITCH DROPS", "DLC", "WEEK-END GRATUIT"];
+const stores: Array<OfferStore | "TOUT"> = ["TOUT", ...platformEntries.map((entry) => entry.store)];
+const categories: Array<OfferCategory | "TOUT"> = ["TOUT", ...categoryEntries.map((entry) => entry.category)];
 
 export function DropsHome() {
   const [store, setStore] = useState<OfferStore | "TOUT">("TOUT");
@@ -65,7 +66,7 @@ export function DropsHome() {
           <button type="button" onClick={() => navigateToOffers()}>Gratuit maintenant</button>
           <button type="button" onClick={() => navigateToOffers("JEUX")}>Jeux</button>
           <button type="button" onClick={showDropsAndItems}>Drops &amp; Items</button>
-          <Link href="/plateformes">Plateformes</Link>
+          <Link href="/platforms">Plateformes</Link>
           <Link href="/categories">Catégories</Link>
           <Link href="/favoris">Favoris{favorites.length > 0 && <b>{favorites.length}</b>}</Link>
         </nav>
