@@ -65,6 +65,8 @@ export function DropsHome() {
           <button type="button" onClick={() => navigateToOffers()}>Gratuit maintenant</button>
           <button type="button" onClick={() => navigateToOffers("JEUX")}>Jeux</button>
           <button type="button" onClick={showDropsAndItems}>Drops &amp; Items</button>
+          <Link href="/plateformes">Plateformes</Link>
+          <Link href="/categories">Catégories</Link>
           <Link href="/favoris">Favoris{favorites.length > 0 && <b>{favorites.length}</b>}</Link>
         </nav>
         <button type="button" className="header-search" onClick={() => document.getElementById("offer-search")?.focus()} aria-label="Rechercher une offre"><SearchIcon /></button>

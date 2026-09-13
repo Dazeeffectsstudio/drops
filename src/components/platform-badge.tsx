@@ -7,6 +7,7 @@ const initials: Record<OfferStore, string> = {
   Xbox: "X",
   Twitch: "T",
   Roblox: "R",
+  "Prime Gaming": "PG",
 };
 
 export function PlatformBadge({ store, compact = false }: { store: OfferStore; compact?: boolean }) {

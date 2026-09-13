@@ -1,6 +1,6 @@
 export type Platform = "PC" | "PLAYSTATION" | "XBOX" | "AUTRES";
-export type OfferCategory = "JEUX" | "ITEMS" | "TWITCH DROPS" | "DLC" | "WEEK-END GRATUIT";
-export type OfferStore = "Steam" | "Epic Games" | "PlayStation" | "Xbox" | "Twitch" | "Roblox";
+export type OfferCategory = "JEUX" | "ITEMS" | "TWITCH DROPS" | "DLC" | "PRIME GAMING" | "WEEK-END GRATUIT";
+export type OfferStore = "Steam" | "Epic Games" | "PlayStation" | "Xbox" | "Twitch" | "Roblox" | "Prime Gaming";
 
 export type Offer = {
   id: string;
