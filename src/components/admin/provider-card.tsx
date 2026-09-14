@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { testProviderAction } from "@/app/admin/actions";
 
 export type ProviderCardData = {
@@ -17,6 +17,8 @@ export type ProviderCardData = {
 export function ProviderCard({ data }: { data: ProviderCardData }) {
   const [pending, startTransition] = useTransition();
   const [testResult, setTestResult] = useState<{ success: boolean; offersFound: number; durationMs: number; error?: string } | null>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   function handleTest() {
     setTestResult(null);
@@ -37,7 +39,7 @@ export function ProviderCard({ data }: { data: ProviderCardData }) {
     </div>
     {data.mode === "simulated" && data.unavailableReason && <p className="provider-card-reason">{data.unavailableReason}</p>}
     <div className="provider-card-stats">
-      <div><span className="micro-label">DERNIÈRE SYNCHRO</span><strong>{data.lastSyncAt ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(data.lastSyncAt)) : "—"}</strong></div>
+      <div><span className="micro-label">DERNIÈRE SYNCHRO</span><strong>{data.lastSyncAt && mounted ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(data.lastSyncAt)) : "—"}</strong></div>
       <div><span className="micro-label">OFFRES RÉCUPÉRÉES</span><strong>{data.lastOffersFound ?? "—"}</strong></div>
       <div><span className="micro-label">TEMPS DE RÉPONSE</span><strong>{data.lastDurationMs !== null ? `${data.lastDurationMs} ms` : "—"}</strong></div>
     </div>

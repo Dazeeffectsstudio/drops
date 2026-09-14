@@ -73,7 +73,11 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
     for (const [store, count] of counts) if (count > topCount) { top = store; topCount = count; }
     return top;
   }, [availableOffers]);
-  const lastEpicSyncLabel = lastEpicSyncAt ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(lastEpicSyncAt)) : "—";
+  // `now !== null` signale que le premier rendu client (après montage) a eu
+  // lieu — avant ça, on affiche "—" des deux côtés (serveur et client) pour
+  // éviter un hydration mismatch : Intl.DateTimeFormat sans `timeZone` utilise
+  // le fuseau du serveur (UTC sur Vercel), différent du fuseau du visiteur.
+  const lastEpicSyncLabel = now !== null && lastEpicSyncAt ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(lastEpicSyncAt)) : "—";
   function navigateToOffers(nextCategory: OfferCategory | "TOUT" = "TOUT") {
     setStore("TOUT"); setCategory(nextCategory); setDropsAndItems(false);
     document.getElementById("offres")?.scrollIntoView({ behavior: "smooth" });

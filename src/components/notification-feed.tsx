@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { markAllNotificationLogsReadAction, markNotificationLogReadAction } from "@/app/notifications/actions";
 import type { MyNotificationLogEntry, NotificationType } from "@/lib/notification-logs-repository";
 
@@ -25,6 +25,11 @@ export function NotificationFeed({ logs }: { logs: MyNotificationLogEntry[] }) {
   const [filter, setFilter] = useState<NotificationType | "ALL">("ALL");
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [pendingAll, startTransition] = useTransition();
+  // Formater une heure dépend du fuseau d'exécution (serveur UTC sur Vercel
+  // vs navigateur du visiteur) — on n'affiche l'heure locale qu'une fois
+  // monté côté client pour éviter un hydration mismatch.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const visible = useMemo(() => (filter === "ALL" ? logs : logs.filter((log) => log.type === filter)), [logs, filter]);
   const hasUnread = logs.some((log) => !log.readAt);
@@ -55,7 +60,7 @@ export function NotificationFeed({ logs }: { logs: MyNotificationLogEntry[] }) {
             <span className="notification-row-title">
               {log.offer ? <Link href={`/offres/${log.offer.id}`}>{log.offer.title}</Link> : <span>Offre supprimée</span>}
             </span>
-            <span className="notification-row-meta">{meta.label} · {new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(log.sentAt))}</span>
+            <span className="notification-row-meta">{meta.label} · {mounted ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(log.sentAt)) : "…"}</span>
           </span>
           {unread && <button type="button" className="admin-test-button notification-row-action" disabled={pendingId === log.id} onClick={() => markOneRead(log.id)}>
             {pendingId === log.id ? "…" : "MARQUER LU"}

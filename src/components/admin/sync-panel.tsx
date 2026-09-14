@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { runSyncAction } from "@/app/admin/actions";
 import type { SyncLogEntry } from "@/lib/sync-logs-repository";
 
@@ -37,6 +37,8 @@ function latestPerProvider(logs: SyncLogEntry[]): ProviderStatus[] {
 export function SyncPanel({ recentLogs }: { recentLogs: SyncLogEntry[] }) {
   const [pending, startTransition] = useTransition();
   const [toast, setToast] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const latest = latestPerProvider(recentLogs);
   const lastSyncAt = latest.reduce<string | null>((max, entry) => (!max || entry.createdAt > max ? entry.createdAt : max), null);
@@ -75,9 +77,11 @@ export function SyncPanel({ recentLogs }: { recentLogs: SyncLogEntry[] }) {
         <span className="section-index">SYNCHRONISATION</span>
         <h2>Offres <em>automatiques</em></h2>
         <p className="admin-sync-sub">
-          {lastSyncAt
+          {lastSyncAt && mounted
             ? `Dernière synchronisation : ${new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(lastSyncAt))}`
-            : "Aucune synchronisation effectuée pour l'instant."}
+            : lastSyncAt
+              ? "Dernière synchronisation : …"
+              : "Aucune synchronisation effectuée pour l'instant."}
         </p>
       </div>
       <div className="admin-sync-actions">

@@ -16,7 +16,10 @@ function UpcomingCard({ offer, now, userId, subscribed, onNotified }: { offer: O
   const isSubscribed = subscribed || justSubscribed;
   const startsAt = offerStartsAt(offer);
   const remaining = startsAt !== null && now !== null ? startsAt - now : null;
-  const dateLabel = startsAt !== null
+  // Placeholder identique serveur/client tant que le composant n'est pas
+  // monté (`now === null`) — voir la note dans offer-card.tsx sur le fuseau
+  // horaire serveur (UTC) vs navigateur.
+  const dateLabel = startsAt !== null && now !== null
     ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(startsAt)
     : "Bientôt";
 

@@ -30,7 +30,13 @@ export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim
   const startsAt = offerStartsAt(offer);
   const remaining = expiresAt !== null && now !== null ? expiresAt - now : null;
   const progress = expiryProgress(remaining);
-  const dateLabel = expiresAt !== null
+  // Formater une date dépend du fuseau horaire d'exécution : sans `now !==
+  // null` (signal que le composant a fini son premier rendu côté client),
+  // le serveur (UTC sur Vercel) et le navigateur du visiteur (heure locale)
+  // afficheraient une heure différente pour le même instant — hydration
+  // mismatch. On affiche donc un placeholder identique des deux côtés tant
+  // que le composant n'est pas monté.
+  const dateLabel = expiresAt !== null && now !== null
     ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(expiresAt)
     : "Chargement…";
 
@@ -57,7 +63,7 @@ export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim
       <div className="offer-divider" />
       <div className="offer-values">
         <div><span className="micro-label">PRIX</span><div className="price-line">{offer.originalPrice !== null && <span className="old-price">{formatPrice(offer.originalPrice)}</span>}<strong>{offer.currentPrice === 0 ? "GRATUIT" : formatPrice(offer.currentPrice)}</strong></div></div>
-        <div className="expires"><span className="micro-label">{status === "upcoming" ? "DISPONIBLE LE" : "EXPIRE LE"}</span><span className="expiry-date">{status === "upcoming" && startsAt !== null ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(startsAt) : dateLabel}</span></div>
+        <div className="expires"><span className="micro-label">{status === "upcoming" ? "DISPONIBLE LE" : "EXPIRE LE"}</span><span className="expiry-date">{status === "upcoming" && startsAt !== null ? (now !== null ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(startsAt) : "Chargement…") : dateLabel}</span></div>
       </div>
       <div className="offer-actions">
         <div className="countdown"><ClockIcon className="clock-icon" /><span><small>Expire dans</small><strong>{remaining === null ? "—" : formatRemaining(remaining)}</strong></span></div>
