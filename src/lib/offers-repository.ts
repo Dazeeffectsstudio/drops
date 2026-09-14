@@ -1,4 +1,5 @@
-import { findCategoryEntry, type AccentColor } from "@/lib/catalog";
+import type { AccentColor } from "@/lib/catalog";
+import { buildOffer } from "@/lib/offer-builder";
 import { supabaseAdmin } from "@/lib/supabase/admin-client";
 import { isSupabaseConfigured, supabasePublic } from "@/lib/supabase/public-client";
 import type { OfferInsert, OfferRow } from "@/types/database";
@@ -11,29 +12,28 @@ import type { Offer, OfferCategory, OfferStore, Platform } from "@/types/offer";
 // rapport de mission pour comment connecter Supabase.
 
 function mapRowToOffer(row: OfferRow): Offer {
-  const category = row.category as OfferCategory;
-  const defaults = findCategoryEntry(category);
-  return {
+  // PostgREST renvoie les colonnes `numeric` (original_price, current_price)
+  // sous forme de chaînes de caractères, pas de nombres — sans cette
+  // conversion, toute comparaison de prix (ex. la détection de changement
+  // dans src/lib/sync-offers.ts) échouerait systématiquement.
+  return buildOffer({
     id: row.id,
     title: row.title,
-    eyebrow: defaults?.eyebrow ?? "OFFRE GRATUITE",
+    description: row.description,
     platform: row.platform as Platform,
     store: row.store as OfferStore,
-    category,
-    kind: defaults?.kind ?? "Offre gratuite à récupérer",
-    description: row.description,
-    originalPrice: row.original_price,
-    currentPrice: row.current_price,
-    startsAt: row.starts_at ?? undefined,
+    category: row.category as OfferCategory,
+    image: row.image,
+    originalPrice: row.original_price === null ? null : Number(row.original_price),
+    currentPrice: Number(row.current_price),
+    startsAt: row.starts_at,
     expiresAt: row.expires_at,
     url: row.url,
-    image: row.image,
-    imageAlt: row.title,
     accent: row.accent as AccentColor,
     featured: row.featured,
     trending: row.trending,
     isNew: row.is_new,
-  };
+  });
 }
 
 export type OfferFormInput = {
@@ -84,6 +84,19 @@ export async function getAllOffers(): Promise<Offer[]> {
   const { data, error } = await supabasePublic.from("offers").select("*").order("expires_at", { ascending: true });
   if (error) { console.error("[offers-repository] getAllOffers:", error.message); return []; }
   return (data ?? []).map(mapRowToOffer);
+}
+
+export type OfferWithTimestamps = Offer & { createdAt: string; updatedAt: string };
+
+// Variante utilisée uniquement par le dashboard admin, pour savoir quelles
+// offres ont été créées/modifiées par la dernière synchronisation (voir
+// src/components/admin/offers-table.tsx). Le reste du site n'a pas besoin
+// de ces dates et continue d'utiliser getAllOffers().
+export async function getAllOffersWithTimestamps(): Promise<OfferWithTimestamps[]> {
+  if (!supabasePublic) { warnUnconfigured("lecture des offres (admin)"); return []; }
+  const { data, error } = await supabasePublic.from("offers").select("*").order("expires_at", { ascending: true });
+  if (error) { console.error("[offers-repository] getAllOffersWithTimestamps:", error.message); return []; }
+  return (data ?? []).map((row) => ({ ...mapRowToOffer(row), createdAt: row.created_at, updatedAt: row.updated_at }));
 }
 
 export async function getOfferById(id: string): Promise<Offer | null> {

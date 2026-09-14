@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { categories, findPlatformByStore, platforms } from "@/lib/catalog";
 import { createOffer, deleteOffer, updateOffer, type OfferFormInput } from "@/lib/offers-repository";
+import { syncAllOffers, type SyncSummary } from "@/lib/sync-offers";
 import type { OfferCategory, OfferStore } from "@/types/offer";
 
 export type OfferFormState = { error?: string };
@@ -99,4 +100,17 @@ export async function deleteOfferAction(id: string): Promise<{ error?: string }>
     revalidatePath("/categories");
   }
   return result;
+}
+
+export async function runSyncAction(): Promise<{ summary?: SyncSummary; error?: string }> {
+  try {
+    const summary = await syncAllOffers();
+    revalidatePath("/admin");
+    revalidatePath("/");
+    revalidatePath("/platforms");
+    revalidatePath("/categories");
+    return { summary };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "La synchronisation a échoué." };
+  }
 }
