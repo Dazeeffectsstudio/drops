@@ -12,6 +12,15 @@ export type OfferProvider = {
   // Nom affiché dans le dashboard admin.
   label: string;
   store: OfferStore;
+  // "real" : récupère de vraies offres depuis une source externe.
+  // "simulated" : renvoie des données fictives, en attendant qu'une
+  // source réelle soit disponible pour cette plateforme (voir
+  // `unavailableReason`).
+  mode: "real" | "simulated";
+  // Uniquement pour mode "simulated" : explique pourquoi il n'y a pas
+  // encore de vraie intégration (ex. pas d'API publique). Affiché dans
+  // le dashboard admin.
+  unavailableReason?: string;
   fetchOffers(): Promise<Offer[]>;
 };
 

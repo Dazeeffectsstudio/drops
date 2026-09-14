@@ -37,4 +37,11 @@ async function fetchOffers() {
   ];
 }
 
-export const steamProvider: OfferProvider = { key: "steam", label: "Steam", store: "Steam", fetchOffers };
+export const steamProvider: OfferProvider = {
+  key: "steam",
+  label: "Steam",
+  store: "Steam",
+  mode: "simulated",
+  unavailableReason: "Steam n'a pas d'API publique dédiée aux jeux gratuits/week-ends gratuits (le flag n'existe pas dans son API officielle).",
+  fetchOffers,
+};

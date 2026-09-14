@@ -9,8 +9,10 @@ export type SyncLogEntry = {
   offersCreated: number;
   offersUpdated: number;
   offersExpired: number;
+  offersSkipped: number;
   status: "success" | "error";
   message: string | null;
+  durationMs: number | null;
   createdAt: string;
 };
 
@@ -22,8 +24,10 @@ function mapRow(row: SyncLogRow): SyncLogEntry {
     offersCreated: row.offers_created,
     offersUpdated: row.offers_updated,
     offersExpired: row.offers_expired,
+    offersSkipped: row.offers_skipped,
     status: row.status,
     message: row.message,
+    durationMs: row.duration_ms,
     createdAt: row.created_at,
   };
 }
@@ -36,8 +40,9 @@ export async function insertSyncLog(entry: SyncLogInsert): Promise<void> {
 
 // Renvoie les journaux les plus récents (tous providers confondus), triés
 // du plus récent au plus ancien. Le dashboard en déduit la dernière
-// synchronisation de chaque provider.
-export async function getRecentSyncLogs(limit = 50): Promise<SyncLogEntry[]> {
+// synchronisation de chaque provider, et l'historique complet de
+// /admin/sync.
+export async function getRecentSyncLogs(limit = 100): Promise<SyncLogEntry[]> {
   if (!supabasePublic) return [];
   const { data, error } = await supabasePublic
     .from("sync_logs")

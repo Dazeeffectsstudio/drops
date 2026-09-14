@@ -36,4 +36,11 @@ async function fetchOffers() {
   ];
 }
 
-export const robloxProvider: OfferProvider = { key: "roblox", label: "Roblox", store: "Roblox", fetchOffers };
+export const robloxProvider: OfferProvider = {
+  key: "roblox",
+  label: "Roblox",
+  store: "Roblox",
+  mode: "simulated",
+  unavailableReason: "Pas d'API publique listant les items gratuits en promotion sur Roblox.",
+  fetchOffers,
+};

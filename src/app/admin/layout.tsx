@@ -9,6 +9,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <Link href="/" className="brand">DROPS<span className="brand-period">.</span> <span className="admin-badge">ADMIN</span></Link>
       <nav className="admin-nav">
         <Link href="/admin">Offres</Link>
+        <Link href="/admin/sync">Synchronisation</Link>
         <Link href="/" className="back-link">← RETOUR AU SITE</Link>
       </nav>
     </header>

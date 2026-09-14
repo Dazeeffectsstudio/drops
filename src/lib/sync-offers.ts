@@ -1,16 +1,21 @@
 import { createOffer, getAllOffers, updateOffer, type OfferFormInput } from "@/lib/offers-repository";
+import { PLACEHOLDER_IMAGE, validateOfferDraft } from "@/lib/providers/normalize";
 import { providers, SYNC_ID_PREFIX, type OfferProvider } from "@/lib/providers";
+import { recordPriceChange } from "@/lib/price-history-repository";
 import { insertSyncLog } from "@/lib/sync-logs-repository";
 import type { Offer } from "@/types/offer";
 
 export type ProviderSyncResult = {
   provider: string;
   label: string;
+  mode: "real" | "simulated";
   status: "success" | "error";
   offersFound: number;
   offersCreated: number;
   offersUpdated: number;
   offersExpired: number;
+  offersSkipped: number;
+  durationMs: number;
   message: string | null;
 };
 
@@ -21,6 +26,7 @@ export type SyncSummary = {
   offersCreated: number;
   offersUpdated: number;
   offersExpired: number;
+  offersSkipped: number;
   providers: ProviderSyncResult[];
 };
 
@@ -54,19 +60,20 @@ function sameInstant(a: string | undefined, b: string | undefined): boolean {
   return new Date(a).getTime() === new Date(b).getTime();
 }
 
-// Une offre a "changé" si un des champs qui compte pour l'utilisateur a
-// bougé depuis la dernière synchronisation. On ne compare pas featured/
-// trending/isNew : ce sont des choix éditoriaux, pas des données de
-// catalogue, un provider ne doit pas les écraser après coup.
-function hasChanged(existing: Offer, incoming: Offer): boolean {
-  return (
-    existing.originalPrice !== incoming.originalPrice ||
-    existing.currentPrice !== incoming.currentPrice ||
-    !sameInstant(existing.expiresAt, incoming.expiresAt) ||
-    !sameInstant(existing.startsAt, incoming.startsAt) ||
-    existing.image !== incoming.image ||
-    existing.description !== incoming.description
-  );
+// Renvoie la liste des champs qui ont changé entre la version en base et
+// la version fraîchement récupérée — sert à la fois à décider s'il faut
+// mettre à jour et à produire un résumé lisible (repris dans sync_logs).
+// On ne compare pas featured/trending/isNew : ce sont des choix
+// éditoriaux, pas des données de catalogue, un provider ne doit pas les
+// écraser après coup.
+function detectChanges(existing: Offer, incoming: Offer): string[] {
+  const changes: string[] = [];
+  if (existing.originalPrice !== incoming.originalPrice || existing.currentPrice !== incoming.currentPrice) changes.push("prix");
+  if (!sameInstant(existing.expiresAt, incoming.expiresAt)) changes.push("date d'expiration");
+  if (!sameInstant(existing.startsAt, incoming.startsAt)) changes.push("date de début");
+  if (existing.image !== incoming.image) changes.push("image");
+  if (existing.description !== incoming.description) changes.push("description");
+  return changes;
 }
 
 function isAlreadyExpired(offer: Offer): boolean {
@@ -74,6 +81,7 @@ function isAlreadyExpired(offer: Offer): boolean {
 }
 
 async function syncProvider(provider: OfferProvider, existingOffers: Offer[]): Promise<ProviderSyncResult> {
+  const startedAt = Date.now();
   const existingForStore = existingOffers.filter((offer) => offer.store === provider.store);
   const existingById = new Map(existingForStore.map((offer) => [offer.id, offer]));
 
@@ -84,11 +92,14 @@ async function syncProvider(provider: OfferProvider, existingOffers: Offer[]): P
     return {
       provider: provider.key,
       label: provider.label,
+      mode: provider.mode,
       status: "error",
       offersFound: 0,
       offersCreated: 0,
       offersUpdated: 0,
       offersExpired: 0,
+      offersSkipped: 0,
+      durationMs: Date.now() - startedAt,
       message: error instanceof Error ? error.message : String(error),
     };
   }
@@ -96,15 +107,45 @@ async function syncProvider(provider: OfferProvider, existingOffers: Offer[]): P
   let created = 0;
   let updated = 0;
   let expired = 0;
+  let skipped = 0;
+  let imagesFallenBack = 0;
+  const changeNotes: string[] = [];
+  const skipNotes: string[] = [];
 
   for (const incoming of offers) {
+    if (incoming.image === PLACEHOLDER_IMAGE) imagesFallenBack += 1;
+
+    const validation = validateOfferDraft({
+      title: incoming.title,
+      url: incoming.url,
+      expiresAt: incoming.expiresAt,
+      image: incoming.image,
+      originalPrice: incoming.originalPrice,
+      currentPrice: incoming.currentPrice,
+    });
+    if (!validation.valid) {
+      skipped += 1;
+      skipNotes.push(`"${incoming.title}" ignorée (${validation.reason})`);
+      continue;
+    }
+
     const existing = existingById.get(incoming.id);
     if (!existing) {
       const result = await createOffer(offerToInput(incoming));
-      if (!result.error) created += 1;
-    } else if (hasChanged(existing, incoming)) {
-      const result = await updateOffer(incoming.id, offerToInput(incoming));
-      if (!result.error) updated += 1;
+      if (!result.error) {
+        created += 1;
+        await recordPriceChange(incoming.id, incoming.originalPrice, incoming.currentPrice);
+      }
+    } else {
+      const changes = detectChanges(existing, incoming);
+      if (changes.length > 0) {
+        const result = await updateOffer(incoming.id, offerToInput(incoming));
+        if (!result.error) {
+          updated += 1;
+          changeNotes.push(`"${incoming.title}" : ${changes.join(", ")}`);
+          if (changes.includes("prix")) await recordPriceChange(incoming.id, incoming.originalPrice, incoming.currentPrice);
+        }
+      }
     }
   }
 
@@ -121,15 +162,23 @@ async function syncProvider(provider: OfferProvider, existingOffers: Offer[]): P
     if (!result.error) expired += 1;
   }
 
+  const notes: string[] = [];
+  if (imagesFallenBack > 0) notes.push(`${imagesFallenBack} image(s) de remplacement utilisée(s)`);
+  if (skipNotes.length > 0) notes.push(...skipNotes);
+  if (changeNotes.length > 0) notes.push(...changeNotes);
+
   return {
     provider: provider.key,
     label: provider.label,
+    mode: provider.mode,
     status: "success",
     offersFound: offers.length,
     offersCreated: created,
     offersUpdated: updated,
     offersExpired: expired,
-    message: null,
+    offersSkipped: skipped,
+    durationMs: Date.now() - startedAt,
+    message: notes.length > 0 ? notes.join(" · ") : null,
   };
 }
 
@@ -152,8 +201,10 @@ export async function syncAllOffers(): Promise<SyncSummary> {
     offers_created: result.offersCreated,
     offers_updated: result.offersUpdated,
     offers_expired: result.offersExpired,
+    offers_skipped: result.offersSkipped,
     status: result.status,
     message: result.message,
+    duration_ms: result.durationMs,
     created_at: startedAt,
   })));
 
@@ -166,6 +217,7 @@ export async function syncAllOffers(): Promise<SyncSummary> {
     offersCreated: results.reduce((sum, r) => sum + r.offersCreated, 0),
     offersUpdated: results.reduce((sum, r) => sum + r.offersUpdated, 0),
     offersExpired: results.reduce((sum, r) => sum + r.offersExpired, 0),
+    offersSkipped: results.reduce((sum, r) => sum + r.offersSkipped, 0),
     providers: results,
   };
 }

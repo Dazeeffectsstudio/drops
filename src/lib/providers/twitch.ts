@@ -36,4 +36,11 @@ async function fetchOffers() {
   ];
 }
 
-export const twitchProvider: OfferProvider = { key: "twitch", label: "Twitch", store: "Twitch", fetchOffers };
+export const twitchProvider: OfferProvider = {
+  key: "twitch",
+  label: "Twitch",
+  store: "Twitch",
+  mode: "simulated",
+  unavailableReason: "L'API Twitch Drops nécessite un accès développeur approuvé par jeu suivi — pas d'accès public en lecture seule.",
+  fetchOffers,
+};

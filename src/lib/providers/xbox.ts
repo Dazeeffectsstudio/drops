@@ -36,4 +36,11 @@ async function fetchOffers() {
   ];
 }
 
-export const xboxProvider: OfferProvider = { key: "xbox", label: "Xbox", store: "Xbox", fetchOffers };
+export const xboxProvider: OfferProvider = {
+  key: "xbox",
+  label: "Xbox",
+  store: "Xbox",
+  mode: "simulated",
+  unavailableReason: "Le Xbox Store n'expose pas d'API publique pour les offres gratuites/Games with Gold.",
+  fetchOffers,
+};

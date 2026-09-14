@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { runSyncAction } from "@/app/admin/actions";
 import type { SyncLogEntry } from "@/lib/sync-logs-repository";
@@ -79,9 +80,12 @@ export function SyncPanel({ recentLogs }: { recentLogs: SyncLogEntry[] }) {
             : "Aucune synchronisation effectuée pour l'instant."}
         </p>
       </div>
-      <button type="button" className="claim-button" onClick={handleSync} disabled={pending}>
-        {pending ? "SYNCHRONISATION…" : "SYNCHRONISER MAINTENANT"}
-      </button>
+      <div className="admin-sync-actions">
+        <Link href="/admin/sync" className="admin-test-button">VOIR L&apos;HISTORIQUE</Link>
+        <button type="button" className="claim-button" onClick={handleSync} disabled={pending}>
+          {pending ? "SYNCHRONISATION…" : "SYNCHRONISER MAINTENANT"}
+        </button>
+      </div>
     </div>
 
     <div className="admin-sync-stats">

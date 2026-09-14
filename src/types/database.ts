@@ -29,12 +29,24 @@ export type SyncLogRow = {
   offers_created: number;
   offers_updated: number;
   offers_expired: number;
+  offers_skipped: number;
   status: "success" | "error";
   message: string | null;
+  duration_ms: number | null;
   created_at: string;
 };
 
 export type SyncLogInsert = Omit<SyncLogRow, "id" | "created_at"> & { created_at?: string };
+
+export type PriceHistoryRow = {
+  id: string;
+  offer_id: string;
+  original_price: number | null;
+  current_price: number;
+  captured_at: string;
+};
+
+export type PriceHistoryInsert = Omit<PriceHistoryRow, "id" | "captured_at">;
 
 export type Database = {
   public: {
@@ -49,6 +61,12 @@ export type Database = {
         Row: SyncLogRow;
         Insert: SyncLogInsert;
         Update: Partial<SyncLogInsert>;
+        Relationships: [];
+      };
+      offer_price_history: {
+        Row: PriceHistoryRow;
+        Insert: PriceHistoryInsert;
+        Update: Partial<PriceHistoryInsert>;
         Relationships: [];
       };
     };

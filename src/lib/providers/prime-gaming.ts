@@ -36,4 +36,11 @@ async function fetchOffers() {
   ];
 }
 
-export const primeGamingProvider: OfferProvider = { key: "prime-gaming", label: "Prime Gaming", store: "Prime Gaming", fetchOffers };
+export const primeGamingProvider: OfferProvider = {
+  key: "prime-gaming",
+  label: "Prime Gaming",
+  store: "Prime Gaming",
+  mode: "simulated",
+  unavailableReason: "Amazon ne publie pas d'API pour le catalogue Prime Gaming.",
+  fetchOffers,
+};

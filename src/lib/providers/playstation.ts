@@ -36,4 +36,11 @@ async function fetchOffers() {
   ];
 }
 
-export const playstationProvider: OfferProvider = { key: "playstation", label: "PlayStation", store: "PlayStation", fetchOffers };
+export const playstationProvider: OfferProvider = {
+  key: "playstation",
+  label: "PlayStation",
+  store: "PlayStation",
+  mode: "simulated",
+  unavailableReason: "Le PlayStation Store n'expose pas d'API publique ; le catalogue n'est accessible que via le site/l'appli, dont le scraping est contraire aux CGU de Sony.",
+  fetchOffers,
+};

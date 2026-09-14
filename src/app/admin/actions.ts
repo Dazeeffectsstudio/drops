@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { categories, findPlatformByStore, platforms } from "@/lib/catalog";
 import { createOffer, deleteOffer, updateOffer, type OfferFormInput } from "@/lib/offers-repository";
+import { providers } from "@/lib/providers";
 import { syncAllOffers, type SyncSummary } from "@/lib/sync-offers";
 import type { OfferCategory, OfferStore } from "@/types/offer";
 
@@ -106,11 +107,34 @@ export async function runSyncAction(): Promise<{ summary?: SyncSummary; error?: 
   try {
     const summary = await syncAllOffers();
     revalidatePath("/admin");
+    revalidatePath("/admin/sync");
     revalidatePath("/");
     revalidatePath("/platforms");
     revalidatePath("/categories");
     return { summary };
   } catch (error) {
     return { error: error instanceof Error ? error.message : "La synchronisation a échoué." };
+  }
+}
+
+export type ProviderTestResult = { success: boolean; offersFound: number; durationMs: number; error?: string };
+
+// Lance fetchOffers() d'un seul provider, sans rien écrire en base — un
+// simple test de connectivité/format, sûr à lancer à tout moment.
+export async function testProviderAction(providerKey: string): Promise<ProviderTestResult> {
+  const provider = providers.find((entry) => entry.key === providerKey);
+  if (!provider) return { success: false, offersFound: 0, durationMs: 0, error: "Provider inconnu." };
+
+  const startedAt = Date.now();
+  try {
+    const offers = await provider.fetchOffers();
+    return { success: true, offersFound: offers.length, durationMs: Date.now() - startedAt };
+  } catch (error) {
+    return {
+      success: false,
+      offersFound: 0,
+      durationMs: Date.now() - startedAt,
+      error: error instanceof Error ? error.message : String(error),
+    };
   }
 }
