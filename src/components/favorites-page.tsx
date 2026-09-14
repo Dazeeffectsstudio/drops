@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { offers } from "@/data/offers";
+import type { Offer } from "@/types/offer";
 import { useFavorites } from "@/lib/favorites";
 import { offerExpiresAt } from "@/lib/offers";
 import { ArrowIcon } from "./icons";
 import { OfferCard } from "./offer-card";
 
-export function FavoritesPage() {
+export function FavoritesPage({ offers }: { offers: Offer[] }) {
   const [now, setNow] = useState<number | null>(null);
   const { favorites, ready, toggleFavorite } = useFavorites();
   useEffect(() => {

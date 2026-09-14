@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CatalogPage } from "@/components/catalog-page";
-import { findPlatformBySlug, offersByStore, platforms } from "@/lib/catalog";
+import { findPlatformBySlug, platforms } from "@/lib/catalog";
+import { getOffersByStore } from "@/lib/offers-repository";
 
 export function generateStaticParams() {
   return platforms.map((platform) => ({ store: platform.slug }));
@@ -17,12 +18,13 @@ export default async function PlatformPage({ params }: { params: Promise<{ store
   const { store } = await params;
   const platform = findPlatformBySlug(store);
   if (!platform) notFound();
+  const offers = await getOffersByStore(platform.store);
 
   return <CatalogPage
     eyebrow="PLATEFORME"
     title={platform.label}
     description={platform.description}
-    offers={offersByStore(platform.store)}
+    offers={offers}
     emptyTitle="Aucune offre disponible ici pour l'instant."
     emptyDescription={`Reviens bientôt pour voir les prochaines offres ${platform.label}.`}
     logo={platform.logo}

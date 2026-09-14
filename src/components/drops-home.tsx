@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { offers } from "@/data/offers";
 import { categories as categoryEntries, platforms as platformEntries } from "@/lib/catalog";
 import { useFavorites } from "@/lib/favorites";
 import { formatPrice, isOfferActive, isOfferUpcoming, offerExpiresAt, totalFreeValue } from "@/lib/offers";
@@ -18,7 +17,7 @@ import { UpcomingSection } from "./upcoming-section";
 const stores: Array<OfferStore | "TOUT"> = ["TOUT", ...platformEntries.map((entry) => entry.store)];
 const categories: Array<OfferCategory | "TOUT"> = ["TOUT", ...categoryEntries.map((entry) => entry.category)];
 
-export function DropsHome() {
+export function DropsHome({ offers }: { offers: Offer[] }) {
   const [store, setStore] = useState<OfferStore | "TOUT">("TOUT");
   const [category, setCategory] = useState<OfferCategory | "TOUT">("TOUT");
   const [dropsAndItems, setDropsAndItems] = useState(false);
@@ -42,7 +41,7 @@ export function DropsHome() {
     setNotice(`${offer.title} est une offre de démonstration. Aucun lien de récupération n’est encore disponible.`);
   }
 
-  const availableOffers = useMemo(() => offers.filter((offer) => isOfferActive(offer, now ?? Date.now())), [now]);
+  const availableOffers = useMemo(() => offers.filter((offer) => isOfferActive(offer, now ?? Date.now())), [offers, now]);
   const visibleOffers = useMemo(() => {
     const search = query.trim().toLocaleLowerCase("fr");
     return availableOffers.filter((offer) =>
@@ -56,7 +55,7 @@ export function DropsHome() {
   const trendingOffers = availableOffers.filter((offer) => offer.trending).slice(0, 4);
   const featuredOffers = availableOffers.filter((offer) => offer.featured);
   const newTodayOffers = availableOffers.filter((offer) => offer.isNew);
-  const upcomingOffers = useMemo(() => offers.filter((offer) => isOfferUpcoming(offer, now ?? Date.now())), [now]);
+  const upcomingOffers = useMemo(() => offers.filter((offer) => isOfferUpcoming(offer, now ?? Date.now())), [offers, now]);
   const total = totalFreeValue(availableOffers);
   const games = availableOffers.filter((offer) => offer.category === "JEUX").length;
   const drops = availableOffers.filter((offer) => offer.category === "TWITCH DROPS").length;
