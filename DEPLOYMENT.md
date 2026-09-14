@@ -8,6 +8,14 @@ quelqu'un de non-technique — chaque étape dit exactement où cliquer.
 Vercel est le service recommandé (créé par l'équipe de Next.js, plan gratuit
 suffisant pour démarrer).
 
+**Important — le dépôt GitHub doit rester PUBLIC.** Le plan gratuit (Hobby)
+de Vercel refuse silencieusement de déployer les commits d'un dépôt privé
+tant que l'auteur du commit n'est pas reconnu comme seul propriétaire du
+projet Vercel ("The Hobby Plan does not support collaboration for private
+repositories"). Aucun secret n'est dans le code (les clés restent dans
+`.env.local`, jamais poussées sur GitHub grâce au `.gitignore`), donc rendre
+le dépôt public est sans risque pour la sécurité.
+
 1. Crée un compte sur [vercel.com](https://vercel.com) (tu peux te connecter avec GitHub).
 2. Mets le code de DROPS sur GitHub s'il n'y est pas déjà (`git push` vers un nouveau dépôt).
 3. Sur Vercel, clique **Add New → Project**, choisis ton dépôt GitHub `drops`.
