@@ -2,6 +2,7 @@ import { createOffer, getAllOffers, updateOffer, type OfferFormInput } from "@/l
 import { PLACEHOLDER_IMAGE, validateOfferDraft } from "@/lib/providers/normalize";
 import { providers, SYNC_ID_PREFIX, type OfferProvider } from "@/lib/providers";
 import { recordPriceChange } from "@/lib/price-history-repository";
+import { runNotificationDispatch } from "@/lib/notification-dispatch";
 import { insertSyncLog } from "@/lib/sync-logs-repository";
 import type { Offer } from "@/types/offer";
 
@@ -17,6 +18,7 @@ export type ProviderSyncResult = {
   offersSkipped: number;
   durationMs: number;
   message: string | null;
+  createdOffers: Offer[];
 };
 
 export type SyncSummary = {
@@ -101,6 +103,7 @@ async function syncProvider(provider: OfferProvider, existingOffers: Offer[]): P
       offersSkipped: 0,
       durationMs: Date.now() - startedAt,
       message: error instanceof Error ? error.message : String(error),
+      createdOffers: [],
     };
   }
 
@@ -111,6 +114,7 @@ async function syncProvider(provider: OfferProvider, existingOffers: Offer[]): P
   let imagesFallenBack = 0;
   const changeNotes: string[] = [];
   const skipNotes: string[] = [];
+  const createdOffers: Offer[] = [];
 
   for (const incoming of offers) {
     if (incoming.image === PLACEHOLDER_IMAGE) imagesFallenBack += 1;
@@ -134,6 +138,7 @@ async function syncProvider(provider: OfferProvider, existingOffers: Offer[]): P
       const result = await createOffer(offerToInput(incoming));
       if (!result.error) {
         created += 1;
+        createdOffers.push(incoming);
         await recordPriceChange(incoming.id, incoming.originalPrice, incoming.currentPrice);
       }
     } else {
@@ -179,6 +184,7 @@ async function syncProvider(provider: OfferProvider, existingOffers: Offer[]): P
     offersSkipped: skipped,
     durationMs: Date.now() - startedAt,
     message: notes.length > 0 ? notes.join(" · ") : null,
+    createdOffers,
   };
 }
 
@@ -207,6 +213,12 @@ export async function syncAllOffers(): Promise<SyncSummary> {
     duration_ms: result.durationMs,
     created_at: startedAt,
   })));
+
+  // Notifications (V8) : email + push pour les nouvelles offres, les
+  // offres suivies qui démarrent, et celles qui expirent bientôt. Ne
+  // bloque jamais la synchronisation elle-même (voir runNotificationDispatch).
+  const newlyCreatedOffers = results.flatMap((result) => result.createdOffers);
+  await runNotificationDispatch(newlyCreatedOffers);
 
   const finishedAt = new Date().toISOString();
 

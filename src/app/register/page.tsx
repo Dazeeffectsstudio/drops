@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { signInWithOAuthAction } from "@/app/auth-actions";
+import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { isSupabaseConfigured } from "@/lib/supabase/server-client";
 import { RegisterForm } from "./register-form";
 
@@ -18,16 +18,7 @@ export default async function RegisterPage() {
       {!isSupabaseConfigured
         ? <p className="admin-notice">Supabase n&apos;est pas encore configuré — les comptes ne sont pas disponibles pour l&apos;instant.</p>
         : <>
-          <div className="oauth-buttons">
-            <form action={signInWithOAuthAction.bind(null, "google")}>
-              <input type="hidden" name="next" value="/account" />
-              <button type="submit" className="oauth-button">Continuer avec Google</button>
-            </form>
-            <form action={signInWithOAuthAction.bind(null, "github")}>
-              <input type="hidden" name="next" value="/account" />
-              <button type="submit" className="oauth-button">Continuer avec GitHub</button>
-            </form>
-          </div>
+          <OAuthButtons next="/account" />
           <div className="auth-divider"><span>ou</span></div>
           <RegisterForm />
           <p className="auth-switch">Déjà un compte ? <Link href="/login">Se connecter</Link></p>

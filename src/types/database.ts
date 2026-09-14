@@ -73,6 +73,33 @@ export type NotificationSubscriptionUpdate = Partial<NotificationSubscriptionIns
 export type PushSubscriptionRow = { id: string; user_id: string; endpoint: string; p256dh: string; auth: string; created_at: string };
 export type PushSubscriptionInsert = Omit<PushSubscriptionRow, "id" | "created_at">;
 
+export type NotificationLogRow = {
+  id: string;
+  user_id: string;
+  offer_id: string | null;
+  type: string;
+  provider: string;
+  status: string;
+  sent_at: string;
+  read_at: string | null;
+  error_message: string | null;
+};
+export type NotificationLogInsert = Omit<NotificationLogRow, "id" | "sent_at" | "read_at"> & { sent_at?: string; read_at?: string | null };
+export type NotificationLogUpdate = Partial<NotificationLogInsert>;
+
+export type NotificationPreferencesRow = {
+  user_id: string;
+  notify_new_offers: boolean;
+  notify_epic_games: boolean;
+  notify_steam: boolean;
+  notify_expiring_soon: boolean;
+  notify_twitch_drops: boolean;
+  notify_prime_gaming: boolean;
+  updated_at: string;
+};
+export type NotificationPreferencesInsert = Omit<NotificationPreferencesRow, "updated_at"> & { updated_at?: string };
+export type NotificationPreferencesUpdate = Partial<NotificationPreferencesInsert>;
+
 export type Database = {
   public: {
     Tables: {
@@ -124,6 +151,26 @@ export type Database = {
         Row: PushSubscriptionRow;
         Insert: PushSubscriptionInsert;
         Update: Partial<PushSubscriptionInsert>;
+        Relationships: [];
+      };
+      notification_logs: {
+        Row: NotificationLogRow;
+        Insert: NotificationLogInsert;
+        Update: NotificationLogUpdate;
+        Relationships: [
+          {
+            foreignKeyName: "notification_logs_offer_id_fkey";
+            columns: ["offer_id"];
+            isOneToOne: false;
+            referencedRelation: "offers";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      notification_preferences: {
+        Row: NotificationPreferencesRow;
+        Insert: NotificationPreferencesInsert;
+        Update: NotificationPreferencesUpdate;
         Relationships: [];
       };
     };

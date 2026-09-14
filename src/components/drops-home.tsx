@@ -19,9 +19,9 @@ import { UpcomingSection } from "./upcoming-section";
 const stores: Array<OfferStore | "TOUT"> = ["TOUT", ...platformEntries.map((entry) => entry.store)];
 const categories: Array<OfferCategory | "TOUT"> = ["TOUT", ...categoryEntries.map((entry) => entry.category)];
 
-type Props = { offers: Offer[]; user: AuthUser | null; initialFavorites: string[]; subscribedOfferIds: string[] };
+type Props = { offers: Offer[]; user: AuthUser | null; initialFavorites: string[]; subscribedOfferIds: string[]; unreadCount?: number };
 
-export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds }: Props) {
+export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, unreadCount = 0 }: Props) {
   const [store, setStore] = useState<OfferStore | "TOUT">("TOUT");
   const [category, setCategory] = useState<OfferCategory | "TOUT">("TOUT");
   const [dropsAndItems, setDropsAndItems] = useState(false);
@@ -91,7 +91,7 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds }
         </nav>
         <div className="header-actions">
           <button type="button" className="header-search" onClick={() => document.getElementById("offer-search")?.focus()} aria-label="Rechercher une offre"><SearchIcon /></button>
-          <AccountNavLink user={user} />
+          <AccountNavLink user={user} unreadCount={unreadCount} />
         </div>
       </header>
       <PlatformQuickNav active={store} onSelect={filterByPlatform} />

@@ -34,6 +34,7 @@ export default async function AccountPage() {
           <div className="account-links">
             <Link href="/favoris">Mes favoris</Link>
             <Link href="/notifications">Centre de notifications</Link>
+            <Link href="/account/notifications">Réglages des notifications</Link>
           </div>
         </div>
         <form action={signOutAction}><button type="submit" className="admin-test-button">SE DÉCONNECTER</button></form>

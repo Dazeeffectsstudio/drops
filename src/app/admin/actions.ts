@@ -3,7 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { categories, findPlatformByStore, platforms } from "@/lib/catalog";
+import { getCurrentUser } from "@/lib/auth";
+import { sendNewOfferEmail } from "@/lib/email/send";
+import { buildOffer } from "@/lib/offer-builder";
 import { createOffer, deleteOffer, updateOffer, type OfferFormInput } from "@/lib/offers-repository";
+import { insertNotificationLog } from "@/lib/notification-logs-repository";
 import { providers } from "@/lib/providers";
 import { syncAllOffers, type SyncSummary } from "@/lib/sync-offers";
 import type { OfferCategory, OfferStore } from "@/types/offer";
@@ -137,4 +141,39 @@ export async function testProviderAction(providerKey: string): Promise<ProviderT
       error: error instanceof Error ? error.message : String(error),
     };
   }
+}
+
+const testSampleOffer = buildOffer({
+  id: "admin-test-email",
+  title: "Offre de test — email admin",
+  description: "Ceci est un email de test envoyé depuis /admin/notifications, pour vérifier que Resend est bien configuré.",
+  platform: "PC",
+  store: "Epic Games",
+  category: "JEUX",
+  image: "/images/placeholder.svg",
+  originalPrice: 19.99,
+  expiresAt: new Date(Date.now() + 86_400_000).toISOString(),
+  url: "https://drops.example.com",
+});
+
+export type SendTestEmailResult = { sent: boolean; error?: string };
+
+// Envoie un email de test au compte admin actuellement connecté, via le
+// même service que les vraies notifications (src/lib/email/send.ts) — sert
+// à vérifier que RESEND_API_KEY est bien configurée, sans attendre une
+// vraie synchronisation.
+export async function sendTestEmailAction(): Promise<SendTestEmailResult> {
+  const admin = await getCurrentUser();
+  if (!admin?.email) return { sent: false, error: "Impossible de déterminer ton adresse email." };
+
+  const result = await sendNewOfferEmail(admin.email, testSampleOffer);
+  await insertNotificationLog({
+    userId: admin.id,
+    offerId: null,
+    type: "test",
+    provider: "email",
+    status: result.error ? "error" : result.sent ? "sent" : "skipped",
+    errorMessage: result.error ?? null,
+  });
+  return result;
 }

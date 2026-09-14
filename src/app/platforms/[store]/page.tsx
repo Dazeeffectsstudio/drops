@@ -4,6 +4,7 @@ import { CatalogPage } from "@/components/catalog-page";
 import { findPlatformBySlug, platforms } from "@/lib/catalog";
 import { getCurrentUser } from "@/lib/auth";
 import { getCurrentFavoritesState } from "@/lib/favorites-repository";
+import { getMyUnreadNotificationCount } from "@/lib/notification-logs-repository";
 import { getOffersByStore } from "@/lib/offers-repository";
 
 export function generateStaticParams() {
@@ -20,7 +21,7 @@ export default async function PlatformPage({ params }: { params: Promise<{ store
   const { store } = await params;
   const platform = findPlatformBySlug(store);
   if (!platform) notFound();
-  const [offers, user, { favorites }] = await Promise.all([getOffersByStore(platform.store), getCurrentUser(), getCurrentFavoritesState()]);
+  const [offers, user, { favorites }, unreadCount] = await Promise.all([getOffersByStore(platform.store), getCurrentUser(), getCurrentFavoritesState(), getMyUnreadNotificationCount()]);
 
   return <CatalogPage
     eyebrow="PLATEFORME"
@@ -34,5 +35,6 @@ export default async function PlatformPage({ params }: { params: Promise<{ store
     categoryFilter
     user={user}
     initialFavorites={favorites}
+    unreadCount={unreadCount}
   />;
 }

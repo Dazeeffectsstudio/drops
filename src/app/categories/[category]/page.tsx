@@ -4,6 +4,7 @@ import { CatalogPage } from "@/components/catalog-page";
 import { categories, findCategoryBySlug } from "@/lib/catalog";
 import { getCurrentUser } from "@/lib/auth";
 import { getCurrentFavoritesState } from "@/lib/favorites-repository";
+import { getMyUnreadNotificationCount } from "@/lib/notification-logs-repository";
 import { getOffersByCategory } from "@/lib/offers-repository";
 
 export function generateStaticParams() {
@@ -20,7 +21,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const { category: slug } = await params;
   const category = findCategoryBySlug(slug);
   if (!category) notFound();
-  const [offers, user, { favorites }] = await Promise.all([getOffersByCategory(category.category), getCurrentUser(), getCurrentFavoritesState()]);
+  const [offers, user, { favorites }, unreadCount] = await Promise.all([getOffersByCategory(category.category), getCurrentUser(), getCurrentFavoritesState(), getMyUnreadNotificationCount()]);
 
   return <CatalogPage
     eyebrow="CATÉGORIE"
@@ -31,5 +32,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     emptyDescription={`Reviens bientôt pour voir les prochaines offres ${category.label}.`}
     user={user}
     initialFavorites={favorites}
+    unreadCount={unreadCount}
   />;
 }

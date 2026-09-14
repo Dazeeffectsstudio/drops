@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { signInWithOAuthAction } from "@/app/auth-actions";
+import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { isSupabaseConfigured } from "@/lib/supabase/server-client";
 import { LoginForm } from "./login-form";
 
@@ -22,16 +22,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         ? <p className="admin-notice">Supabase n&apos;est pas encore configuré — les comptes ne sont pas disponibles pour l&apos;instant.</p>
         : <>
           {params.error && <p className="auth-error">Une erreur est survenue, réessaie.</p>}
-          <div className="oauth-buttons">
-            <form action={signInWithOAuthAction.bind(null, "google")}>
-              <input type="hidden" name="next" value={next} />
-              <button type="submit" className="oauth-button">Continuer avec Google</button>
-            </form>
-            <form action={signInWithOAuthAction.bind(null, "github")}>
-              <input type="hidden" name="next" value={next} />
-              <button type="submit" className="oauth-button">Continuer avec GitHub</button>
-            </form>
-          </div>
+          <OAuthButtons next={next} />
           <div className="auth-divider"><span>ou</span></div>
           <LoginForm next={next} />
           <p className="auth-switch">Pas encore de compte ? <Link href="/register">Créer un compte</Link></p>

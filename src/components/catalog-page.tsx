@@ -24,9 +24,10 @@ type Props = {
   categoryFilter?: boolean;
   user: AuthUser | null;
   initialFavorites: string[];
+  unreadCount?: number;
 };
 
-export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, emptyDescription, logo, color, categoryFilter = false, user, initialFavorites }: Props) {
+export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, emptyDescription, logo, color, categoryFilter = false, user, initialFavorites, unreadCount = 0 }: Props) {
   const [now, setNow] = useState<number | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [category, setCategory] = useState<OfferCategory | "TOUT">("TOUT");
@@ -47,7 +48,7 @@ export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, e
     <main className="subpage site-shell">
       <header className="subpage-header">
         <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
-        <div className="header-actions"><Link href="/" className="back-link">← RETOUR AUX OFFRES</Link><AccountNavLink user={user} /></div>
+        <div className="header-actions"><Link href="/" className="back-link">← RETOUR AUX OFFRES</Link><AccountNavLink user={user} unreadCount={unreadCount} /></div>
       </header>
       <section className={`subpage-intro ${logo ? "subpage-intro--banner" : ""}`}>
         {logo && <span className={`browse-logo browse-logo--${color ?? "lime"} subpage-logo`} aria-hidden="true">{logo}</span>}
