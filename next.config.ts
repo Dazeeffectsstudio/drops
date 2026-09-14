@@ -37,6 +37,8 @@ const nextConfig: NextConfig = {
       // Images des offres Epic Games réelles (voir src/lib/providers/epic-games.ts).
       { protocol: "https", hostname: "cdn1.epicgames.com" },
       { protocol: "https", hostname: "cdn2.unrealengine.com" },
+      // Images des offres Steam réelles, servies par GamerPower (voir src/lib/providers/steam.ts).
+      { protocol: "https", hostname: "www.gamerpower.com" },
     ],
   },
   async headers() {
