@@ -58,13 +58,10 @@ Search Console indique à Google que ton site existe et permet de suivre son ind
 
 ## 5. Cron automatique (synchronisation des offres)
 
-`vercel.json` déclare déjà deux tâches planifiées :
-- `/api/sync` toutes les 6 heures (récupère les nouvelles offres).
-- `/api/notifications/check-expiring` toutes les 30 minutes (offres qui démarrent/expirent bientôt).
+`vercel.json` déclare deux tâches planifiées, réglées sur **une fois par jour** (`/api/sync` à 6h00, `/api/notifications/check-expiring` à 6h10) — c'est la limite du plan Vercel gratuit (Hobby), qui refuse tout cron plus fréquent qu'une fois par jour.
 
-**Important — limite du plan Vercel gratuit (Hobby)** : il n'autorise que des cron jobs qui tournent **une fois par jour maximum**. Deux options :
-- **Passer au plan Vercel Pro** (payant) pour garder les fréquences actuelles.
-- **Rester sur Hobby** : modifie `vercel.json` pour mettre `"schedule": "0 6 * * *"` (une fois par jour, 6h du matin) sur les deux tâches.
+Si un jour tu veux revenir à une synchronisation plus fréquente (toutes les 6h / toutes les 30min comme au départ), deux options :
+- **Passer au plan Vercel Pro** (payant), puis remettre `"schedule": "0 */6 * * *"` et `"*/30 * * * *"`.
 - **Alternative gratuite** : utiliser GitHub Actions à la place (voir le commentaire dans `src/app/api/sync/route.ts` pour l'exemple de workflow).
 
 Pour que Vercel Cron s'authentifie automatiquement auprès de tes routes, ajoute une variable d'environnement nommée exactement `CRON_SECRET` (Vercel l'envoie tout seul dans l'en-tête `Authorization` de chaque appel cron) — donne-lui la même valeur que `SYNC_SECRET`, ou laisse les deux vides si tu préfères garder les routes ouvertes.
