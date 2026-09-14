@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CatalogPage } from "@/components/catalog-page";
 import { findPlatformBySlug, platforms } from "@/lib/catalog";
+import { getCurrentUser } from "@/lib/auth";
+import { getCurrentFavoritesState } from "@/lib/favorites-repository";
 import { getOffersByStore } from "@/lib/offers-repository";
 
 export function generateStaticParams() {
@@ -18,7 +20,7 @@ export default async function PlatformPage({ params }: { params: Promise<{ store
   const { store } = await params;
   const platform = findPlatformBySlug(store);
   if (!platform) notFound();
-  const offers = await getOffersByStore(platform.store);
+  const [offers, user, { favorites }] = await Promise.all([getOffersByStore(platform.store), getCurrentUser(), getCurrentFavoritesState()]);
 
   return <CatalogPage
     eyebrow="PLATEFORME"
@@ -30,5 +32,7 @@ export default async function PlatformPage({ params }: { params: Promise<{ store
     logo={platform.logo}
     color={platform.color}
     categoryFilter
+    user={user}
+    initialFavorites={favorites}
   />;
 }

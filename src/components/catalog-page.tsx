@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { AccentColor } from "@/lib/catalog";
+import type { AuthUser } from "@/lib/auth";
 import type { Offer, OfferCategory } from "@/types/offer";
 import { useFavorites } from "@/lib/favorites";
 import { formatPrice, isOfferActive, offerExpiresAt, totalFreeValue } from "@/lib/offers";
+import { AccountNavLink } from "./account-nav-link";
 import { ArrowIcon } from "./icons";
 import { OfferCard } from "./offer-card";
 import { Reveal } from "./reveal";
@@ -20,13 +22,15 @@ type Props = {
   logo?: string;
   color?: AccentColor;
   categoryFilter?: boolean;
+  user: AuthUser | null;
+  initialFavorites: string[];
 };
 
-export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, emptyDescription, logo, color, categoryFilter = false }: Props) {
+export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, emptyDescription, logo, color, categoryFilter = false, user, initialFavorites }: Props) {
   const [now, setNow] = useState<number | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [category, setCategory] = useState<OfferCategory | "TOUT">("TOUT");
-  const { favorites, toggleFavorite } = useFavorites();
+  const { favorites, toggleFavorite } = useFavorites(user?.id ?? null, initialFavorites);
 
   useEffect(() => {
     setNow(Date.now());
@@ -43,7 +47,7 @@ export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, e
     <main className="subpage site-shell">
       <header className="subpage-header">
         <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
-        <Link href="/" className="back-link">← RETOUR AUX OFFRES</Link>
+        <div className="header-actions"><Link href="/" className="back-link">← RETOUR AUX OFFRES</Link><AccountNavLink user={user} /></div>
       </header>
       <section className={`subpage-intro ${logo ? "subpage-intro--banner" : ""}`}>
         {logo && <span className={`browse-logo browse-logo--${color ?? "lime"} subpage-logo`} aria-hidden="true">{logo}</span>}

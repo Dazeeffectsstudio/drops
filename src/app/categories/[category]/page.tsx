@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CatalogPage } from "@/components/catalog-page";
 import { categories, findCategoryBySlug } from "@/lib/catalog";
+import { getCurrentUser } from "@/lib/auth";
+import { getCurrentFavoritesState } from "@/lib/favorites-repository";
 import { getOffersByCategory } from "@/lib/offers-repository";
 
 export function generateStaticParams() {
@@ -18,7 +20,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const { category: slug } = await params;
   const category = findCategoryBySlug(slug);
   if (!category) notFound();
-  const offers = await getOffersByCategory(category.category);
+  const [offers, user, { favorites }] = await Promise.all([getOffersByCategory(category.category), getCurrentUser(), getCurrentFavoritesState()]);
 
   return <CatalogPage
     eyebrow="CATÉGORIE"
@@ -27,5 +29,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     offers={offers}
     emptyTitle="Aucune offre disponible ici pour l'instant."
     emptyDescription={`Reviens bientôt pour voir les prochaines offres ${category.label}.`}
+    user={user}
+    initialFavorites={favorites}
   />;
 }

@@ -5,7 +5,9 @@ import { useEffect, useMemo, useState } from "react";
 import { categories as categoryEntries, platforms as platformEntries } from "@/lib/catalog";
 import { useFavorites } from "@/lib/favorites";
 import { formatPrice, isOfferActive, isOfferUpcoming, offerExpiresAt, totalFreeValue } from "@/lib/offers";
+import type { AuthUser } from "@/lib/auth";
 import type { Offer, OfferCategory, OfferStore } from "@/types/offer";
+import { AccountNavLink } from "./account-nav-link";
 import { FeaturedCarousel } from "./featured-carousel";
 import { ArrowIcon, SearchIcon, SparkIcon } from "./icons";
 import { NewTodaySection } from "./new-today-section";
@@ -17,7 +19,9 @@ import { UpcomingSection } from "./upcoming-section";
 const stores: Array<OfferStore | "TOUT"> = ["TOUT", ...platformEntries.map((entry) => entry.store)];
 const categories: Array<OfferCategory | "TOUT"> = ["TOUT", ...categoryEntries.map((entry) => entry.category)];
 
-export function DropsHome({ offers }: { offers: Offer[] }) {
+type Props = { offers: Offer[]; user: AuthUser | null; initialFavorites: string[]; subscribedOfferIds: string[] };
+
+export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds }: Props) {
   const [store, setStore] = useState<OfferStore | "TOUT">("TOUT");
   const [category, setCategory] = useState<OfferCategory | "TOUT">("TOUT");
   const [dropsAndItems, setDropsAndItems] = useState(false);
@@ -25,7 +29,7 @@ export function DropsHome({ offers }: { offers: Offer[] }) {
   const [now, setNow] = useState<number | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [headerScrolled, setHeaderScrolled] = useState(false);
-  const { favorites, toggleFavorite } = useFavorites();
+  const { favorites, toggleFavorite } = useFavorites(user?.id ?? null, initialFavorites);
 
   useEffect(() => {
     const current = Date.now();
@@ -85,7 +89,10 @@ export function DropsHome({ offers }: { offers: Offer[] }) {
           <Link href="/categories">Catégories</Link>
           <Link href="/favoris">Favoris{favorites.length > 0 && <b>{favorites.length}</b>}</Link>
         </nav>
-        <button type="button" className="header-search" onClick={() => document.getElementById("offer-search")?.focus()} aria-label="Rechercher une offre"><SearchIcon /></button>
+        <div className="header-actions">
+          <button type="button" className="header-search" onClick={() => document.getElementById("offer-search")?.focus()} aria-label="Rechercher une offre"><SearchIcon /></button>
+          <AccountNavLink user={user} />
+        </div>
       </header>
       <PlatformQuickNav active={store} onSelect={filterByPlatform} />
       <main>
@@ -119,7 +126,7 @@ export function DropsHome({ offers }: { offers: Offer[] }) {
           <div className="results-line"><span>{query ? `RÉSULTATS POUR « ${query} »` : dropsAndItems ? "DROPS & ITEMS" : "TOUTES LES OFFRES"}</span><span>{visibleOffers.length.toString().padStart(2, "0")} RÉSULTAT{visibleOffers.length > 1 ? "S" : ""}</span></div>
           {visibleOffers.length > 0 ? <div className="offer-grid">{visibleOffers.map((offer) => <OfferCard key={offer.id} offer={offer} expiresAt={offerExpiresAt(offer)} now={now} favorite={favorites.includes(offer.id)} onFavorite={() => toggleFavorite(offer.id)} onClaim={() => showClaimNotice(offer)} />)}</div> : <div className="empty-state"><span>∅</span><h3>Aucune offre ici pour l&apos;instant.</h3><p>Essaie une autre recherche ou retire les filtres.</p><button type="button" onClick={() => { setStore("TOUT"); setCategory("TOUT"); setDropsAndItems(false); setQuery(""); }}>VOIR TOUTES LES OFFRES <ArrowIcon className="arrow-icon" /></button></div>}
         </section></Reveal>
-        <UpcomingSection offers={upcomingOffers} now={now} />
+        <UpcomingSection offers={upcomingOffers} now={now} userId={user?.id ?? null} subscribedOfferIds={subscribedOfferIds} onNotified={setNotice} />
       </main>
       <footer className="site-footer"><span className="footer-brand">DROPS<span>.</span></span><span>DON&apos;T PAY. JUST PLAY.</span><span>VERSION DÉMO · OFFRES FICTIVES</span></footer>
     </div>

@@ -11,7 +11,7 @@ import type { Offer, OfferCategory, OfferStore, Platform } from "@/types/offer";
 // renvoient une liste vide au lieu de planter — voir le README / le
 // rapport de mission pour comment connecter Supabase.
 
-function mapRowToOffer(row: OfferRow): Offer {
+export function mapRowToOffer(row: OfferRow): Offer {
   // PostgREST renvoie les colonnes `numeric` (original_price, current_price)
   // sous forme de chaînes de caractères, pas de nombres — sans cette
   // conversion, toute comparaison de prix (ex. la détection de changement

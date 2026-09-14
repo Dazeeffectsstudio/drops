@@ -10,6 +10,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <nav className="admin-nav">
         <Link href="/admin">Offres</Link>
         <Link href="/admin/sync">Synchronisation</Link>
+        <Link href="/admin/users">Utilisateurs</Link>
+        <Link href="/admin/notifications">Notifications</Link>
         <Link href="/" className="back-link">← RETOUR AU SITE</Link>
       </nav>
     </header>
