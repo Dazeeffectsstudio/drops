@@ -14,7 +14,10 @@ export async function GET(request: NextRequest) {
     const supabase = await createSupabaseServerClient();
     if (supabase) {
       const { error } = await supabase.auth.exchangeCodeForSession(code);
-      if (!error) return NextResponse.redirect(`${origin}${next.startsWith("/") ? next : "/account"}`);
+      if (!error) {
+        const target = next.startsWith("/") ? next : "/account";
+        return NextResponse.redirect(`${origin}${target}${target.includes("?") ? "&" : "?"}_evt=login`);
+      }
     }
   }
 

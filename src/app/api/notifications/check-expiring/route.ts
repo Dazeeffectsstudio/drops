@@ -8,13 +8,12 @@ import { runNotificationDispatch } from "@/lib/notification-dispatch";
 // déjà ce même service à chaque synchronisation — cette route sert à
 // planifier des vérifications plus fréquentes et régulières.
 //
-// Planification automatique volontairement PAS activée, même pattern que
-// /api/sync : protégée par SYNC_SECRET si défini, sinon ouverte. Pour un
-// vrai cron (Vercel Cron / GitHub Actions), appeler cette route toutes les
-// 15-30 minutes, comme documenté dans src/app/api/sync/route.ts.
+// Planifiée automatiquement en production via vercel.json (voir
+// DEPLOYMENT.md). Protégée par SYNC_SECRET/CRON_SECRET, même pattern que
+// /api/sync.
 
 function isAuthorized(request: NextRequest): boolean {
-  const secret = process.env.SYNC_SECRET;
+  const secret = process.env.SYNC_SECRET || process.env.CRON_SECRET;
   if (!secret) return true;
   return request.headers.get("authorization") === `Bearer ${secret}`;
 }

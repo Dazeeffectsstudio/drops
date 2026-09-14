@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import type { Offer } from "@/types/offer";
 import { subscribeToOfferAction } from "@/app/notifications/actions";
+import { trackEvent } from "@/lib/analytics/track";
 import { formatRemaining, offerStartsAt } from "@/lib/offers";
 import { ClockIcon } from "./icons";
 import { PlatformBadge } from "./platform-badge";
@@ -25,6 +26,7 @@ function UpcomingCard({ offer, now, userId, subscribed, onNotified }: { offer: O
       const result = await subscribeToOfferAction(offer.id);
       if (!result.error) {
         setJustSubscribed(true);
+        trackEvent("notification_subscribe", { offerId: offer.id, store: offer.store });
         onNotified(`Tu seras prévenu·e par email quand « ${offer.title} » sera disponible.`);
       }
     });

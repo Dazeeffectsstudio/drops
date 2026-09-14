@@ -20,7 +20,11 @@ Sans configuration, le site s'affiche normalement mais **sans aucune offre** (pa
 
 ## Tableau de bord d'administration
 
-Accessible sur `/admin` (ex. [http://localhost:3000/admin](http://localhost:3000/admin)). Permet de voir, ajouter, modifier et supprimer des offres. **Non protégé par mot de passe pour l'instant** — voir `src/lib/admin-auth.ts` pour la marche à suivre quand une authentification sera nécessaire.
+Accessible sur `/admin` (ex. [http://localhost:3000/admin](http://localhost:3000/admin)). Permet de voir, ajouter, modifier et supprimer des offres. **Protégé par connexion** : seuls les comptes listés dans `ADMIN_EMAILS` (voir `.env.local`) peuvent y accéder — voir `src/lib/admin-auth.ts`.
+
+## Déployer en production
+
+Voir [DEPLOYMENT.md](./DEPLOYMENT.md) pour le guide complet (Vercel, domaine personnalisé, Google Search Console, synchronisation automatique).
 
 ## Structure
 

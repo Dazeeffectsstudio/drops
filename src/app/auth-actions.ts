@@ -21,6 +21,13 @@ function safeNext(next: FormDataEntryValue | null): string {
   return value.startsWith("/") ? value : "/";
 }
 
+// Ajoute un marqueur "_evt" lu par AuthEventTracker (src/components/auth-event-tracker.tsx)
+// pour déclencher un événement analytics juste après la redirection — le
+// seul moment fiable, puisque redirect() coupe l'exécution du serveur.
+function withEvent(path: string, evt: "login" | "signup"): string {
+  return `${path}${path.includes("?") ? "&" : "?"}_evt=${evt}`;
+}
+
 export async function signInAction(_prevState: AuthFormState, formData: FormData): Promise<AuthFormState> {
   if (!isSupabaseConfigured) return { error: "Supabase n'est pas encore configuré." };
   const supabase = await createSupabaseServerClient();
@@ -33,7 +40,7 @@ export async function signInAction(_prevState: AuthFormState, formData: FormData
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { error: "Email ou mot de passe incorrect." };
 
-  redirect(safeNext(formData.get("next")));
+  redirect(withEvent(safeNext(formData.get("next")), "login"));
 }
 
 export async function signUpAction(_prevState: AuthFormState, formData: FormData): Promise<AuthFormState> {
@@ -50,7 +57,7 @@ export async function signUpAction(_prevState: AuthFormState, formData: FormData
   if (error) return { error: error.message.includes("already registered") ? "Un compte existe déjà avec cet email." : "Impossible de créer le compte." };
   if (!data.session) return { message: "Compte créé ! Vérifie ta boîte mail pour confirmer ton adresse avant de te connecter." };
 
-  redirect("/account");
+  redirect(withEvent("/account", "signup"));
 }
 
 export async function signOutAction(): Promise<void> {

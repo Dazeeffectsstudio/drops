@@ -14,6 +14,11 @@ export function generateStaticParams() {
   return platforms.map((platform) => ({ store: platform.slug }));
 }
 
+// Filet de sécurité en plus de revalidatePath (déclenché à chaque
+// création/modification d'offre et après chaque synchronisation) : au pire,
+// une page plateforme ne reste jamais périmée plus d'une heure.
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: { params: Promise<{ store: string }> }): Promise<Metadata> {
   const { store } = await params;
   const platform = findPlatformBySlug(store);

@@ -398,4 +398,10 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 
 @media(max-width:480px) { .why-grid, .related-offers-grid { grid-template-columns:1fr; } }
 
+/* V10 — monitoring, checklist de lancement */
+.monitoring-chart { display:flex; align-items:flex-end; gap:3px; height:120px; padding:16px; border:1px solid #3b4238; border-radius:13px; background:var(--panel); }
+.monitoring-bar-wrap { flex:1; height:100%; display:flex; align-items:flex-end; }
+.monitoring-bar { width:100%; min-height:2px; background:var(--lime); border-radius:2px 2px 0 0; opacity:.85; transition:opacity .15s; }
+.monitoring-bar-wrap:hover .monitoring-bar { opacity:1; }
+
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*:before,*:after { transition:none!important; animation:none!important; } }

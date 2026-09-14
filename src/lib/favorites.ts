@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { toggleFavoriteAction } from "@/app/favorites-actions";
+import { trackEvent } from "@/lib/analytics/track";
 
 export const favoriteStorageKey = "drops-demo-favorites";
 
@@ -29,7 +30,9 @@ export function useFavorites(userId: string | null = null, initialFavorites: str
 
   function toggleFavorite(id: string) {
     setFavorites((current) => {
-      const next = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
+      const adding = !current.includes(id);
+      const next = adding ? [...current, id] : current.filter((item) => item !== id);
+      trackEvent("favorite_toggle", { offerId: id, action: adding ? "add" : "remove" });
       if (userId) {
         toggleFavoriteAction(id).catch(() => { /* échec silencieux : l'état local reste optimiste */ });
       } else {

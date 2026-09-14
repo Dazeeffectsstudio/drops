@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.name }],
   icons: { icon: "/favicon.svg" },
   robots: { index: siteConfig.isProduction, follow: siteConfig.isProduction },
+  // Vérification Google Search Console par balise meta — voir DEPLOYMENT.md.
+  // Absente tant que NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION n'est pas définie.
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : undefined,
   openGraph: {
     type: "website",
     locale: siteConfig.locale,

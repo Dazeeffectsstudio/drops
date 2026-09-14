@@ -14,6 +14,11 @@ export function generateStaticParams() {
   return categories.map((category) => ({ category: category.slug }));
 }
 
+// Filet de sécurité en plus de revalidatePath (déclenché à chaque
+// création/modification d'offre et après chaque synchronisation) : au pire,
+// une page catégorie ne reste jamais périmée plus d'une heure.
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const { category: slug } = await params;
   const category = findCategoryBySlug(slug);

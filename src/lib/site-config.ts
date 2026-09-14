@@ -7,12 +7,18 @@
 // qui reste cohérent en développement mais ne doit jamais arriver en prod
 // (sitemap/robots/Open Graph pointeraient vers localhost).
 const productionUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+const devUrl = "http://localhost:3000";
 
 export const siteConfig = {
   name: "DROPS",
   tagline: "DON'T PAY. JUST PLAY.",
   description: "Tous les jeux, drops et récompenses que tu peux récupérer gratuitement. Epic Games, Steam, PlayStation, Xbox, Twitch Drops, Roblox, Prime Gaming — sans bruit, seulement les bonnes opportunités.",
-  url: productionUrl ?? "http://localhost:3000",
+  url: productionUrl ?? devUrl,
+  devUrl,
+  productionUrl: productionUrl ?? null,
+  // Nom de domaine nu (sans protocole), pratique pour les instructions DNS
+  // et l'affichage — dérivé automatiquement de productionUrl.
+  domain: productionUrl ? new URL(productionUrl).hostname : null,
   isProduction: Boolean(productionUrl),
   contactEmail: "contact@drops.be",
   social: {
