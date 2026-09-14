@@ -100,6 +100,24 @@ export type NotificationPreferencesRow = {
 export type NotificationPreferencesInsert = Omit<NotificationPreferencesRow, "updated_at"> & { updated_at?: string };
 export type NotificationPreferencesUpdate = Partial<NotificationPreferencesInsert>;
 
+export type UserBadgeRow = { id: string; user_id: string; badge_key: string; earned_at: string };
+export type UserBadgeInsert = Omit<UserBadgeRow, "id" | "earned_at"> & { earned_at?: string };
+
+export type UserStreakRow = { user_id: string; current_streak: number; longest_streak: number; last_visit_date: string | null; updated_at: string };
+export type UserStreakInsert = Omit<UserStreakRow, "updated_at"> & { updated_at?: string };
+export type UserStreakUpdate = Partial<UserStreakInsert>;
+
+export type ReferralRow = { id: string; referrer_id: string; referred_id: string | null; created_at: string; signed_up_at: string | null };
+export type ReferralInsert = Omit<ReferralRow, "id" | "created_at"> & { created_at?: string };
+export type ReferralUpdate = Partial<ReferralInsert>;
+
+export type FeedbackRow = { id: string; type: string; message: string; user_id: string | null; created_at: string; status: string };
+export type FeedbackInsert = Omit<FeedbackRow, "id" | "created_at" | "status"> & { created_at?: string; status?: string };
+export type FeedbackUpdate = Partial<FeedbackInsert>;
+
+export type BetaBannerRow = { id: string; enabled: boolean; message: string; link_url: string | null; link_label: string | null; updated_at: string };
+export type BetaBannerUpdate = Partial<Omit<BetaBannerRow, "id">>;
+
 export type Database = {
   public: {
     Tables: {
@@ -125,7 +143,15 @@ export type Database = {
         Row: FavoriteRow;
         Insert: FavoriteInsert;
         Update: Partial<FavoriteInsert>;
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "favorites_offer_id_fkey";
+            columns: ["offer_id"];
+            isOneToOne: false;
+            referencedRelation: "offers";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       user_preferences: {
         Row: UserPreferencesRow;
@@ -171,6 +197,36 @@ export type Database = {
         Row: NotificationPreferencesRow;
         Insert: NotificationPreferencesInsert;
         Update: NotificationPreferencesUpdate;
+        Relationships: [];
+      };
+      user_badges: {
+        Row: UserBadgeRow;
+        Insert: UserBadgeInsert;
+        Update: Partial<UserBadgeInsert>;
+        Relationships: [];
+      };
+      user_streaks: {
+        Row: UserStreakRow;
+        Insert: UserStreakInsert;
+        Update: UserStreakUpdate;
+        Relationships: [];
+      };
+      referrals: {
+        Row: ReferralRow;
+        Insert: ReferralInsert;
+        Update: ReferralUpdate;
+        Relationships: [];
+      };
+      feedback: {
+        Row: FeedbackRow;
+        Insert: FeedbackInsert;
+        Update: FeedbackUpdate;
+        Relationships: [];
+      };
+      beta_banner: {
+        Row: BetaBannerRow;
+        Insert: BetaBannerRow;
+        Update: BetaBannerUpdate;
         Relationships: [];
       };
     };

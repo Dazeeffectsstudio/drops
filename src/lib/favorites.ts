@@ -29,17 +29,19 @@ export function useFavorites(userId: string | null = null, initialFavorites: str
   }, [userId]);
 
   function toggleFavorite(id: string) {
-    setFavorites((current) => {
-      const adding = !current.includes(id);
-      const next = adding ? [...current, id] : current.filter((item) => item !== id);
-      trackEvent("favorite_toggle", { offerId: id, action: adding ? "add" : "remove" });
-      if (userId) {
-        toggleFavoriteAction(id).catch(() => { /* échec silencieux : l'état local reste optimiste */ });
-      } else {
-        localStorage.setItem(favoriteStorageKey, JSON.stringify(next));
-      }
-      return next;
-    });
+    // Les effets de bord (appel serveur, tracking, localStorage) doivent rester
+    // hors de l'updater passé à setFavorites : en StrictMode (dev), React
+    // rappelle cet updater une seconde fois pour vérifier sa pureté, ce qui
+    // déclenchait un second toggle côté serveur et annulait le premier.
+    const adding = !favorites.includes(id);
+    const next = adding ? [...favorites, id] : favorites.filter((item) => item !== id);
+    setFavorites(next);
+    trackEvent("favorite_toggle", { offerId: id, action: adding ? "add" : "remove" });
+    if (userId) {
+      toggleFavoriteAction(id).catch(() => { /* échec silencieux : l'état local reste optimiste */ });
+    } else {
+      localStorage.setItem(favoriteStorageKey, JSON.stringify(next));
+    }
   }
 
   return { favorites, ready, toggleFavorite };

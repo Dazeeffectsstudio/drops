@@ -13,6 +13,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteConfig.url}/privacy`, changeFrequency: "yearly", priority: 0.2 },
     { url: `${siteConfig.url}/terms`, changeFrequency: "yearly", priority: 0.2 },
     { url: `${siteConfig.url}/contact`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${siteConfig.url}/free-games-this-week`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${siteConfig.url}/community`, changeFrequency: "daily", priority: 0.4 },
   ];
 
   const platformEntries: MetadataRoute.Sitemap = platforms.map((platform) => ({

@@ -1,6 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
 
-export type AuthUser = { id: string; email: string | null; avatarUrl: string | null };
+export type AuthUser = { id: string; email: string | null; avatarUrl: string | null; pseudo: string | null; createdAt: string };
 
 function parsedAdminEmails(): string[] {
   return (process.env.ADMIN_EMAILS ?? "")
@@ -26,5 +26,7 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     id: user.id,
     email: user.email ?? null,
     avatarUrl: (user.user_metadata?.avatar_url as string | undefined) ?? null,
+    pseudo: (user.user_metadata?.display_name as string | undefined) ?? null,
+    createdAt: user.created_at,
   };
 }

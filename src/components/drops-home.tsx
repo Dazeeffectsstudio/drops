@@ -20,9 +20,9 @@ import { UpcomingSection } from "./upcoming-section";
 const stores: Array<OfferStore | "TOUT"> = ["TOUT", ...platformEntries.map((entry) => entry.store)];
 const categories: Array<OfferCategory | "TOUT"> = ["TOUT", ...categoryEntries.map((entry) => entry.category)];
 
-type Props = { offers: Offer[]; user: AuthUser | null; initialFavorites: string[]; subscribedOfferIds: string[]; unreadCount?: number };
+type Props = { offers: Offer[]; user: AuthUser | null; initialFavorites: string[]; subscribedOfferIds: string[]; unreadCount?: number; lastEpicSyncAt?: string | null };
 
-export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, unreadCount = 0 }: Props) {
+export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, unreadCount = 0, lastEpicSyncAt = null }: Props) {
   const [store, setStore] = useState<OfferStore | "TOUT">("TOUT");
   const [category, setCategory] = useState<OfferCategory | "TOUT">("TOUT");
   const [dropsAndItems, setDropsAndItems] = useState(false);
@@ -65,6 +65,15 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
   const games = availableOffers.filter((offer) => offer.category === "JEUX").length;
   const drops = availableOffers.filter((offer) => offer.category === "TWITCH DROPS").length;
   const skins = availableOffers.filter((offer) => offer.category === "ITEMS").length;
+  const mostActivePlatform = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const offer of availableOffers) counts.set(offer.store, (counts.get(offer.store) ?? 0) + 1);
+    let top: string | null = null;
+    let topCount = 0;
+    for (const [store, count] of counts) if (count > topCount) { top = store; topCount = count; }
+    return top;
+  }, [availableOffers]);
+  const lastEpicSyncLabel = lastEpicSyncAt ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(lastEpicSyncAt)) : "—";
   function navigateToOffers(nextCategory: OfferCategory | "TOUT" = "TOUT") {
     setStore("TOUT"); setCategory(nextCategory); setDropsAndItems(false);
     document.getElementById("offres")?.scrollIntoView({ behavior: "smooth" });
@@ -88,6 +97,7 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
           <button type="button" onClick={showDropsAndItems}>Drops &amp; Items</button>
           <Link href="/platforms">Plateformes</Link>
           <Link href="/categories">Catégories</Link>
+          <Link href="/community">Communauté</Link>
           <Link href="/favoris">Favoris{favorites.length > 0 && <b>{favorites.length}</b>}</Link>
         </nav>
         <div className="header-actions">
@@ -96,6 +106,15 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
         </div>
       </header>
       <PlatformQuickNav active={store} onSelect={filterByPlatform} />
+      <section className="live-stats" aria-label="Disponible aujourd'hui">
+        <span className="live-stats-label"><span className="live-dot" /> DISPONIBLE AUJOURD&apos;HUI</span>
+        <div className="live-stats-grid">
+          <div><strong>{games}</strong><span>jeux gratuits</span></div>
+          <div><strong>{formatPrice(total)}</strong><span>économisés aujourd&apos;hui</span></div>
+          <div><strong>{mostActivePlatform ?? "—"}</strong><span>plateforme la plus active</span></div>
+          <div><strong>{lastEpicSyncLabel}</strong><span>dernière synchro Epic Games</span></div>
+        </div>
+      </section>
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="hero-copy">
@@ -148,7 +167,7 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
           </div>
         </section></Reveal>
       </main>
-      <footer className="site-footer"><span className="footer-brand">DROPS<span>.</span></span><span>DON&apos;T PAY. JUST PLAY.</span><nav className="footer-links" aria-label="Liens légaux"><Link href="/privacy">Confidentialité</Link><Link href="/terms">Conditions</Link><Link href="/contact">Contact</Link></nav></footer>
+      <footer className="site-footer"><span className="footer-brand">DROPS<span>.</span></span><span>DON&apos;T PAY. JUST PLAY.</span><nav className="footer-links" aria-label="Liens du site"><Link href="/free-games-this-week">Jeux de la semaine</Link><Link href="/community">Communauté</Link><Link href="/feedback">Feedback</Link><Link href="/privacy">Confidentialité</Link><Link href="/terms">Conditions</Link><Link href="/contact">Contact</Link></nav></footer>
     </div>
     {notice && <div className="notice" role="status"><p>{notice}</p><button type="button" onClick={() => setNotice(null)} aria-label="Fermer le message">×</button></div>}
   </>;

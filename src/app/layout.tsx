@@ -1,7 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { siteConfig } from "@/lib/site-config";
-import { MobileNav } from "@/components/mobile-nav";
 import { AnalyticsScripts } from "@/components/analytics-scripts";
+import { BetaBanner } from "@/components/beta-banner";
+import { MobileNav } from "@/components/mobile-nav";
+import { ReferralCapture } from "@/components/referral-capture";
+import { StreakTracker } from "@/components/streak-tracker";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -39,8 +43,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="fr"><body>
+    <BetaBanner />
     {children}
     <MobileNav />
+    <StreakTracker />
+    <Suspense fallback={null}><ReferralCapture /></Suspense>
     <AnalyticsScripts />
   </body></html>;
 }

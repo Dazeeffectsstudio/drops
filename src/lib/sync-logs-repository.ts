@@ -42,6 +42,19 @@ export async function insertSyncLog(entry: SyncLogInsert): Promise<void> {
 // du plus récent au plus ancien. Le dashboard en déduit la dernière
 // synchronisation de chaque provider, et l'historique complet de
 // /admin/sync.
+export async function getLastSyncForProvider(providerKey: string): Promise<SyncLogEntry | null> {
+  if (!supabasePublic) return null;
+  const { data, error } = await supabasePublic
+    .from("sync_logs")
+    .select("*")
+    .eq("provider", providerKey)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error || !data) return null;
+  return mapRow(data);
+}
+
 export async function getRecentSyncLogs(limit = 100): Promise<SyncLogEntry[]> {
   if (!supabasePublic) return [];
   const { data, error } = await supabasePublic

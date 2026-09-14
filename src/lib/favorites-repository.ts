@@ -1,3 +1,4 @@
+import { checkAndAwardBadges } from "@/lib/badges";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
 
 // Favoris en base pour les comptes connectés — les visiteurs non connectés
@@ -28,5 +29,6 @@ export async function toggleFavorite(offerId: string): Promise<{ error?: string 
     return { error: error?.message };
   }
   const { error } = await supabase.from("favorites").insert({ user_id: user.id, offer_id: offerId });
+  if (!error) await checkAndAwardBadges(user.id);
   return { error: error?.message };
 }

@@ -1,3 +1,4 @@
+import { checkAndAwardBadges } from "@/lib/badges";
 import { mapRowToOffer } from "@/lib/offers-repository";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
 import { supabaseAdmin } from "@/lib/supabase/admin-client";
@@ -26,6 +27,7 @@ export async function subscribeToOffer(offerId: string): Promise<{ error?: strin
   if (existing) return { alreadySubscribed: true };
 
   const { error } = await supabase.from("notification_subscriptions").insert({ user_id: user.id, offer_id: offerId });
+  if (!error) await checkAndAwardBadges(user.id);
   return { error: error?.message };
 }
 

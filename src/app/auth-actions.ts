@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { attributeReferral } from "@/lib/referrals-repository";
 import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server-client";
 
 export type AuthFormState = { error?: string; message?: string };
@@ -55,6 +56,7 @@ export async function signUpAction(_prevState: AuthFormState, formData: FormData
 
   const { data, error } = await supabase.auth.signUp({ email, password });
   if (error) return { error: error.message.includes("already registered") ? "Un compte existe déjà avec cet email." : "Impossible de créer le compte." };
+  if (data.user) await attributeReferral(data.user.id);
   if (!data.session) return { message: "Compte créé ! Vérifie ta boîte mail pour confirmer ton adresse avant de te connecter." };
 
   redirect(withEvent("/account", "signup"));
