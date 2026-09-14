@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { OfferForm } from "@/components/admin/offer-form";
 
-export const metadata: Metadata = { title: "Ajouter une offre — Admin DROPS" };
+export const metadata: Metadata = { title: "Ajouter une offre" };
 
 export default function NewOfferPage() {
   return <div className="admin-page">

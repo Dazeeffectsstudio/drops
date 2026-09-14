@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { categories as categoryEntries, platforms as platformEntries } from "@/lib/catalog";
 import { useFavorites } from "@/lib/favorites";
+import { homeFaq } from "@/lib/seo-content";
 import { formatPrice, isOfferActive, isOfferUpcoming, offerExpiresAt, totalFreeValue } from "@/lib/offers";
 import type { AuthUser } from "@/lib/auth";
 import type { Offer, OfferCategory, OfferStore } from "@/types/offer";
@@ -127,8 +128,27 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
           {visibleOffers.length > 0 ? <div className="offer-grid">{visibleOffers.map((offer) => <OfferCard key={offer.id} offer={offer} expiresAt={offerExpiresAt(offer)} now={now} favorite={favorites.includes(offer.id)} onFavorite={() => toggleFavorite(offer.id)} onClaim={() => showClaimNotice(offer)} />)}</div> : <div className="empty-state"><span>∅</span><h3>Aucune offre ici pour l&apos;instant.</h3><p>Essaie une autre recherche ou retire les filtres.</p><button type="button" onClick={() => { setStore("TOUT"); setCategory("TOUT"); setDropsAndItems(false); setQuery(""); }}>VOIR TOUTES LES OFFRES <ArrowIcon className="arrow-icon" /></button></div>}
         </section></Reveal>
         <UpcomingSection offers={upcomingOffers} now={now} userId={user?.id ?? null} subscribedOfferIds={subscribedOfferIds} onNotified={setNotice} />
+        <Reveal><section className="why-section" aria-labelledby="why-title">
+          <div className="section-heading"><div><span className="section-index">06 / POURQUOI DROPS</span><h2 id="why-title">Pourquoi <em>DROPS</em> ?</h2></div></div>
+          <div className="why-grid">
+            <div className="why-card"><span className="why-icon" aria-hidden="true">✓</span><strong>100% gratuit</strong><p>DROPS ne vend rien et ne demande jamais ta carte bancaire — juste un annuaire des vraies offres gratuites.</p></div>
+            <div className="why-card"><span className="why-icon" aria-hidden="true">⚡</span><strong>Synchronisation automatique</strong><p>Les offres sont détectées directement depuis les sources officielles, pas de saisie manuelle qui prend du retard.</p></div>
+            <div className="why-card"><span className="why-icon" aria-hidden="true">🔔</span><strong>Notifications sur-mesure</strong><p>Choisis tes plateformes préférées et reçois un email dès qu&apos;une nouvelle offre correspond.</p></div>
+            <div className="why-card"><span className="why-icon" aria-hidden="true">🇧🇪</span><strong>Pensé pour la Belgique</strong><p>Prix en euros, fuseau horaire local, et une sélection qui privilégie les offres disponibles chez nous.</p></div>
+          </div>
+        </section></Reveal>
+        <Reveal><section className="faq-section" aria-labelledby="faq-title">
+          <span className="section-index">FAQ</span>
+          <h2 id="faq-title">Questions <em>fréquentes</em></h2>
+          <div className="faq-list">
+            {homeFaq.map((entry) => <details key={entry.question} className="faq-item">
+              <summary>{entry.question}</summary>
+              <p>{entry.answer}</p>
+            </details>)}
+          </div>
+        </section></Reveal>
       </main>
-      <footer className="site-footer"><span className="footer-brand">DROPS<span>.</span></span><span>DON&apos;T PAY. JUST PLAY.</span><span>VERSION DÉMO · OFFRES FICTIVES</span></footer>
+      <footer className="site-footer"><span className="footer-brand">DROPS<span>.</span></span><span>DON&apos;T PAY. JUST PLAY.</span><nav className="footer-links" aria-label="Liens légaux"><Link href="/privacy">Confidentialité</Link><Link href="/terms">Conditions</Link><Link href="/contact">Contact</Link></nav></footer>
     </div>
     {notice && <div className="notice" role="status"><p>{notice}</p><button type="button" onClick={() => setNotice(null)} aria-label="Fermer le message">×</button></div>}
   </>;

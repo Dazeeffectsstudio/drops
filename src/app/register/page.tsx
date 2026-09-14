@@ -4,7 +4,7 @@ import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { isSupabaseConfigured } from "@/lib/supabase/server-client";
 import { RegisterForm } from "./register-form";
 
-export const metadata: Metadata = { title: "Créer un compte — DROPS" };
+export const metadata: Metadata = { title: "Créer un compte", robots: { index: false, follow: false } };
 
 export default async function RegisterPage() {
   return <main className="subpage site-shell auth-page">

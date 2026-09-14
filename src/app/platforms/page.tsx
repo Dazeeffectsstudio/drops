@@ -3,7 +3,10 @@ import { BrowseIndex } from "@/components/browse-index";
 import { platforms } from "@/lib/catalog";
 import { getAllOffers } from "@/lib/offers-repository";
 
-export const metadata: Metadata = { title: "Plateformes — DROPS" };
+export const metadata: Metadata = {
+  title: "Toutes les plateformes de jeux gratuits",
+  description: "Epic Games, Steam, PlayStation, Xbox, Twitch, Roblox, Prime Gaming — toutes les sources d'offres gratuites suivies par DROPS.",
+};
 
 export default async function PlatformsIndexPage() {
   const offers = await getAllOffers();

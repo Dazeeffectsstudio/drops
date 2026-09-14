@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import type { Offer } from "@/types/offer";
+import { trackEvent } from "@/lib/analytics/track";
 import { expiryProgress, formatPrice, formatRemaining, getOfferStatus, offerStartsAt } from "@/lib/offers";
 import { ArrowIcon, ClockIcon, HeartIcon } from "./icons";
 import { PlatformBadge } from "./platform-badge";
@@ -60,7 +61,7 @@ export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim
       </div>
       <div className="offer-actions">
         <div className="countdown"><ClockIcon className="clock-icon" /><span><small>Expire dans</small><strong>{remaining === null ? "—" : formatRemaining(remaining)}</strong></span></div>
-        <button type="button" className="claim-button" onClick={onClaim} disabled={status !== "active"}>{claimLabel[status]}<ArrowIcon className="arrow-icon" /></button>
+        <button type="button" className="claim-button" onClick={() => { trackEvent("claim_click", { store: offer.store, offerId: offer.id }); onClaim(); }} disabled={status !== "active"}>{claimLabel[status]}<ArrowIcon className="arrow-icon" /></button>
       </div>
       <div className="expiry-progress" aria-label={`Il reste ${Math.round(progress)} % du temps de l’offre`}><span style={{ width: `${progress}%` }} /></div>
     </div>

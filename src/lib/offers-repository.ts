@@ -120,6 +120,24 @@ export async function getOffersByCategory(category: OfferCategory): Promise<Offe
   return (data ?? []).map(mapRowToOffer);
 }
 
+// "Offres similaires" sur la page de détail : même catégorie en priorité,
+// complété par la même plateforme si besoin, jamais l'offre elle-même.
+export async function getRelatedOffers(offer: Offer, limit = 4): Promise<Offer[]> {
+  if (!supabasePublic) { warnUnconfigured("lecture des offres similaires"); return []; }
+  const { data, error } = await supabasePublic
+    .from("offers")
+    .select("*")
+    .or(`category.eq.${offer.category},store.eq.${offer.store}`)
+    .neq("id", offer.id)
+    .order("expires_at", { ascending: true })
+    .limit(limit * 3);
+  if (error) { console.error("[offers-repository] getRelatedOffers:", error.message); return []; }
+  const mapped = (data ?? []).map(mapRowToOffer);
+  const sameCategory = mapped.filter((entry) => entry.category === offer.category);
+  const sameStore = mapped.filter((entry) => entry.store === offer.store && entry.category !== offer.category);
+  return [...sameCategory, ...sameStore].slice(0, limit);
+}
+
 function slugify(title: string): string {
   return title
     .normalize("NFD")

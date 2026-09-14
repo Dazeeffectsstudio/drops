@@ -3,7 +3,10 @@ import { BrowseIndex } from "@/components/browse-index";
 import { categories } from "@/lib/catalog";
 import { getAllOffers } from "@/lib/offers-repository";
 
-export const metadata: Metadata = { title: "Catégories — DROPS" };
+export const metadata: Metadata = {
+  title: "Toutes les catégories d'offres gratuites",
+  description: "Jeux, skins, Twitch Drops, DLC, week-ends gratuits, Prime Gaming — tous les types de contenu gratuit suivis par DROPS.",
+};
 
 export default async function CategoriesIndexPage() {
   const offers = await getAllOffers();

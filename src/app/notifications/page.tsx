@@ -7,7 +7,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { getMyNotificationLogs, getMyUnreadNotificationCount } from "@/lib/notification-logs-repository";
 import { getMySubscriptions } from "@/lib/notification-subscriptions-repository";
 
-export const metadata: Metadata = { title: "Notifications — DROPS" };
+export const metadata: Metadata = { title: "Notifications", robots: { index: false, follow: false } };
 
 export default async function NotificationsPage() {
   const user = await getCurrentUser();

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Admin — DROPS" };
+export const metadata: Metadata = { title: { default: "Admin", template: "%s — Admin DROPS" }, robots: { index: false, follow: false } };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return <div className="site-shell admin-shell">
@@ -12,6 +12,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <Link href="/admin/sync">Synchronisation</Link>
         <Link href="/admin/users">Utilisateurs</Link>
         <Link href="/admin/notifications">Notifications</Link>
+        <Link href="/admin/seo">SEO</Link>
         <Link href="/" className="back-link">← RETOUR AU SITE</Link>
       </nav>
     </header>

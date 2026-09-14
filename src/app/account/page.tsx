@@ -6,7 +6,7 @@ import { PreferencesForm } from "@/components/account/preferences-form";
 import { getCurrentUser } from "@/lib/auth";
 import { getUserPreferences } from "@/lib/preferences-repository";
 
-export const metadata: Metadata = { title: "Mon compte — DROPS" };
+export const metadata: Metadata = { title: "Mon compte", robots: { index: false, follow: false } };
 
 export default async function AccountPage() {
   const user = await getCurrentUser();

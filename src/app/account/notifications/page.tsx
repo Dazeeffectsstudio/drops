@@ -6,7 +6,7 @@ import { PushNotificationToggle } from "@/components/push-notification-toggle";
 import { getCurrentUser } from "@/lib/auth";
 import { getNotificationPreferences } from "@/lib/notification-preferences-repository";
 
-export const metadata: Metadata = { title: "Notifications — Mon compte — DROPS" };
+export const metadata: Metadata = { title: "Notifications — Mon compte", robots: { index: false, follow: false } };
 
 export default async function AccountNotificationsPage() {
   const user = await getCurrentUser();

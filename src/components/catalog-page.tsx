@@ -25,9 +25,11 @@ type Props = {
   user: AuthUser | null;
   initialFavorites: string[];
   unreadCount?: number;
+  intro?: string;
+  faq?: Array<{ question: string; answer: string }>;
 };
 
-export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, emptyDescription, logo, color, categoryFilter = false, user, initialFavorites, unreadCount = 0 }: Props) {
+export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, emptyDescription, logo, color, categoryFilter = false, user, initialFavorites, unreadCount = 0, intro, faq }: Props) {
   const [now, setNow] = useState<number | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [category, setCategory] = useState<OfferCategory | "TOUT">("TOUT");
@@ -87,6 +89,17 @@ export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, e
             <p>{emptyDescription}</p>
             <Link href="/" className="empty-link">VOIR TOUTES LES OFFRES <ArrowIcon /></Link>
           </div>}
+      {intro && <section className="seo-intro"><p>{intro}</p></section>}
+      {faq && faq.length > 0 && <section className="faq-section">
+        <span className="section-index">FAQ</span>
+        <h2>Questions <em>fréquentes</em></h2>
+        <div className="faq-list">
+          {faq.map((entry) => <details key={entry.question} className="faq-item">
+            <summary>{entry.question}</summary>
+            <p>{entry.answer}</p>
+          </details>)}
+        </div>
+      </section>}
     </main>
     {notice && <div className="notice" role="status"><p>{notice}</p><button type="button" onClick={() => setNotice(null)} aria-label="Fermer le message">×</button></div>}
   </>;

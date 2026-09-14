@@ -4,7 +4,7 @@ import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { isSupabaseConfigured } from "@/lib/supabase/server-client";
 import { LoginForm } from "./login-form";
 
-export const metadata: Metadata = { title: "Connexion — DROPS" };
+export const metadata: Metadata = { title: "Connexion", robots: { index: false, follow: false } };
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {
   const params = await searchParams;

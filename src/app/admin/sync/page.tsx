@@ -5,7 +5,7 @@ import { SyncHistoryTable } from "@/components/admin/sync-history-table";
 import { providers } from "@/lib/providers";
 import { getRecentSyncLogs } from "@/lib/sync-logs-repository";
 
-export const metadata: Metadata = { title: "Synchronisation — Admin DROPS" };
+export const metadata: Metadata = { title: "Synchronisation" };
 
 export default async function AdminSyncPage({ searchParams }: { searchParams: Promise<{ provider?: string }> }) {
   const { provider: filterProvider } = await searchParams;
