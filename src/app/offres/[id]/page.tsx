@@ -6,6 +6,7 @@ import { getCurrentFavoritesState } from "@/lib/favorites-repository";
 import { offerJsonLd } from "@/lib/json-ld";
 import { getMyUnreadNotificationCount } from "@/lib/notification-logs-repository";
 import { getOfferById, getRelatedOffers } from "@/lib/offers-repository";
+import { getPriceHistoryForOffer } from "@/lib/price-history-repository";
 import { absoluteUrl } from "@/lib/site-config";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -27,10 +28,10 @@ export default async function OfferPage({ params }: { params: Promise<{ id: stri
   const [offer, user, { favorites }, unreadCount] = await Promise.all([getOfferById(id), getCurrentUser(), getCurrentFavoritesState(), getMyUnreadNotificationCount()]);
   if (!offer) notFound();
 
-  const relatedOffers = await getRelatedOffers(offer);
+  const [relatedOffers, priceHistory] = await Promise.all([getRelatedOffers(offer), getPriceHistoryForOffer(offer.id)]);
 
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(offerJsonLd(offer)) }} />
-    <OfferDetail offer={offer} user={user} initialFavorites={favorites} unreadCount={unreadCount} relatedOffers={relatedOffers} />
+    <OfferDetail offer={offer} user={user} initialFavorites={favorites} unreadCount={unreadCount} relatedOffers={relatedOffers} priceHistory={priceHistory} />
   </>;
 }

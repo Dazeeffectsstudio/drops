@@ -6,7 +6,8 @@ import { PreferencesForm } from "@/components/account/preferences-form";
 import { PseudoForm } from "@/components/account/pseudo-form";
 import { BadgeList } from "@/components/badge-list";
 import { ReferralRewardList } from "@/components/referral-reward-list";
-import { getMyActivity } from "@/lib/account-stats-repository";
+import { SavingsCard } from "@/components/account/savings-card";
+import { getMyActivity, getMySavingsStats } from "@/lib/account-stats-repository";
 import { getCurrentUser } from "@/lib/auth";
 import { getMyBadges } from "@/lib/badges";
 import { getUserPreferences } from "@/lib/preferences-repository";
@@ -24,9 +25,10 @@ export default async function AccountPage() {
 
   await markReferralConfirmedIfNeeded(user.id);
 
-  const [preferences, activity, streak, badges, referralStats, referralRewards, qrCode] = await Promise.all([
+  const [preferences, activity, savings, streak, badges, referralStats, referralRewards, qrCode] = await Promise.all([
     getUserPreferences(),
     getMyActivity(),
+    getMySavingsStats(),
     getMyStreak(),
     getMyBadges(),
     getMyReferralStats(),
@@ -79,6 +81,9 @@ export default async function AccountPage() {
       <div className="reward-progress-label"><span>Progression vers le badge « Fidèle » (30 jours)</span><span>{streak.currentStreak} / 30</span></div>
       <div className="reward-progress-bar"><span style={{ width: `${streakProgress}%` }} /></div>
     </div>
+
+    <div className="admin-subheading"><h2>Tes économies</h2></div>
+    <SavingsCard stats={savings} />
 
     <div className="admin-subheading"><h2>Pseudo</h2></div>
     <PseudoForm currentPseudo={user.pseudo} />

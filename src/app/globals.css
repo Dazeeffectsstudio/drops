@@ -488,6 +488,46 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 .account-referral-panel { display:flex; align-items:center; gap:20px; border:1px solid #3b4238; border-radius:13px; background:var(--panel); padding:20px; margin-bottom:16px; flex-wrap:wrap; }
 .account-referral-panel p { margin:0 0 10px; font-size:13px; color:#c9cdc3; }
 
+/* V13 : calendrier, statistiques personnelles, historique des offres */
+
+.search-row-wrap { position:relative; }
+.search-suggestions { position:absolute; top:100%; left:0; right:0; z-index:20; margin-top:6px; border:1px solid #3b4238; border-radius:13px; background:var(--panel); overflow:hidden; list-style:none; padding:6px; }
+.search-suggestions li a { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; text-decoration:none; color:var(--text); font-size:13px; }
+.search-suggestions li a:hover { background:#20241f; color:var(--lime); }
+.search-suggestions li a small { color:#8b9186; font-size:11px; white-space:nowrap; }
+
+.price-history { padding:40px 0; border-top:1px solid var(--line); }
+.price-history-summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:24px; }
+.price-history-summary > div { border:1px solid #3b4238; border-radius:13px; background:var(--panel); padding:16px 18px; }
+.price-history-timeline { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0; border-left:2px solid #3b4238; padding-left:20px; }
+.price-history-timeline li { position:relative; padding-bottom:18px; font-size:13px; }
+.price-history-dot { position:absolute; left:-25px; top:4px; width:9px; height:9px; border-radius:50%; background:var(--lime); }
+.price-history-old { color:#8b9186; }
+.price-history-date { display:block; color:#8b9186; font-size:11px; margin-top:2px; }
+
+.savings-card { margin-bottom:16px; }
+
+.calendar-view { padding-bottom:60px; }
+.calendar-toolbar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; margin-bottom:16px; }
+.calendar-nav { display:flex; align-items:center; gap:10px; }
+.calendar-nav button:not(.admin-test-button) { background:transparent; border:1px solid #3b4238; border-radius:8px; width:34px; height:34px; color:var(--text); cursor:pointer; }
+.calendar-nav button:not(.admin-test-button):hover { border-color:var(--lime); color:var(--lime); }
+.calendar-period-label { margin-left:6px; font-size:15px; text-transform:capitalize; }
+.calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:#262b23; border:1px solid #262b23; border-radius:13px; overflow:hidden; margin-top:16px; }
+.calendar-weekday { background:#171a16; padding:8px; font-size:11px; text-align:center; color:#8b9186; font-weight:800; letter-spacing:.05em; }
+.calendar-grid--week .calendar-cell { min-height:140px; }
+.calendar-cell { background:var(--panel); min-height:90px; padding:6px; display:flex; flex-direction:column; gap:4px; }
+.calendar-cell--today { background:#20241f; }
+.calendar-cell--today .calendar-cell-date { color:var(--lime); }
+.calendar-cell--muted { opacity:.4; }
+.calendar-cell-date { font-size:11px; font-weight:700; color:#c9cdc3; }
+.calendar-cell-events { display:flex; flex-direction:column; gap:2px; overflow:hidden; }
+.calendar-event { display:block; font-size:10px; line-height:1.4; padding:2px 5px; border-radius:5px; text-decoration:none; color:#10120f; background:var(--lime); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.calendar-event--violet { background:#b9a6ff; }
+.calendar-event--blue { background:#8fc7ff; }
+.calendar-event--orange { background:#ffbf87; }
+.calendar-event-more { font-size:10px; color:#8b9186; padding-left:5px; }
+
 @media(max-width:700px) {
   .live-stats { gap:16px; padding:14px 19px; }
   .live-stats-grid { gap:16px; }
@@ -495,12 +535,21 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
   .leaderboard-grid { grid-template-columns:1fr; }
   .ambassador-card-content { flex-direction:column; align-items:flex-start; }
   .ambassador-card-stats { gap:20px; }
+  .calendar-cell { min-height:70px; }
+  .calendar-event { font-size:9px; }
+  .calendar-toolbar { flex-direction:column; align-items:flex-start; }
 }
 @media(max-width:480px) {
   .badge-grid { grid-template-columns:1fr; }
   .invite-link-row { flex-direction:column; }
   .install-pwa-hint { right:auto; left:0; width:200px; }
   .account-referral-panel { flex-direction:column; align-items:flex-start; }
+  .calendar-grid { grid-template-columns:repeat(7,1fr); }
+  .calendar-cell { min-height:64px; padding:3px; }
+  .calendar-weekday { font-size:9px; padding:5px 2px; }
+  .calendar-cell-date { font-size:9px; }
+  .calendar-event { font-size:0; line-height:0; padding:0; width:8px; height:8px; border-radius:50%; }
+  .calendar-event-more { font-size:8px; }
 }
 
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*:before,*:after { transition:none!important; animation:none!important; } }

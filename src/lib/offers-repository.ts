@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { AccentColor } from "@/lib/catalog";
 import { buildOffer } from "@/lib/offer-builder";
 import { supabaseAdmin } from "@/lib/supabase/admin-client";
@@ -79,12 +80,18 @@ function warnUnconfigured(action: string) {
   console.warn(`[offers-repository] Supabase n'est pas configuré — ${action} annulé. Voir .env.local.example.`);
 }
 
-export async function getAllOffers(): Promise<Offer[]> {
+// `cache()` de React dédoublonne les appels identiques au sein d'UNE MÊME
+// requête serveur (ex. plusieurs Server Components qui appellent
+// getAllOffers() dans le même arbre de rendu, comme /calendar) — ça ne met
+// rien en cache entre deux requêtes différentes (chaque visiteur voit
+// toujours les offres à jour), juste un aller-retour Supabase économisé par
+// page quand plusieurs composants ont besoin de la même liste.
+export const getAllOffers = cache(async (): Promise<Offer[]> => {
   if (!supabasePublic) { warnUnconfigured("lecture des offres"); return []; }
   const { data, error } = await supabasePublic.from("offers").select("*").order("expires_at", { ascending: true });
   if (error) { console.error("[offers-repository] getAllOffers:", error.message); return []; }
   return (data ?? []).map(mapRowToOffer);
-}
+});
 
 export type OfferWithTimestamps = Offer & { createdAt: string; updatedAt: string };
 
