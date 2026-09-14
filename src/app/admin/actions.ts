@@ -175,5 +175,6 @@ export async function sendTestEmailAction(): Promise<SendTestEmailResult> {
     status: result.error ? "error" : result.sent ? "sent" : "skipped",
     errorMessage: result.error ?? null,
   });
+  revalidatePath("/admin/notifications");
   return result;
 }
