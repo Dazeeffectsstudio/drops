@@ -4,7 +4,9 @@ import { siteConfig } from "@/lib/site-config";
 import { AnalyticsScripts } from "@/components/analytics-scripts";
 import { BetaBanner } from "@/components/beta-banner";
 import { MobileNav } from "@/components/mobile-nav";
+import { OfflineBanner } from "@/components/offline-banner";
 import { ReferralCapture } from "@/components/referral-capture";
+import { ServiceWorkerRegister } from "@/components/sw-register";
 import { StreakTracker } from "@/components/streak-tracker";
 import "./globals.css";
 
@@ -15,7 +17,9 @@ export const metadata: Metadata = {
   keywords: ["jeux gratuits", "epic games gratuit", "steam gratuit", "twitch drops", "prime gaming", "jeux gratuits belgique", "bons plans jeux vidéo"],
   applicationName: siteConfig.name,
   authors: [{ name: siteConfig.name }],
-  icons: { icon: "/favicon.svg" },
+  manifest: "/manifest.webmanifest",
+  icons: { icon: "/favicon.svg", apple: "/icons/apple-touch-icon.png" },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: siteConfig.name },
   robots: { index: siteConfig.isProduction, follow: siteConfig.isProduction },
   // Vérification Google Search Console par balise meta — voir DEPLOYMENT.md.
   // Absente tant que NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION n'est pas définie.
@@ -44,9 +48,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="fr"><body>
     <BetaBanner />
+    <OfflineBanner />
     {children}
     <MobileNav />
     <StreakTracker />
+    <ServiceWorkerRegister />
     <Suspense fallback={null}><ReferralCapture /></Suspense>
     <AnalyticsScripts />
   </body></html>;

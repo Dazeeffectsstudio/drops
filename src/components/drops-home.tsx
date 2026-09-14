@@ -11,6 +11,7 @@ import type { Offer, OfferCategory, OfferStore } from "@/types/offer";
 import { AccountNavLink } from "./account-nav-link";
 import { FeaturedCarousel } from "./featured-carousel";
 import { ArrowIcon, SearchIcon, SparkIcon } from "./icons";
+import { InstallPwaButton } from "./install-pwa-button";
 import { NewTodaySection } from "./new-today-section";
 import { OfferCard } from "./offer-card";
 import { PlatformQuickNav } from "./platform-quicknav";
@@ -105,6 +106,7 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
           <Link href="/favoris">Favoris{favorites.length > 0 && <b>{favorites.length}</b>}</Link>
         </nav>
         <div className="header-actions">
+          <InstallPwaButton variant="compact" />
           <button type="button" className="header-search" onClick={() => document.getElementById("offer-search")?.focus()} aria-label="Rechercher une offre"><SearchIcon /></button>
           <AccountNavLink user={user} unreadCount={unreadCount} />
         </div>

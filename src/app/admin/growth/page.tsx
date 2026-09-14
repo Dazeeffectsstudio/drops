@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getCommunityStats } from "@/lib/community-stats-repository";
 import { getGrowthStats } from "@/lib/growth-stats-repository";
 import { getNotificationLogStats } from "@/lib/notification-logs-repository";
 import { isAnalyticsConfigured } from "@/lib/analytics/config";
+
+const ACQUISITION_EVENTS = [
+  { name: "referral_click", label: "Clic sur un lien d'invitation (?ref=...)" },
+  { name: "signup_via_referral", label: "Inscription convertie depuis un lien d'invitation" },
+  { name: "pwa_install", label: "Installation de la PWA" },
+  { name: "share", label: "Partage d'une offre (WhatsApp, X, Discord...)" },
+  { name: "claim_click", label: "Clic sur « RÉCUPÉRER »" },
+];
 
 export const metadata: Metadata = { title: "Croissance" };
 export const dynamic = "force-dynamic";
@@ -37,7 +46,18 @@ export default async function AdminGrowthPage() {
       {community.popularPlatforms.map((entry) => <li key={entry.label} className="notification-row"><span>{entry.label}</span><span className="notification-row-meta">{entry.value} favoris</span></li>)}
     </ul>}
 
-    <p className="admin-notice" style={{ marginTop: 32 }}>
+    <div className="admin-subheading"><h2>Acquisition</h2></div>
+    <p className="empty-note">
+      Chiffres de parrainage réels (base de données) : <Link href="/admin/referrals">voir /admin/referrals</Link>.
+    </p>
+    <ul className="notification-list">
+      {ACQUISITION_EVENTS.map((event) => <li key={event.name} className="notification-row"><span>{event.label}</span><span className="notification-row-meta">{event.name}</span></li>)}
+    </ul>
+    <p className="admin-notice" style={{ marginTop: 12 }}>
+      Ces événements sont envoyés à Google Analytics / Plausible (jamais stockés dans cette base — voir <Link href="/admin/seo">/admin/seo</Link>) : {isAnalyticsConfigured ? "consulte ton tableau de bord GA4/Plausible pour les volumes et taux de conversion." : "configure Google Analytics ou Plausible pour commencer à les recevoir."}
+    </p>
+
+    <p className="admin-notice" style={{ marginTop: 16 }}>
       <strong>Non disponible ici :</strong> le taux d&apos;ouverture des emails et les clics sur les notifications/boutons &quot;Récupérer&quot; ne sont pas stockés dans cette base (ça demanderait des pixels de suivi ou un service dédié). {isAnalyticsConfigured ? "Consulte Google Analytics / Plausible pour ces chiffres." : "Configure Google Analytics ou Plausible (voir /admin/seo) pour suivre ces clics."}
     </p>
   </div>;

@@ -5,10 +5,15 @@ import { signOutAction } from "@/app/auth-actions";
 import { PreferencesForm } from "@/components/account/preferences-form";
 import { PseudoForm } from "@/components/account/pseudo-form";
 import { BadgeList } from "@/components/badge-list";
+import { ReferralRewardList } from "@/components/referral-reward-list";
 import { getMyActivity } from "@/lib/account-stats-repository";
 import { getCurrentUser } from "@/lib/auth";
 import { getMyBadges } from "@/lib/badges";
 import { getUserPreferences } from "@/lib/preferences-repository";
+import { generateQrCodeDataUrl } from "@/lib/qr-code";
+import { getMyReferralRewards } from "@/lib/referral-rewards";
+import { getMyReferralStats, markReferralConfirmedIfNeeded } from "@/lib/referrals-repository";
+import { absoluteUrl } from "@/lib/site-config";
 import { getMyStreak } from "@/lib/streak-repository";
 
 export const metadata: Metadata = { title: "Mon compte", robots: { index: false, follow: false } };
@@ -17,12 +22,18 @@ export default async function AccountPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login?next=/account");
 
-  const [preferences, activity, streak, badges] = await Promise.all([
+  await markReferralConfirmedIfNeeded(user.id);
+
+  const [preferences, activity, streak, badges, referralStats, referralRewards, qrCode] = await Promise.all([
     getUserPreferences(),
     getMyActivity(),
     getMyStreak(),
     getMyBadges(),
+    getMyReferralStats(),
+    getMyReferralRewards(),
+    generateQrCodeDataUrl(absoluteUrl(`/?ref=${user.id}`)),
   ]);
+  const streakProgress = Math.min(100, (streak.currentStreak / 30) * 100);
 
   const initial = (user.pseudo ?? user.email ?? "?").charAt(0).toUpperCase();
   const joinedLabel = new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "long", year: "numeric" }).format(new Date(user.createdAt));
@@ -48,7 +59,7 @@ export default async function AccountPage() {
             <Link href="/favoris">Mes favoris</Link>
             <Link href="/notifications">Centre de notifications</Link>
             <Link href="/account/notifications">Réglages des notifications</Link>
-            <Link href="/invite">Inviter un ami</Link>
+            <Link href="/ambassador">Devenir ambassadeur</Link>
           </div>
         </div>
         <form action={signOutAction}><button type="submit" className="admin-test-button">SE DÉCONNECTER</button></form>
@@ -64,12 +75,27 @@ export default async function AccountPage() {
       <div className="provider-card"><span className="micro-label">STREAK ACTUEL</span><strong className="admin-stat-value">🔥 {streak.currentStreak}</strong></div>
       <div className="provider-card"><span className="micro-label">MEILLEUR STREAK</span><strong className="admin-stat-value">{streak.longestStreak}</strong></div>
     </div>
+    <div className="reward-progress" style={{ marginTop: 4 }}>
+      <div className="reward-progress-label"><span>Progression vers le badge « Fidèle » (30 jours)</span><span>{streak.currentStreak} / 30</span></div>
+      <div className="reward-progress-bar"><span style={{ width: `${streakProgress}%` }} /></div>
+    </div>
 
     <div className="admin-subheading"><h2>Pseudo</h2></div>
     <PseudoForm currentPseudo={user.pseudo} />
 
     <div className="admin-subheading"><h2>Badges</h2></div>
     <BadgeList earned={badges} />
+
+    <div className="admin-subheading"><h2>Parrainage</h2></div>
+    <div className="account-referral-panel">
+      {/* eslint-disable-next-line @next/next/no-img-element -- data: URL générée côté serveur, voir la même note dans /ambassador */}
+      <img src={qrCode} alt="QR code de ton lien d'invitation" className="ambassador-qr ambassador-qr--compact" width={100} height={100} />
+      <div>
+        <p>{referralStats.totalSignedUp} invitation(s), {referralStats.totalConfirmed} confirmée(s), {referralRewards.length} récompense(s) débloquée(s).</p>
+        <Link href="/ambassador" className="admin-test-button">VOIR LA PAGE AMBASSADEUR</Link>
+      </div>
+    </div>
+    <ReferralRewardList earned={referralRewards} signedUpCount={referralStats.totalSignedUp} />
 
     <div className="admin-subheading"><h2>Préférences</h2></div>
     <PreferencesForm preferences={preferences} />

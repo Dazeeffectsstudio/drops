@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { attributeReferral } from "@/lib/referrals-repository";
+import { siteConfig } from "@/lib/site-config";
 import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server-client";
 
 export type AuthFormState = { error?: string; message?: string };
@@ -14,7 +15,7 @@ async function getSiteOrigin(): Promise<string> {
   const host = headersList.get("x-forwarded-host") ?? headersList.get("host");
   const protocol = headersList.get("x-forwarded-proto") ?? "https";
   if (host) return `${protocol}://${host}`;
-  return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  return siteConfig.url;
 }
 
 function safeNext(next: FormDataEntryValue | null): string {

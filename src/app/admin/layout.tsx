@@ -15,6 +15,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <Link href="/admin/seo">SEO</Link>
         <Link href="/admin/monitoring">Monitoring</Link>
         <Link href="/admin/growth">Croissance</Link>
+        <Link href="/admin/referrals">Parrainage</Link>
         <Link href="/admin/banner">Bannière</Link>
         <Link href="/admin/feedback">Feedback</Link>
         <Link href="/admin/launch-checklist">Checklist</Link>

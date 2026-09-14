@@ -459,12 +459,48 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 .auth-form textarea { background:#171a16; border:1px solid #3b4238; border-radius:8px; padding:13px 14px; color:var(--text); font-size:14px; font-family:inherit; resize:vertical; }
 .auth-form select { background:#171a16; border:1px solid #3b4238; border-radius:8px; padding:13px 14px; color:var(--text); font-size:14px; font-family:inherit; }
 
+/* V12 : PWA, mode hors ligne, programme ambassadeurs */
+
+.offline-banner { position:sticky; top:0; z-index:60; background:#3a2a12; color:#ffcf8a; text-align:center; font-size:12px; font-weight:700; padding:9px 16px; }
+
+.install-pwa { display:inline-flex; flex-direction:column; align-items:flex-start; gap:6px; position:relative; }
+.install-pwa-button { background:transparent; border:1px solid var(--lime); color:var(--lime); border-radius:999px; padding:9px 16px; font-size:12px; font-weight:800; cursor:pointer; white-space:nowrap; }
+.install-pwa-button:hover { background:var(--lime); color:#10120f; }
+.install-pwa--compact .install-pwa-button { padding:8px 14px; }
+.install-pwa-hint { position:absolute; top:100%; right:0; margin-top:8px; background:var(--panel); border:1px solid #3b4238; border-radius:10px; padding:10px 14px; font-size:12px; color:#c9cdc3; width:220px; z-index:10; }
+
+.ambassador-card { position:relative; border:1px solid #3b4238; border-radius:16px; background:linear-gradient(135deg,#1b1e1a,#141712); padding:28px; margin-bottom:24px; overflow:hidden; }
+.ambassador-card-glow { position:absolute; inset:-40%; background:radial-gradient(circle at 30% 30%, rgba(212,252,113,.16), transparent 60%); animation:ambassador-glow 8s ease-in-out infinite; pointer-events:none; }
+@keyframes ambassador-glow { 0%,100% { transform:translate(0,0) scale(1); } 50% { transform:translate(4%,4%) scale(1.08); } }
+.ambassador-card-content { position:relative; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+.ambassador-card-stats { display:flex; gap:32px; }
+.ambassador-card-stats div { display:flex; flex-direction:column; }
+.ambassador-card-stats strong { font-size:32px; font-weight:900; color:var(--lime); line-height:1.1; }
+.ambassador-card-stats span { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:#8b9186; margin-top:4px; }
+.ambassador-qr { border-radius:10px; border:1px solid #3b4238; }
+.ambassador-qr--compact { width:80px; height:80px; }
+
+.reward-progress { margin:16px 0 24px; }
+.reward-progress-label { display:flex; justify-content:space-between; font-size:12px; color:#c9cdc3; margin-bottom:6px; }
+.reward-progress-bar { height:8px; border-radius:999px; background:#242a20; overflow:hidden; }
+.reward-progress-bar span { display:block; height:100%; background:var(--lime); border-radius:999px; transition:width .3s ease; }
+
+.account-referral-panel { display:flex; align-items:center; gap:20px; border:1px solid #3b4238; border-radius:13px; background:var(--panel); padding:20px; margin-bottom:16px; flex-wrap:wrap; }
+.account-referral-panel p { margin:0 0 10px; font-size:13px; color:#c9cdc3; }
+
 @media(max-width:700px) {
   .live-stats { gap:16px; padding:14px 19px; }
   .live-stats-grid { gap:16px; }
   .badge-grid { grid-template-columns:1fr 1fr; }
   .leaderboard-grid { grid-template-columns:1fr; }
+  .ambassador-card-content { flex-direction:column; align-items:flex-start; }
+  .ambassador-card-stats { gap:20px; }
 }
-@media(max-width:480px) { .badge-grid { grid-template-columns:1fr; } .invite-link-row { flex-direction:column; } }
+@media(max-width:480px) {
+  .badge-grid { grid-template-columns:1fr; }
+  .invite-link-row { flex-direction:column; }
+  .install-pwa-hint { right:auto; left:0; width:200px; }
+  .account-referral-panel { flex-direction:column; align-items:flex-start; }
+}
 
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*:before,*:after { transition:none!important; animation:none!important; } }

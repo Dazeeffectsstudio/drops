@@ -107,9 +107,12 @@ export type UserStreakRow = { user_id: string; current_streak: number; longest_s
 export type UserStreakInsert = Omit<UserStreakRow, "updated_at"> & { updated_at?: string };
 export type UserStreakUpdate = Partial<UserStreakInsert>;
 
-export type ReferralRow = { id: string; referrer_id: string; referred_id: string | null; created_at: string; signed_up_at: string | null };
-export type ReferralInsert = Omit<ReferralRow, "id" | "created_at"> & { created_at?: string };
+export type ReferralRow = { id: string; referrer_id: string; referred_id: string | null; created_at: string; signed_up_at: string | null; confirmed_at: string | null };
+export type ReferralInsert = Omit<ReferralRow, "id" | "created_at" | "confirmed_at"> & { created_at?: string; confirmed_at?: string | null };
 export type ReferralUpdate = Partial<ReferralInsert>;
+
+export type ReferralRewardRow = { id: string; referrer_id: string; reward_key: string; unlocked_at: string };
+export type ReferralRewardInsert = Omit<ReferralRewardRow, "id" | "unlocked_at"> & { unlocked_at?: string };
 
 export type FeedbackRow = { id: string; type: string; message: string; user_id: string | null; created_at: string; status: string };
 export type FeedbackInsert = Omit<FeedbackRow, "id" | "created_at" | "status"> & { created_at?: string; status?: string };
@@ -215,6 +218,12 @@ export type Database = {
         Row: ReferralRow;
         Insert: ReferralInsert;
         Update: ReferralUpdate;
+        Relationships: [];
+      };
+      referral_rewards: {
+        Row: ReferralRewardRow;
+        Insert: ReferralRewardInsert;
+        Update: Partial<ReferralRewardInsert>;
         Relationships: [];
       };
       feedback: {

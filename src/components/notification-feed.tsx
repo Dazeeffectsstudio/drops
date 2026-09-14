@@ -11,6 +11,15 @@ const typeMeta: Record<NotificationType, { label: string; icon: string }> = {
   offer_ending_soon_24h: { label: "Expire dans 24h", icon: "⚠️" },
   offer_ending_soon_2h: { label: "Expire dans 2h", icon: "⚠️" },
   test: { label: "Test", icon: "🔔" },
+  referral_signup: { label: "Nouveau filleul", icon: "🤝" },
+  referral_confirmed: { label: "Filleul confirmé", icon: "✅" },
+  referral_reward: { label: "Récompense débloquée", icon: "🏅" },
+};
+
+const referralTitles: Partial<Record<NotificationType, string>> = {
+  referral_signup: "Un ami s'est inscrit grâce à ton lien !",
+  referral_confirmed: "Un ami a confirmé son compte !",
+  referral_reward: "Nouvelle récompense de parrainage débloquée !",
 };
 
 const filters: Array<{ key: NotificationType | "ALL"; label: string }> = [
@@ -19,6 +28,8 @@ const filters: Array<{ key: NotificationType | "ALL"; label: string }> = [
   { key: "offer_started", label: "Offres disponibles" },
   { key: "offer_ending_soon_24h", label: "Expire dans 24h" },
   { key: "offer_ending_soon_2h", label: "Expire dans 2h" },
+  { key: "referral_signup", label: "Parrainage" },
+  { key: "referral_reward", label: "Récompenses" },
 ];
 
 export function NotificationFeed({ logs }: { logs: MyNotificationLogEntry[] }) {
@@ -58,7 +69,7 @@ export function NotificationFeed({ logs }: { logs: MyNotificationLogEntry[] }) {
           <span className="notification-type-icon" aria-hidden="true">{meta.icon}</span>
           <span className="notification-row-body">
             <span className="notification-row-title">
-              {log.offer ? <Link href={`/offres/${log.offer.id}`}>{log.offer.title}</Link> : <span>Offre supprimée</span>}
+              {log.offer ? <Link href={`/offres/${log.offer.id}`}>{log.offer.title}</Link> : <span>{referralTitles[log.type] ?? "Offre supprimée"}</span>}
             </span>
             <span className="notification-row-meta">{meta.label} · {mounted ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(log.sentAt)) : "…"}</span>
           </span>

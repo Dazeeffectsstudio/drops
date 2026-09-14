@@ -1,4 +1,6 @@
 import { cookies } from "next/headers";
+import { insertNotificationLog } from "@/lib/notification-logs-repository";
+import { checkAndAwardReferralRewards } from "@/lib/referral-rewards";
 import { supabaseAdmin } from "@/lib/supabase/admin-client";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
 
@@ -20,16 +22,45 @@ export async function attributeReferral(newUserId: string): Promise<void> {
   await supabaseAdmin
     .from("referrals")
     .upsert({ referrer_id: referrerId, referred_id: newUserId, signed_up_at: new Date().toISOString() }, { onConflict: "referred_id" });
+
+  await insertNotificationLog({ userId: referrerId, offerId: null, type: "referral_signup", provider: "in_app", status: "sent" });
+  await checkAndAwardReferralRewards(referrerId);
 }
 
-export type ReferralStats = { code: string | null; totalSignedUp: number };
+// Appelée depuis /account (voir src/app/account/page.tsx) : dès qu'un
+// compte parrainé a une session active, on sait que son email est confirmé
+// (Supabase n'émet pas de session tant que l'email n'est pas validé, voir
+// [[project-drops-overview]] section V7) — on marque donc confirmed_at et on
+// prévient le parrain une seule fois (idempotent : ne fait rien si déjà
+// marqué, ou si cet utilisateur n'a pas été parrainé).
+export async function markReferralConfirmedIfNeeded(referredUserId: string): Promise<void> {
+  if (!supabaseAdmin) return;
+  const { data: referral } = await supabaseAdmin
+    .from("referrals")
+    .select("id, referrer_id")
+    .eq("referred_id", referredUserId)
+    .is("confirmed_at", null)
+    .maybeSingle();
+  if (!referral) return;
+
+  await supabaseAdmin.from("referrals").update({ confirmed_at: new Date().toISOString() }).eq("id", referral.id);
+  await insertNotificationLog({ userId: referral.referrer_id, offerId: null, type: "referral_confirmed", provider: "in_app", status: "sent" });
+}
+
+export type ReferralStats = { code: string | null; totalSignedUp: number; totalConfirmed: number };
 
 export async function getMyReferralStats(): Promise<ReferralStats> {
+  const empty: ReferralStats = { code: null, totalSignedUp: 0, totalConfirmed: 0 };
   const supabase = await createSupabaseServerClient();
-  if (!supabase) return { code: null, totalSignedUp: 0 };
+  if (!supabase) return empty;
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { code: null, totalSignedUp: 0 };
+  if (!user) return empty;
 
-  const { data } = await supabase.from("referrals").select("id").eq("referrer_id", user.id);
-  return { code: user.id, totalSignedUp: (data ?? []).length };
+  const { data } = await supabase.from("referrals").select("signed_up_at, confirmed_at").eq("referrer_id", user.id);
+  const rows = data ?? [];
+  return {
+    code: user.id,
+    totalSignedUp: rows.filter((row) => row.signed_up_at !== null).length,
+    totalConfirmed: rows.filter((row) => row.confirmed_at !== null).length,
+  };
 }

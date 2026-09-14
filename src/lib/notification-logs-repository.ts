@@ -4,8 +4,8 @@ import { mapRowToOffer } from "@/lib/offers-repository";
 import type { NotificationLogRow, OfferRow } from "@/types/database";
 import type { Offer } from "@/types/offer";
 
-export type NotificationType = "new_offer" | "offer_started" | "offer_ending_soon_24h" | "offer_ending_soon_2h" | "test";
-export type NotificationProvider = "email" | "push";
+export type NotificationType = "new_offer" | "offer_started" | "offer_ending_soon_24h" | "offer_ending_soon_2h" | "test" | "referral_signup" | "referral_confirmed" | "referral_reward";
+export type NotificationProvider = "email" | "push" | "in_app";
 export type NotificationStatus = "sent" | "skipped" | "error";
 
 export type NotificationLogEntry = {
