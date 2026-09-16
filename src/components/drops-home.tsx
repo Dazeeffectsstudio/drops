@@ -95,8 +95,6 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
   const upcomingOffers = useMemo(() => offers.filter((offer) => isOfferUpcoming(offer, now ?? Date.now())), [offers, now]);
   const total = totalFreeValue(availableOffers);
   const games = availableOffers.filter((offer) => offer.category === "JEUX").length;
-  const drops = availableOffers.filter((offer) => offer.category === "TWITCH DROPS").length;
-  const skins = availableOffers.filter((offer) => offer.category === "ITEMS").length;
   const mostActivePlatform = useMemo(() => {
     const counts = new Map<string, number>();
     for (const offer of availableOffers) counts.set(offer.store, (counts.get(offer.store) ?? 0) + 1);
@@ -155,10 +153,6 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
       </section>
       <main>
         <BrandHero totalValueLabel={formatPrice(total)} offerCount={availableOffers.length} onCtaClick={() => navigateToOffers()} featuredOffer={heroOffers[0]} now={now} onClaim={showClaimNotice} />
-        <section className="stats" aria-label="Statistiques des offres disponibles">
-          <div className="stats-icon" aria-hidden="true">↗</div><div className="stats-copy"><strong>{formatPrice(total)}</strong><span>DE CONTENU GRATUIT DISPONIBLE AUJOURD&apos;HUI</span></div>
-          <div className="stats-grid"><span><b>{availableOffers.length}</b> offres</span><span><b>{games}</b> jeux</span><span><b>{drops}</b> drops</span><span><b>{skins}</b> skins</span></div>
-        </section>
         <FeaturedCarousel offers={featuredOffers} now={now} onClaim={showClaimNotice} />
         <Reveal><section id="tendance" className="trending-section" aria-labelledby="trending-title">
           <div className="section-heading"><div><span className="section-index">02 / SÉLECTION</span><h2 id="trending-title">🔥 EN <em>TENDANCE</em></h2></div><p>Les offres les plus regardées<br />en ce moment.</p></div>

@@ -51,17 +51,7 @@ export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim
     }
   }
 
-  // Mutation directe du style (sans useState) pour suivre le curseur à
-  // chaque mousemove sans déclencher de re-render React — une carte parmi
-  // beaucoup dans une grille ne doit jamais re-render tout son sous-arbre
-  // à chaque pixel de déplacement de la souris.
-  function onCardMove(event: React.MouseEvent<HTMLElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    event.currentTarget.style.setProperty("--spot-x", `${((event.clientX - rect.left) / rect.width) * 100}%`);
-    event.currentTarget.style.setProperty("--spot-y", `${((event.clientY - rect.top) / rect.height) * 100}%`);
-  }
-
-  return <article className={`offer-card offer-card--${offer.accent} offer-card--${status} ${featured ? "offer-card--featured" : ""} reveal`} onMouseMove={onCardMove}>
+  return <article className={`offer-card offer-card--${offer.accent} offer-card--${status} ${featured ? "offer-card--featured" : ""} reveal`}>
     <div className="offer-art" onMouseMove={onMove} onMouseLeave={onLeave} style={tiltStyle}>
       <Link href={`/offres/${offer.id}`} className="offer-art-link" aria-label={`Voir ${offer.title}`}><Image src={offer.image} alt={offer.imageAlt} fill sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw" className="offer-art-image" /></Link>
       <div className="offer-tags"><span className="art-tag">{offer.category}</span>{offer.isNew && <span className="new-tag">NOUVEAU</span>}{status === "upcoming" && <span className="soon-tag">BIENTÔT</span>}</div>
