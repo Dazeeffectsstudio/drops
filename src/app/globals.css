@@ -100,14 +100,7 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 .platform-chip { display:flex; align-items:center; gap:9px; flex:none; background:#171a16; border:1px solid #3b4238; border-radius:999px; color:#c9cdc3; padding:8px 16px 8px 8px; font-size:12px; font-weight:800; letter-spacing:.03em; transition:border-color .2s,color .2s,background .2s; }
 .platform-chip:hover { color:var(--text); border-color:#657157; }
 .platform-chip.selected { background:#242a20; border-color:var(--lime); color:var(--text); }
-.platform-chip-icon { width:24px; height:24px; flex:none; display:grid; place-items:center; border-radius:50%; background:var(--lime); color:#17200f; font-size:10px; font-weight:950; }
-.platform-chip-icon--violet { background:#cdb8ff; color:#221b33; }
-.platform-chip-icon--blue { background:#6fa8dc; color:#0e2038; }
-.platform-chip-icon--amber { background:#f0c674; color:#3a2a0a; }
-.platform-chip-icon--green { background:#7bc97e; color:#132a14; }
-.platform-chip-icon--navy { background:#5b7fc7; color:#0e1730; }
-.platform-chip-icon--red { background:#e2726a; color:#330f0c; }
-.platform-chip-icon--skyblue { background:#8ecae6; color:#0e2836; }
+.platform-chip-icon { width:24px; height:24px; flex:none; display:grid; place-items:center; border-radius:50%; background:#f5f5ed; padding:4px; }.platform-chip-icon img { width:100%; height:100%; object-fit:contain; }
 
 .carousel-section { padding:52px 0 0; scroll-margin-top:100px; }
 .carousel-controls { display:flex; gap:8px; }

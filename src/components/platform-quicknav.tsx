@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { platforms } from "@/lib/catalog";
+import { platformLogos } from "@/lib/platform-logos";
 import type { OfferStore } from "@/types/offer";
 
 export function PlatformQuickNav({ active, onSelect }: { active: OfferStore | "TOUT"; onSelect: (store: OfferStore) => void }) {
@@ -12,7 +14,7 @@ export function PlatformQuickNav({ active, onSelect }: { active: OfferStore | "T
       onClick={() => onSelect(platform.store)}
       aria-pressed={active === platform.store}
     >
-      <span className={`platform-chip-icon platform-chip-icon--${platform.color}`} aria-hidden="true">{platform.logo}</span>
+      <span className="platform-chip-icon"><Image src={platformLogos[platform.store]} alt="" width={24} height={24} unoptimized /></span>
       {platform.label}
     </button>)}
   </nav>;
