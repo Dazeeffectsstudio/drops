@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CatalogPage } from "@/components/catalog-page";
 import { categories, findCategoryBySlug } from "@/lib/catalog";
+import { CalendarIcon, DropletIcon, GamepadIcon, GemIcon, GiftIcon, PuzzlePieceIcon } from "@/components/icons";
 import { getCurrentUser } from "@/lib/auth";
 import { getCurrentFavoritesState } from "@/lib/favorites-repository";
 import { collectionPageJsonLd, faqJsonLd } from "@/lib/json-ld";
@@ -9,6 +10,16 @@ import { getMyUnreadNotificationCount } from "@/lib/notification-logs-repository
 import { getOffersByCategory } from "@/lib/offers-repository";
 import { categoryFaq, categoryIntro } from "@/lib/seo-content";
 import { absoluteUrl } from "@/lib/site-config";
+import type { OfferCategory } from "@/types/offer";
+
+const categoryIcons: Record<OfferCategory, React.ReactNode> = {
+  "JEUX": <GamepadIcon />,
+  "ITEMS": <GemIcon />,
+  "TWITCH DROPS": <DropletIcon />,
+  "DLC": <PuzzlePieceIcon />,
+  "PRIME GAMING": <GiftIcon />,
+  "WEEK-END GRATUIT": <CalendarIcon />,
+};
 
 export function generateStaticParams() {
   return categories.map((category) => ({ category: category.slug }));
@@ -50,6 +61,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       offers={offers}
       emptyTitle="Aucune offre disponible ici pour l'instant."
       emptyDescription={`Reviens bientôt pour voir les prochaines offres ${category.label}.`}
+      logoIcon={categoryIcons[category.category]}
       user={user}
       initialFavorites={favorites}
       unreadCount={unreadCount}

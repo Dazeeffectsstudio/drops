@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import type { AccentColor } from "@/lib/catalog";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { AuthUser } from "@/lib/auth";
 import type { Offer, OfferCategory } from "@/types/offer";
 import { useFavorites } from "@/lib/favorites";
@@ -19,8 +19,8 @@ type Props = {
   offers: Offer[];
   emptyTitle: string;
   emptyDescription: string;
-  logo?: string;
-  color?: AccentColor;
+  logoImage?: string;
+  logoIcon?: ReactNode;
   categoryFilter?: boolean;
   user: AuthUser | null;
   initialFavorites: string[];
@@ -29,7 +29,7 @@ type Props = {
   faq?: Array<{ question: string; answer: string }>;
 };
 
-export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, emptyDescription, logo, color, categoryFilter = false, user, initialFavorites, unreadCount = 0, intro, faq }: Props) {
+export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, emptyDescription, logoImage, logoIcon, categoryFilter = false, user, initialFavorites, unreadCount = 0, intro, faq }: Props) {
   const [now, setNow] = useState<number | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [category, setCategory] = useState<OfferCategory | "TOUT">("TOUT");
@@ -52,8 +52,9 @@ export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, e
         <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
         <div className="header-actions"><Link href="/" className="back-link">← RETOUR AUX OFFRES</Link><AccountNavLink user={user} unreadCount={unreadCount} /></div>
       </header>
-      <section className={`subpage-intro ${logo ? "subpage-intro--banner" : ""}`}>
-        {logo && <span className={`browse-logo browse-logo--${color ?? "lime"} subpage-logo`} aria-hidden="true">{logo}</span>}
+      <section className={`subpage-intro ${logoImage || logoIcon ? "subpage-intro--banner" : ""}`}>
+        {logoImage && <span className="browse-logo subpage-logo" aria-hidden="true"><Image src={logoImage} alt="" width={84} height={84} unoptimized /></span>}
+        {logoIcon && <span className="browse-logo browse-logo--icon subpage-logo" aria-hidden="true">{logoIcon}</span>}
         <span className="section-index">{eyebrow}</span>
         <h1><em>{title}</em></h1>
         <p>{description}</p>

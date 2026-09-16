@@ -7,6 +7,7 @@ import { getCurrentFavoritesState } from "@/lib/favorites-repository";
 import { collectionPageJsonLd, faqJsonLd } from "@/lib/json-ld";
 import { getMyUnreadNotificationCount } from "@/lib/notification-logs-repository";
 import { getOffersByStore } from "@/lib/offers-repository";
+import { platformLogos } from "@/lib/platform-logos";
 import { platformFaq, platformIntro } from "@/lib/seo-content";
 import { absoluteUrl } from "@/lib/site-config";
 
@@ -50,8 +51,7 @@ export default async function PlatformPage({ params }: { params: Promise<{ store
       offers={offers}
       emptyTitle="Aucune offre disponible ici pour l'instant."
       emptyDescription={`Reviens bientôt pour voir les prochaines offres ${platform.label}.`}
-      logo={platform.logo}
-      color={platform.color}
+      logoImage={platformLogos[platform.store]}
       categoryFilter
       user={user}
       initialFavorites={favorites}

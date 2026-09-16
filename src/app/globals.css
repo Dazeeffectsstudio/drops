@@ -203,14 +203,10 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 .browse-card:hover { transform:translateY(-3px); border-color:#91ad61; }
 .browse-card-top { display:flex; align-items:center; gap:10px; }
 .browse-card-top>span:last-child { color:var(--lime); font-size:10px; font-weight:900; letter-spacing:.12em; }
-.browse-logo { width:26px; height:26px; flex:none; display:grid; place-items:center; border-radius:50%; background:var(--lime); color:#17200f; font-size:11px; font-weight:950; letter-spacing:-.02em; }
-.browse-logo--violet { background:#cdb8ff; color:#221b33; }
-.browse-logo--blue { background:#6fa8dc; color:#0e2038; }
-.browse-logo--amber { background:#f0c674; color:#3a2a0a; }
-.browse-logo--green { background:#7bc97e; color:#132a14; }
-.browse-logo--navy { background:#5b7fc7; color:#0e1730; }
-.browse-logo--red { background:#e2726a; color:#330f0c; }
-.browse-logo--skyblue { background:#8ecae6; color:#0e2836; }
+.browse-logo { width:26px; height:26px; flex:none; display:grid; place-items:center; border-radius:50%; background:#f5f5ed; padding:4px; }
+.browse-logo img { width:100%; height:100%; object-fit:contain; }
+.browse-logo--icon { background:#1c2018; border:1px solid #3b4238; color:var(--lime); padding:5px; }
+.browse-logo--icon svg { width:100%; height:100%; }
 .browse-card strong { font-size:23px; letter-spacing:-.045em; }
 .browse-card p { margin:0; color:#a1a89d; font-size:13px; line-height:1.5; }
 .site-footer { border-top:1px solid var(--line); padding:29px 0 35px; display:flex; justify-content:space-between; align-items:center; gap:20px; color:#788174; font-size:10px; font-weight:800; letter-spacing:.13em; }.footer-brand { font-size:22px; letter-spacing:-.08em; }

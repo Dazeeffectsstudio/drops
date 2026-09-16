@@ -1,7 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
-import type { AccentColor } from "@/lib/catalog";
+import type { ReactNode } from "react";
 
-type Entry = { href: string; label: string; description: string; count: number; logo?: string; color?: AccentColor };
+type Entry = { href: string; label: string; description: string; count: number; logoImage?: string; icon?: ReactNode };
 
 export function BrowseIndex({ eyebrow, title, description, entries }: { eyebrow: string; title: string; description: string; entries: Entry[] }) {
   return <main className="subpage site-shell">
@@ -17,7 +18,8 @@ export function BrowseIndex({ eyebrow, title, description, entries }: { eyebrow:
     <div className="browse-grid">
       {entries.map((entry) => <Link key={entry.href} href={entry.href} className="browse-card">
         <div className="browse-card-top">
-          {entry.logo && <span className={`browse-logo browse-logo--${entry.color ?? "lime"}`} aria-hidden="true">{entry.logo}</span>}
+          {entry.logoImage && <span className="browse-logo" aria-hidden="true"><Image src={entry.logoImage} alt="" width={26} height={26} unoptimized /></span>}
+          {entry.icon && <span className="browse-logo browse-logo--icon" aria-hidden="true">{entry.icon}</span>}
           <span>{entry.count > 0 ? `${entry.count} OFFRE${entry.count > 1 ? "S" : ""}` : "BIENTÔT"}</span>
         </div>
         <strong>{entry.label}</strong>
