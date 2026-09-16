@@ -538,6 +538,9 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 .leaderboard-list li:last-child { border-bottom:0; }
 .leaderboard-rank { color:var(--lime); font-weight:900; font-size:12px; width:28px; }
 .leaderboard-list strong { margin-left:auto; color:var(--text); }
+.leaderboard-list li.is-top-rank { background:linear-gradient(90deg,#c8ff5e14,transparent); border-radius:8px; margin:0 -4px; padding-left:8px; padding-right:8px; }
+.leaderboard-list li.is-top-rank .leaderboard-rank { font-size:16px; width:auto; margin-right:2px; }
+.leaderboard-list li.is-top-rank strong { color:var(--lime); }
 
 .week-section { padding:40px 0; border-top:1px solid var(--line); }
 .week-section h2 { margin:0 0 24px; font-size:clamp(24px,3.5vw,32px); letter-spacing:-.03em; }

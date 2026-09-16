@@ -10,7 +10,11 @@ function Leaderboard({ title, entries, formatValue }: { title: string; entries: 
   return <div className="leaderboard-card">
     <h3>{title}</h3>
     {entries.length === 0 ? <p className="empty-note">Pas encore assez de données.</p> : <ol className="leaderboard-list">
-      {entries.map((entry, i) => <li key={entry.label}><span className="leaderboard-rank">#{i + 1}</span><span>{entry.label}</span><strong>{formatValue(entry.value)}</strong></li>)}
+      {entries.map((entry, i) => <li key={entry.label} className={i === 0 ? "is-top-rank" : ""}>
+        <span className="leaderboard-rank">{i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : `#${i + 1}`}</span>
+        <span>{entry.label}</span>
+        <strong>{formatValue(entry.value)}</strong>
+      </li>)}
     </ol>}
   </div>;
 }
