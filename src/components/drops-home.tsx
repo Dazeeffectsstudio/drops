@@ -12,7 +12,6 @@ import type { Offer, OfferCategory, OfferStore } from "@/types/offer";
 import { AccountNavLink } from "./account-nav-link";
 import { BrandHero } from "./brand-hero";
 import { FeaturedCarousel } from "./featured-carousel";
-import { FeaturedHeroBanner } from "./featured-hero-banner";
 import { ArrowIcon, SearchIcon } from "./icons";
 import { InstallPwaButton } from "./install-pwa-button";
 import { NewTodaySection } from "./new-today-section";
@@ -155,8 +154,7 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
         </div>
       </section>
       <main>
-        <BrandHero totalValueLabel={formatPrice(total)} offerCount={availableOffers.length} onCtaClick={() => navigateToOffers()} />
-        {heroOffers.length > 0 && <FeaturedHeroBanner offers={heroOffers} now={now} onClaim={showClaimNotice} />}
+        <BrandHero totalValueLabel={formatPrice(total)} offerCount={availableOffers.length} onCtaClick={() => navigateToOffers()} featuredOffer={heroOffers[0]} now={now} onClaim={showClaimNotice} />
         <section className="stats" aria-label="Statistiques des offres disponibles">
           <div className="stats-icon" aria-hidden="true">↗</div><div className="stats-copy"><strong>{formatPrice(total)}</strong><span>DE CONTENU GRATUIT DISPONIBLE AUJOURD&apos;HUI</span></div>
           <div className="stats-grid"><span><b>{availableOffers.length}</b> offres</span><span><b>{games}</b> jeux</span><span><b>{drops}</b> drops</span><span><b>{skins}</b> skins</span></div>

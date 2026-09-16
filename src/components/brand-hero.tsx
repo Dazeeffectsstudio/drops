@@ -1,56 +1,69 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import Image from "next/image";
+import { useState } from "react";
+import type { Offer } from "@/types/offer";
+import { trackEvent } from "@/lib/analytics/track";
+import { buildBurstDots } from "@/lib/claim-burst";
+import { formatPrice, formatRemaining, offerExpiresAt } from "@/lib/offers";
 import { ArrowIcon } from "./icons";
+import { PlatformBadge } from "./platform-badge";
 
-type Props = { totalValueLabel: string; offerCount: number; onCtaClick: () => void };
+type Props = { totalValueLabel: string; offerCount: number; onCtaClick: () => void; featuredOffer?: Offer; now: number | null; onClaim: (offer: Offer) => void };
 
-const SCATTER_DOTS = [
-  { color: "#f0c674", x: -300, y: -160, delay: 0 },
-  { color: "#6fa8dc", x: 280, y: -190, delay: 0.05 },
-  { color: "#7bc97e", x: -380, y: 90, delay: 0.1 },
-  { color: "#5b7fc7", x: 350, y: 70, delay: 0.15 },
-  { color: "#cdb8ff", x: -200, y: 220, delay: 0.02 },
-  { color: "#e2726a", x: 210, y: 210, delay: 0.07 },
-  { color: "#8ecae6", x: 0, y: -260, delay: 0.12 },
-];
+const burstDots = buildBurstDots(10);
 
-// Hero de marque : la goutte tombe, rebondit puis éclate en révélant le
-// titre — reprend littéralement le nom "DROPS" comme mise en scène
-// d'entrée plutôt que comme simple mot. Animation CSS pure, jouée une
-// fois au montage ; `prefers-reduced-motion` la neutralise via la règle
-// globale déjà en place dans globals.css.
-export function BrandHero({ totalValueLabel, offerCount, onCtaClick }: Props) {
+// Hero éditorial : le statement de marque à gauche, la vraie jaquette du
+// jeu en vedette à droite — asymétrique et posée en biais plutôt que
+// centrée, pour que la vraie image domine au lieu d'une forme abstraite.
+// Remplace l'ancienne mise en scène "goutte qui tombe" (toujours présente
+// en plus discret dans le kicker) désormais qu'une vraie photo porte le
+// hero.
+export function BrandHero({ totalValueLabel, offerCount, onCtaClick, featuredOffer, now, onClaim }: Props) {
+  const [claimed, setClaimed] = useState(false);
+  const expiresAt = featuredOffer ? offerExpiresAt(featuredOffer) : null;
+  const remaining = expiresAt !== null && now !== null ? expiresAt - now : null;
+
+  function handleClaim() {
+    if (!featuredOffer) return;
+    trackEvent("claim_click", { store: featuredOffer.store, offerId: featuredOffer.id });
+    onClaim(featuredOffer);
+    setClaimed(true);
+  }
+
   return <div className="brand-hero">
-    <div className="brand-hero-bg" aria-hidden="true" />
-    <svg className="brand-hero-rings" viewBox="0 0 1440 820" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <circle cx="720" cy="380" r="280" />
-      <circle cx="720" cy="380" r="200" />
-    </svg>
-
-    <div className="brand-hero-drop" aria-hidden="true" />
-    <div className="brand-hero-trail" aria-hidden="true" />
-    <div className="brand-hero-ring" aria-hidden="true" />
-    {SCATTER_DOTS.map((dot, i) => <span
-      key={i}
-      className="brand-hero-scatter"
-      aria-hidden="true"
-      style={{ "--to": `translate(${dot.x}px, ${dot.y}px)`, background: dot.color, animationDelay: `${1.22 + dot.delay}s` } as CSSProperties}
-    />)}
-
-    <div className="brand-hero-content">
+    <div className="brand-hero-text">
       <div className="brand-hero-kicker">
         <span className="brand-hero-dot" />
         <span>{totalValueLabel} de jeux gratuits aujourd&apos;hui &middot; {offerCount} offres</span>
       </div>
       <h1 className="brand-hero-title">
-        <span className="brand-hero-title-strong">Don&apos;t pay<span className="brand-hero-accent">.</span></span>
-        <span className="brand-hero-title-light">Just play<span className="brand-hero-accent">.</span></span>
+        <span className="brand-hero-title-strong">Don&apos;t pay.</span>
+        <span className="brand-hero-title-light">Just play.</span>
       </h1>
       <p className="brand-hero-description">Epic Games, Steam et cinq autres plateformes, réunies chaque jour au même endroit.</p>
       <button type="button" className="brand-hero-cta" onClick={onCtaClick}>
         Voir les offres <ArrowIcon className="arrow-icon" />
       </button>
     </div>
+
+    {featuredOffer && <div className="brand-hero-feature">
+      <div className="brand-hero-feature-art">
+        <Image src={featuredOffer.image} alt={featuredOffer.imageAlt} fill priority sizes="(max-width: 900px) 92vw, 46vw" className="brand-hero-feature-image" />
+        <span className="brand-hero-feature-tag"><span className="live-dot" /> JEU EN VEDETTE</span>
+      </div>
+      <div className="brand-hero-feature-card">
+        <PlatformBadge store={featuredOffer.store} />
+        <strong>{featuredOffer.title}</strong>
+        <div className="brand-hero-feature-meta">
+          <span>{featuredOffer.originalPrice !== null && <s>{formatPrice(featuredOffer.originalPrice)}</s>} <b>GRATUIT</b></span>
+          <span>{remaining === null ? "—" : `Expire dans ${formatRemaining(remaining)}`}</span>
+        </div>
+        <button type="button" className={`claim-button ${claimed ? "is-claimed" : ""}`} onClick={handleClaim}>
+          {claimed ? "Récupéré" : "RÉCUPÉRER"} <ArrowIcon className="arrow-icon" />
+          {claimed && burstDots.map((style, i) => <span key={i} className="claim-burst-dot" style={style} />)}
+        </button>
+      </div>
+    </div>}
   </div>;
 }
