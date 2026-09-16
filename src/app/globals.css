@@ -111,7 +111,7 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 .filter-options button:hover { color:var(--text); background:#1f2a27; }
 .filter-options button.selected { background:var(--lime); color:#0d2320; }
 .results-line { display:flex; justify-content:space-between; color:#828a7e; font-size:10px; font-weight:800; letter-spacing:.15em; padding:25px 0 19px; }
-.offer-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr)); gap:16px; }
+.offer-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:20px; }
 .offer-card { position:relative; background:#151813; border:1px solid #2a2f27; border-radius:20px; padding:7px; overflow:hidden; min-width:0; transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .3s ease,box-shadow .5s cubic-bezier(.16,1,.3,1); }
 .offer-card:hover { transform:translateY(-4px); border-color:#3d5750; box-shadow:0 26px 50px #000a,0 0 0 1px #4df0e022; }
 .offer-card--featured { padding:0; }

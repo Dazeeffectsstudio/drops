@@ -60,7 +60,7 @@ export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim
       </button>
     </div>
     <div className="offer-body">
-      <div className="offer-meta"><PlatformBadge store={offer.store} /><span className="meta-dot" /><span>{offer.platform}</span></div>
+      <div className="offer-meta"><PlatformBadge store={offer.store} /></div>
       <h3><Link href={`/offres/${offer.id}`}>{offer.title}</Link></h3>
       <p className="offer-kind">{offer.kind}</p>
       <div className="offer-divider" />
