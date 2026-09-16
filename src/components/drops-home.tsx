@@ -11,10 +11,8 @@ import type { AuthUser } from "@/lib/auth";
 import type { Offer, OfferCategory, OfferStore } from "@/types/offer";
 import { AccountNavLink } from "./account-nav-link";
 import { BrandHero } from "./brand-hero";
-import { FeaturedCarousel } from "./featured-carousel";
 import { ArrowIcon, SearchIcon } from "./icons";
 import { InstallPwaButton } from "./install-pwa-button";
-import { NewTodaySection } from "./new-today-section";
 import { OfferCard } from "./offer-card";
 import { PlatformQuickNav } from "./platform-quicknav";
 import { Reveal } from "./reveal";
@@ -91,7 +89,6 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
   const trendingOffers = availableOffers.filter((offer) => offer.trending).slice(0, 4);
   const featuredOffers = availableOffers.filter((offer) => offer.featured);
   const heroOffers = (featuredOffers.length > 0 ? featuredOffers : trendingOffers.length > 0 ? trendingOffers : availableOffers).slice(0, 4);
-  const newTodayOffers = availableOffers.filter((offer) => offer.isNew);
   const upcomingOffers = useMemo(() => offers.filter((offer) => isOfferUpcoming(offer, now ?? Date.now())), [offers, now]);
   const total = totalFreeValue(availableOffers);
   const games = availableOffers.filter((offer) => offer.category === "JEUX").length;
@@ -153,14 +150,12 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
       </section>
       <main>
         <BrandHero totalValueLabel={formatPrice(total)} offerCount={availableOffers.length} onCtaClick={() => navigateToOffers()} featuredOffer={heroOffers[0]} now={now} onClaim={showClaimNotice} />
-        <FeaturedCarousel offers={featuredOffers} now={now} onClaim={showClaimNotice} />
         <Reveal><section id="tendance" className="trending-section" aria-labelledby="trending-title">
-          <div className="section-heading"><div><span className="section-index">02 / SÉLECTION</span><h2 id="trending-title">🔥 EN <em>TENDANCE</em></h2></div><p>Les offres les plus regardées<br />en ce moment.</p></div>
+          <div className="section-heading"><div><span className="section-index">01 / SÉLECTION</span><h2 id="trending-title">🔥 EN <em>TENDANCE</em></h2></div><p>Les offres les plus regardées<br />en ce moment.</p></div>
           <div className="trending-grid">{trendingOffers.map((offer, index) => <Link href={`/offres/${offer.id}`} key={offer.id} className="trending-card reveal"><span className="trending-rank">0{index + 1}</span><Image src={offer.image} alt={offer.imageAlt} fill sizes="(max-width: 700px) 50vw, 25vw" className="trending-card-image" /><span className="trending-card-shade" /><span className="trending-card-content"><span>{offer.store}</span><strong>{offer.title}</strong><small>{offer.category} · GRATUIT</small></span></Link>)}</div>
         </section></Reveal>
-        <NewTodaySection offers={newTodayOffers} now={now} favorites={favorites} onFavorite={toggleFavorite} onClaim={showClaimNotice} />
         <Reveal><section id="offres" className="offers-section" aria-labelledby="offers-title">
-          <div className="section-heading"><div><span className="section-index">04 / LES OFFRES</span><h2 id="offers-title"><span className="heading-spark">✳</span> GRATUIT <em>MAINTENANT</em></h2></div><p>Des opportunités à saisir<br />avant qu&apos;elles disparaissent.</p></div>
+          <div className="section-heading"><div><span className="section-index">02 / LES OFFRES</span><h2 id="offers-title"><span className="heading-spark">✳</span> GRATUIT <em>MAINTENANT</em></h2></div><p>Des opportunités à saisir<br />avant qu&apos;elles disparaissent.</p></div>
           <div className="search-row-wrap">
             <div className="search-row"><SearchIcon /><input id="offer-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher un jeu, une plateforme, une catégorie…" aria-label="Rechercher une offre" autoComplete="off" />{query && <button type="button" onClick={() => setQuery("")} aria-label="Effacer la recherche">×</button>}</div>
             {searchSuggestions.length > 0 && <ul className="search-suggestions" role="listbox">
@@ -177,7 +172,7 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
         </section></Reveal>
         <UpcomingSection offers={upcomingOffers} now={now} userId={user?.id ?? null} subscribedOfferIds={subscribedOfferIds} onNotified={setNotice} />
         <Reveal><section className="why-section" aria-labelledby="why-title">
-          <div className="section-heading"><div><span className="section-index">06 / POURQUOI DROPS</span><h2 id="why-title">Pourquoi <em>DROPS</em> ?</h2></div></div>
+          <div className="section-heading"><div><span className="section-index">04 / POURQUOI DROPS</span><h2 id="why-title">Pourquoi <em>DROPS</em> ?</h2></div></div>
           <div className="why-grid">
             <div className="why-card"><span className="why-icon" aria-hidden="true">✓</span><strong>100% gratuit</strong><p>DROPS ne vend rien et ne demande jamais ta carte bancaire — juste un annuaire des vraies offres gratuites.</p></div>
             <div className="why-card"><span className="why-icon" aria-hidden="true">⚡</span><strong>Synchronisation automatique</strong><p>Les offres sont détectées directement depuis les sources officielles, pas de saisie manuelle qui prend du retard.</p></div>
