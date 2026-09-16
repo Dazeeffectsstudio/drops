@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { signOutAction } from "@/app/auth-actions";
@@ -53,7 +54,7 @@ export default async function AccountPage() {
 
     <div className="account-panel">
       <div className="account-identity">
-        {user.avatarUrl ? <img src={user.avatarUrl} alt="" className="account-avatar account-avatar--large" /> : <span className="account-avatar account-avatar--large account-avatar--fallback">{initial}</span>}
+        {user.avatarUrl ? <Image src={user.avatarUrl} alt="" width={56} height={56} className="account-avatar account-avatar--large" /> : <span className="account-avatar account-avatar--large account-avatar--fallback">{initial}</span>}
         <div>
           <strong>{user.pseudo ?? user.email}</strong>
           <span className="account-joined">Membre depuis le {joinedLabel}</span>

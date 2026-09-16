@@ -14,7 +14,7 @@ function buildChecklist(): ChecklistItem[] {
     { label: "HTTPS actif", ok: httpsReady, hint: httpsReady ? "Actif" : "Automatique sur Vercel dès que le domaine est connecté et vérifié." },
     { label: "Search Console validée", ok: Boolean(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION), hint: "Ajoute NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION avec le code fourni par Google (voir DEPLOYMENT.md)." },
     { label: "Analytics actif", ok: isAnalyticsConfigured, hint: isAnalyticsConfigured ? "Configuré" : "Optionnel — définis NEXT_PUBLIC_GA_MEASUREMENT_ID ou NEXT_PUBLIC_PLAUSIBLE_DOMAIN si tu veux des statistiques." },
-    { label: "Cron de synchronisation déclaré", ok: true, hint: "vercel.json déclare /api/sync (6h) et /api/notifications/check-expiring (30min) — actif dès le déploiement sur Vercel (plan Pro pour cette fréquence, voir DEPLOYMENT.md pour l'alternative Hobby)." },
+    { label: "Cron de synchronisation déclaré", ok: true, hint: "vercel.json déclare /api/sync et /api/notifications/check-expiring une fois par jour (6h00/6h10) — compatible avec le plan gratuit Vercel (Hobby). Voir DEPLOYMENT.md pour repasser à une fréquence plus rapide (plan Pro ou GitHub Actions)." },
     { label: "Emails actifs", ok: isEmailConfigured, hint: isEmailConfigured ? "Configuré (Resend)" : "Définis RESEND_API_KEY pour des envois réels." },
     { label: "Notifications push actives", ok: isPushConfigured, hint: isPushConfigured ? "Configuré" : "Clés VAPID manquantes (normalement déjà générées, voir .env.local)." },
     { label: "robots.txt valide", ok: true, hint: "Généré automatiquement par src/app/robots.ts." },

@@ -59,7 +59,9 @@ export function InstallPwaButton({ variant = "default" }: { variant?: "default" 
   }
 
   return <div className={`install-pwa ${variant === "compact" ? "install-pwa--compact" : ""}`}>
-    <button type="button" className="install-pwa-button" onClick={handleClick}>📲 Installer DROPS</button>
+    <button type="button" className="install-pwa-button" onClick={handleClick} aria-label="Installer DROPS">
+      {variant === "compact" ? "📲" : "📲 Installer DROPS"}
+    </button>
     {showIosHint && <p className="install-pwa-hint">Appuie sur <strong>Partager</strong> puis <strong>« Sur l&apos;écran d&apos;accueil »</strong>.</p>}
   </div>;
 }

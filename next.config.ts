@@ -39,6 +39,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn2.unrealengine.com" },
       // Images des offres Steam réelles, servies par GamerPower (voir src/lib/providers/steam.ts).
       { protocol: "https", hostname: "www.gamerpower.com" },
+      // Avatars des comptes connectés via Google/GitHub OAuth (voir src/lib/auth.ts).
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      { protocol: "https", hostname: "avatars.githubusercontent.com" },
     ],
   },
   async headers() {

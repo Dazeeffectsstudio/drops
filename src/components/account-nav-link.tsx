@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { AuthUser } from "@/lib/auth";
 
@@ -7,7 +8,7 @@ export function AccountNavLink({ user, unreadCount = 0 }: { user: AuthUser | nul
   if (!user) return <Link href="/login" className="account-link">CONNEXION</Link>;
   const initial = (user.email ?? "?").charAt(0).toUpperCase();
   return <Link href="/account" className="account-link account-link--connected" aria-label={unreadCount > 0 ? `Mon compte, ${unreadCount} notification(s) non lue(s)` : "Mon compte"}>
-    {user.avatarUrl ? <img src={user.avatarUrl} alt="" className="account-avatar" /> : <span className="account-avatar account-avatar--fallback">{initial}</span>}
+    {user.avatarUrl ? <Image src={user.avatarUrl} alt="" width={34} height={34} className="account-avatar" /> : <span className="account-avatar account-avatar--fallback">{initial}</span>}
     {unreadCount > 0 && <span className="account-unread-dot" aria-hidden="true" />}
   </Link>;
 }
