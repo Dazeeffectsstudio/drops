@@ -80,7 +80,7 @@ export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim
       </div>
       <div className="offer-actions">
         <div className="countdown"><ClockIcon className="clock-icon" /><span><small>Expire dans</small><strong>{remaining === null ? "—" : formatRemaining(remaining)}</strong></span></div>
-        <button type="button" className="claim-button" onClick={() => { trackEvent("claim_click", { store: offer.store, offerId: offer.id }); onClaim(); }} disabled={status !== "active"}>{claimLabel[status]}<ArrowIcon className="arrow-icon" /></button>
+        <button type="button" className="claim-button" onClick={() => { trackEvent("claim_click", { store: offer.store, offerId: offer.id }); onClaim(); }} disabled={status !== "active"}>{claimLabel[status]}<span className="cta-icon"><ArrowIcon className="arrow-icon" /></span></button>
       </div>
       <div className="expiry-progress" role="progressbar" aria-label="Temps restant avant expiration" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${progress}%` }} /></div>
     </div>

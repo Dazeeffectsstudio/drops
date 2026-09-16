@@ -21,7 +21,7 @@ function Slide({ offer, now, onClaim }: { offer: Offer; now: number | null; onCl
         <div><span className="micro-label">ÉCONOMISÉ</span><strong>{offer.originalPrice !== null ? formatPrice(offer.originalPrice) : "—"}</strong></div>
         <div><span className="micro-label">EXPIRE DANS</span><strong>{remaining === null ? "—" : formatRemaining(remaining)}</strong></div>
       </div>
-      <button type="button" className="claim-button" onClick={() => onClaim(offer)} disabled={expired}>{expired ? "EXPIRÉE" : "RÉCUPÉRER"} <ArrowIcon className="arrow-icon" /></button>
+      <button type="button" className="claim-button" onClick={() => onClaim(offer)} disabled={expired}>{expired ? "EXPIRÉE" : "RÉCUPÉRER"} <span className="cta-icon"><ArrowIcon className="arrow-icon" /></span></button>
     </div>
   </article>;
 }

@@ -43,7 +43,7 @@ export function BrandHero({ totalValueLabel, offerCount, onCtaClick, featuredOff
       </h1>
       <p className="brand-hero-description">Epic Games, Steam et cinq autres plateformes, réunies chaque jour au même endroit.</p>
       <button type="button" className="brand-hero-cta" onClick={onCtaClick}>
-        Voir les offres <ArrowIcon className="arrow-icon" />
+        Voir les offres <span className="cta-icon"><ArrowIcon className="arrow-icon" /></span>
       </button>
     </div>
 
@@ -60,7 +60,7 @@ export function BrandHero({ totalValueLabel, offerCount, onCtaClick, featuredOff
           <span>{remaining === null ? "—" : `Expire dans ${formatRemaining(remaining)}`}</span>
         </div>
         <button type="button" className={`claim-button ${claimed ? "is-claimed" : ""}`} onClick={handleClaim}>
-          {claimed ? "Récupéré" : "RÉCUPÉRER"} <ArrowIcon className="arrow-icon" />
+          {claimed ? "Récupéré" : "RÉCUPÉRER"} <span className="cta-icon"><ArrowIcon className="arrow-icon" /></span>
           {claimed && burstDots.map((style, i) => <span key={i} className="claim-burst-dot" style={style} />)}
         </button>
       </div>

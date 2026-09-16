@@ -66,7 +66,7 @@ export function OfferDetail({ offer, user, initialFavorites, unreadCount = 0, re
           <div className="expiry-progress" role="progressbar" aria-label="Temps restant avant expiration" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${progress}%` }} /></div>
         </div>
         <button type="button" className={`claim-button detail-claim ${claimed ? "is-claimed" : ""}`} onClick={handleClaim} disabled={remaining !== null && remaining <= 0}>
-          {claimed ? "Récupéré" : "RÉCUPÉRER"} <ArrowIcon className="arrow-icon" />
+          {claimed ? "Récupéré" : "RÉCUPÉRER"} <span className="cta-icon"><ArrowIcon className="arrow-icon" /></span>
           {claimed && burstDots.map((style, i) => <span key={i} className="claim-burst-dot" style={style} />)}
         </button>
         <div className="detail-side-actions">
