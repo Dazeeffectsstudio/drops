@@ -30,6 +30,29 @@ function addDays(date: Date, n: number): Date {
 const stores: Array<OfferStore | "TOUT"> = ["TOUT", ...platformEntries.map((entry) => entry.store)];
 const categories: Array<OfferCategory | "TOUT"> = ["TOUT", ...categoryEntries.map((entry) => entry.category)];
 
+// Reprend exactement la structure de la vraie grille (toolbar + 42 cellules)
+// pour que le passage au vrai contenu, une fois monté, ne décale rien —
+// plutôt qu'un texte "Chargement…" centré qui disparaît d'un coup.
+function CalendarSkeleton() {
+  return <div className="calendar-view calendar-skeleton" aria-hidden="true">
+    <div className="calendar-toolbar">
+      <div className="calendar-nav">
+        <span className="skeleton-block" style={{ width: 34, height: 34, borderRadius: 8 }} />
+        <span className="skeleton-block" style={{ width: 92, height: 34, borderRadius: 8 }} />
+        <span className="skeleton-block" style={{ width: 34, height: 34, borderRadius: 8 }} />
+        <span className="skeleton-block" style={{ width: 140, height: 15, marginLeft: 6 }} />
+      </div>
+    </div>
+    <div className="calendar-grid">
+      {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => <div key={d} className="calendar-weekday">{d}</div>)}
+      {Array.from({ length: 42 }, (_, i) => <div key={i} className="calendar-cell">
+        <span className="skeleton-block" style={{ width: 16, height: 10 }} />
+        {i % 5 === 0 && <span className="skeleton-block" style={{ width: "80%", height: 14, marginTop: 4 }} />}
+      </div>)}
+    </div>
+  </div>;
+}
+
 export function CalendarView({ offers, user, initialFavorites }: { offers: Offer[]; user: AuthUser | null; initialFavorites: string[] }) {
   // `mounted` évite tout hydration mismatch : découper des offres par jour
   // calendaire dépend du fuseau horaire du visiteur (voir la note sur
@@ -66,7 +89,7 @@ export function CalendarView({ offers, user, initialFavorites }: { offers: Offer
     return map;
   }, [filteredOffers]);
 
-  if (!mounted || !anchor) return <div className="calendar-view"><div className="empty-state">Chargement du calendrier…</div></div>;
+  if (!mounted || !anchor) return <CalendarSkeleton />;
 
   const days: Date[] = view === "week"
     ? Array.from({ length: 7 }, (_, i) => addDays(startOfWeek(anchor), i))
