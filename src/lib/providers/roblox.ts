@@ -1,39 +1,9 @@
-import { buildOffer } from "@/lib/offer-builder";
-import { stableFutureDate } from "./dates";
 import type { OfferProvider } from "./types";
 
-// Données simulées en attendant une vraie intégration avec le catalogue
-// d'items gratuits Roblox.
+// Aucune offre simulée : mieux vaut ne rien afficher pour Roblox que de
+// faire croire à de vraies offres qui n'existent pas.
 async function fetchOffers() {
-  return [
-    buildOffer({
-      id: "sync-roblox-item-1",
-      title: "Couronne du Créateur",
-      description: "Un accessoire de collection gratuit créé pour la communauté Roblox.",
-      platform: "AUTRES",
-      store: "Roblox",
-      category: "ITEMS",
-      image: "/images/roblox-blocks.svg",
-      originalPrice: 5.99,
-      expiresAt: stableFutureDate(10),
-      url: "#sync-roblox-item-1",
-      accent: "red",
-      isNew: true,
-    }),
-    buildOffer({
-      id: "sync-roblox-item-2",
-      title: "Cape Spectrale",
-      description: "Un accessoire cosmétique offert pendant l'événement en cours sur Roblox.",
-      platform: "AUTRES",
-      store: "Roblox",
-      category: "ITEMS",
-      image: "/images/roblox-blocks.svg",
-      originalPrice: 3.99,
-      expiresAt: stableFutureDate(10),
-      url: "#sync-roblox-item-2",
-      accent: "red",
-    }),
-  ];
+  return [];
 }
 
 export const robloxProvider: OfferProvider = {
@@ -41,6 +11,6 @@ export const robloxProvider: OfferProvider = {
   label: "Roblox",
   store: "Roblox",
   mode: "simulated",
-  unavailableReason: "Pas d'API publique listant les items gratuits en promotion sur Roblox.",
+  unavailableReason: "Pas d'API publique listant les items gratuits en promotion sur Roblox. Aucune offre affichée tant que ce n'est pas branché sur une vraie source.",
   fetchOffers,
 };

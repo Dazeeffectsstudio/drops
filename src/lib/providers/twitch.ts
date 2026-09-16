@@ -1,39 +1,11 @@
-import { buildOffer } from "@/lib/offer-builder";
-import { stableFutureDate } from "./dates";
 import type { OfferProvider } from "./types";
 
-// Données simulées en attendant une vraie intégration avec l'API Twitch
-// Drops (nécessite un accès développeur Twitch approuvé par jeu suivi).
+// Aucune offre simulée : mieux vaut ne rien afficher pour Twitch que de
+// faire croire à de vraies offres qui n'existent pas. `syncAllOffers()`
+// interprète un tableau vide comme "plus aucune offre côté ce provider"
+// et expire automatiquement celles déjà en base (voir sync-offers.ts).
 async function fetchOffers() {
-  return [
-    buildOffer({
-      id: "sync-twitch-drop-1",
-      title: "Signal Nocturne — Pack Twitch Drop",
-      description: "Regarde les streams partenaires pour débloquer ce pack cosmétique exclusif.",
-      platform: "AUTRES",
-      store: "Twitch",
-      category: "TWITCH DROPS",
-      image: "/images/stream-signal.svg",
-      originalPrice: null,
-      expiresAt: stableFutureDate(5),
-      url: "#sync-twitch-drop-1",
-      accent: "violet",
-      isNew: true,
-    }),
-    buildOffer({
-      id: "sync-twitch-drop-2",
-      title: "Arène Numérique — Pack Twitch Drop",
-      description: "Un deuxième drop de la campagne, à débloquer en regardant les créateurs partenaires.",
-      platform: "AUTRES",
-      store: "Twitch",
-      category: "TWITCH DROPS",
-      image: "/images/stream-signal.svg",
-      originalPrice: null,
-      expiresAt: stableFutureDate(5),
-      url: "#sync-twitch-drop-2",
-      accent: "violet",
-    }),
-  ];
+  return [];
 }
 
 export const twitchProvider: OfferProvider = {
@@ -41,6 +13,6 @@ export const twitchProvider: OfferProvider = {
   label: "Twitch",
   store: "Twitch",
   mode: "simulated",
-  unavailableReason: "L'API Twitch Drops nécessite un accès développeur approuvé par jeu suivi — pas d'accès public en lecture seule.",
+  unavailableReason: "L'API Twitch Drops nécessite un accès développeur approuvé par jeu suivi — pas d'accès public en lecture seule. Aucune offre affichée tant que ce n'est pas branché sur une vraie source.",
   fetchOffers,
 };
