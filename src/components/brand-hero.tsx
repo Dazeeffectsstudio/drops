@@ -38,7 +38,9 @@ export function BrandHero({ totalValueLabel, offerCount, onCtaClick, featuredOff
         <span>{totalValueLabel} de jeux gratuits aujourd&apos;hui &middot; {offerCount} offres</span>
       </div>
       <h1 className="brand-hero-title">
-        <span className="brand-hero-title-strong">Don&apos;t pay.</span>
+        <span className="brand-hero-title-strong">
+          {"Don't pay.".split(" ").map((word, i) => <span key={i} className="brand-hero-word" style={{ animationDelay: `${.62 + i * .08}s` }}>{word}</span>)}
+        </span>
         <span className="brand-hero-title-light">Just play.</span>
       </h1>
       <p className="brand-hero-description">Epic Games, Steam et cinq autres plateformes, réunies chaque jour au même endroit.</p>
