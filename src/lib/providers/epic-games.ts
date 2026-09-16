@@ -69,7 +69,7 @@ async function fetchOffers() {
         originalPrice,
         expiresAt: activeWindow.endDate,
         url,
-        accent: "lime",
+        accent: "amber",
         trending: true,
       }));
       continue;
@@ -90,7 +90,7 @@ async function fetchOffers() {
         startsAt: upcomingWindow.startDate,
         expiresAt: upcomingWindow.endDate,
         url,
-        accent: "lime",
+        accent: "amber",
       }));
     }
   }

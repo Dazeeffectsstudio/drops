@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { PriceHistoryEntry } from "@/lib/price-history-repository";
 import { formatPrice } from "@/lib/offers";
 import type { Offer } from "@/types/offer";
+import { PriceHistoryChart } from "./price-history-chart";
 
 // "use client" (et non un Server Component séparé) car ce composant est
 // rendu depuis offer-detail.tsx, lui-même client — voir la note sur le
@@ -32,7 +33,8 @@ export function OfferPriceHistory({ offer, history }: { offer: Offer; history: P
       <div><span className="micro-label">ANCIEN PRIX</span><strong>{offer.originalPrice === null ? "—" : formatPrice(offer.originalPrice)}</strong></div>
       <div><span className="micro-label">PRIX ACTUEL</span><strong>{offer.currentPrice === 0 ? "GRATUIT" : formatPrice(offer.currentPrice)}</strong></div>
     </div>
-    {history.length === 0 ? <p className="empty-note">Aucun changement de prix enregistré pour cette offre.</p> : <ul className="price-history-timeline">
+    {history.length === 0 ? <p className="empty-note">Aucun changement de prix enregistré pour cette offre.</p> : <PriceHistoryChart history={history} formatDate={fmt} />}
+    {history.length > 0 && <ul className="price-history-timeline">
       {history.map((entry) => <li key={entry.id}>
         <span className="price-history-dot" aria-hidden="true" />
         <div>

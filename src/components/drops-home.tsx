@@ -10,8 +10,10 @@ import { formatPrice, isOfferActive, isOfferUpcoming, offerExpiresAt, totalFreeV
 import type { AuthUser } from "@/lib/auth";
 import type { Offer, OfferCategory, OfferStore } from "@/types/offer";
 import { AccountNavLink } from "./account-nav-link";
+import { BrandHero } from "./brand-hero";
 import { FeaturedCarousel } from "./featured-carousel";
-import { ArrowIcon, SearchIcon, SparkIcon } from "./icons";
+import { FeaturedHeroBanner } from "./featured-hero-banner";
+import { ArrowIcon, SearchIcon } from "./icons";
 import { InstallPwaButton } from "./install-pwa-button";
 import { NewTodaySection } from "./new-today-section";
 import { OfferCard } from "./offer-card";
@@ -89,6 +91,7 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
 
   const trendingOffers = availableOffers.filter((offer) => offer.trending).slice(0, 4);
   const featuredOffers = availableOffers.filter((offer) => offer.featured);
+  const heroOffers = (featuredOffers.length > 0 ? featuredOffers : trendingOffers.length > 0 ? trendingOffers : availableOffers).slice(0, 4);
   const newTodayOffers = availableOffers.filter((offer) => offer.isNew);
   const upcomingOffers = useMemo(() => offers.filter((offer) => isOfferUpcoming(offer, now ?? Date.now())), [offers, now]);
   const total = totalFreeValue(availableOffers);
@@ -152,16 +155,8 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
         </div>
       </section>
       <main>
-        <section className="hero" aria-labelledby="hero-title">
-          <div className="hero-copy">
-            <div className="hero-kicker"><span className="live-dot" /> +12 NOUVELLES OFFRES AUJOURD&apos;HUI <span className="kicker-line" /></div>
-            <h1 id="hero-title">DROPS<span>.</span></h1>
-            <p className="hero-slogan">DON&apos;T PAY.<br /><em>JUST PLAY.</em></p>
-            <p className="hero-description">Tous les jeux, drops et récompenses que tu peux récupérer gratuitement. Sans bruit, seulement les bonnes opportunités.</p>
-            <div className="hero-actions"><button type="button" className="hero-button" onClick={() => navigateToOffers()}>VOIR LES DROPS <ArrowIcon className="arrow-icon" /></button><button type="button" className="hero-button hero-button--quiet" onClick={() => document.getElementById("tendance")?.scrollIntoView({ behavior: "smooth" })}>EN TENDANCE <SparkIcon className="arrow-icon" /></button></div>
-          </div>
-          <div className="hero-visual" aria-hidden="true"><div className="hero-orbit hero-orbit-one" /><div className="hero-orbit hero-orbit-two" /><div className="hero-disc" /><span className="hero-visual-label">PLAY MORE / PAY LESS</span><span className="hero-visual-no">01—04</span></div>
-        </section>
+        <BrandHero totalValueLabel={formatPrice(total)} offerCount={availableOffers.length} onCtaClick={() => navigateToOffers()} />
+        {heroOffers.length > 0 && <FeaturedHeroBanner offers={heroOffers} now={now} onClaim={showClaimNotice} />}
         <section className="stats" aria-label="Statistiques des offres disponibles">
           <div className="stats-icon" aria-hidden="true">↗</div><div className="stats-copy"><strong>{formatPrice(total)}</strong><span>DE CONTENU GRATUIT DISPONIBLE AUJOURD&apos;HUI</span></div>
           <div className="stats-grid"><span><b>{availableOffers.length}</b> offres</span><span><b>{games}</b> jeux</span><span><b>{drops}</b> drops</span><span><b>{skins}</b> skins</span></div>
@@ -186,7 +181,7 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
             <div className="filter-group" role="group" aria-label="Catégorie"><span className="filter-label">TYPE</span><div className="filter-options">{categories.map((item) => <button key={item} type="button" className={category === item && !dropsAndItems ? "selected" : ""} onClick={() => { setDropsAndItems(false); setCategory(item); }} aria-pressed={category === item && !dropsAndItems}>{item}</button>)}</div></div>
           </div>
           <div className="results-line"><span>{query ? `RÉSULTATS POUR « ${query} »` : dropsAndItems ? "DROPS & ITEMS" : "TOUTES LES OFFRES"}</span><span>{visibleOffers.length.toString().padStart(2, "0")} RÉSULTAT{visibleOffers.length > 1 ? "S" : ""}</span></div>
-          {visibleOffers.length > 0 ? <div className="offer-grid">{visibleOffers.map((offer) => <OfferCard key={offer.id} offer={offer} expiresAt={offerExpiresAt(offer)} now={now} favorite={favorites.includes(offer.id)} onFavorite={() => toggleFavorite(offer.id)} onClaim={() => showClaimNotice(offer)} />)}</div> : <div className="empty-state"><span>∅</span><h3>Aucune offre ici pour l&apos;instant.</h3><p>Essaie une autre recherche ou retire les filtres.</p><button type="button" onClick={() => { setStore("TOUT"); setCategory("TOUT"); setDropsAndItems(false); setQuickFilter("TOUT"); setQuery(""); }}>VOIR TOUTES LES OFFRES <ArrowIcon className="arrow-icon" /></button></div>}
+          {visibleOffers.length > 0 ? <div className="offer-grid">{visibleOffers.map((offer, index) => <OfferCard key={offer.id} offer={offer} expiresAt={offerExpiresAt(offer)} now={now} favorite={favorites.includes(offer.id)} onFavorite={() => toggleFavorite(offer.id)} onClaim={() => showClaimNotice(offer)} featured={index === 0} />)}</div> : <div className="empty-state"><span>∅</span><h3>Aucune offre ici pour l&apos;instant.</h3><p>Essaie une autre recherche ou retire les filtres.</p><button type="button" onClick={() => { setStore("TOUT"); setCategory("TOUT"); setDropsAndItems(false); setQuickFilter("TOUT"); setQuery(""); }}>VOIR TOUTES LES OFFRES <ArrowIcon className="arrow-icon" /></button></div>}
         </section></Reveal>
         <UpcomingSection offers={upcomingOffers} now={now} userId={user?.id ?? null} subscribedOfferIds={subscribedOfferIds} onNotified={setNotice} />
         <Reveal><section className="why-section" aria-labelledby="why-title">

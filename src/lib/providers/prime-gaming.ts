@@ -13,11 +13,11 @@ async function fetchOffers() {
       platform: "PC",
       store: "Prime Gaming",
       category: "PRIME GAMING",
-      image: "/images/carbon-skin.svg",
+      image: "/images/prime-crate.svg",
       originalPrice: 9.99,
       expiresAt: stableFutureDate(30),
       url: "#sync-prime-gaming-1",
-      accent: "blue",
+      accent: "skyblue",
       featured: true,
     }),
     buildOffer({
@@ -27,11 +27,11 @@ async function fetchOffers() {
       platform: "PC",
       store: "Prime Gaming",
       category: "PRIME GAMING",
-      image: "/images/carbon-skin.svg",
+      image: "/images/prime-crate.svg",
       originalPrice: 4.99,
       expiresAt: stableFutureDate(30),
       url: "#sync-prime-gaming-2",
-      accent: "blue",
+      accent: "skyblue",
     }),
   ];
 }

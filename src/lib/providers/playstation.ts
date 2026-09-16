@@ -1,46 +1,50 @@
 import { buildOffer } from "@/lib/offer-builder";
-import { stableFutureDate } from "./dates";
+import { clampDescription, normalizeImageUrl } from "./normalize";
+import { cleanTitle, fetchGamerPowerGiveaways, mergeGiveawaysById, parseWorth, resolveExpiry } from "./gamerpower";
 import type { OfferProvider } from "./types";
 
-// Données simulées en attendant une vraie intégration avec le PlayStation
-// Store (jeux du mois PS Plus, essais, etc.).
+// Provider RÉEL depuis GamerPower.com (même source que Steam — voir
+// steam.ts pour le contexte). Contrairement à Steam, le PlayStation Store
+// n'y a quasiment que des DLC/codes cosmétiques gratuits (skins, points
+// in-game...), jamais de vrais jeux complets — c'est réel mais partiel,
+// donc on n'affiche que ce que GamerPower recense vraiment, sans faire
+// croire à des jeux gratuits qui n'existent pas. PS4 et PS5 sont deux
+// requêtes séparées côté GamerPower qui se recoupent souvent (même
+// giveaway cross-gen) — fusionnées par id pour éviter les doublons.
 async function fetchOffers() {
-  return [
-    buildOffer({
-      id: "sync-playstation-item-1",
-      title: "Skin Titane Poli",
-      description: "Un habillage exclusif offert gratuitement sur le PlayStation Store.",
+  const [ps4, ps5] = await Promise.all([fetchGamerPowerGiveaways("ps4"), fetchGamerPowerGiveaways("ps5")]);
+  const payload = mergeGiveawaysById([ps4, ps5]);
+
+  const offers = [];
+  for (const item of payload) {
+    if (item.status !== "Active") continue;
+    if (item.type !== "Game" && item.type !== "DLC") continue;
+    const expiresAt = resolveExpiry(item.end_date);
+    if (!expiresAt) continue;
+
+    offers.push(buildOffer({
+      id: `sync-playstation-gp-${item.id}`,
+      title: cleanTitle(item.title),
+      description: clampDescription(item.description),
       platform: "PLAYSTATION",
       store: "PlayStation",
-      category: "ITEMS",
-      image: "/images/carbon-skin.svg",
-      originalPrice: 12.99,
-      expiresAt: stableFutureDate(12),
-      url: "#sync-playstation-item-1",
-      accent: "blue",
-    }),
-    buildOffer({
-      id: "sync-playstation-weekend-1",
-      title: "Marée Silencieuse",
-      description: "Découvre ce jeu d'exploration sous-marine gratuitement pendant le week-end sur PlayStation.",
-      platform: "PLAYSTATION",
-      store: "PlayStation",
-      category: "WEEK-END GRATUIT",
-      image: "/images/echoes-of-nova.svg",
-      originalPrice: 19.99,
-      expiresAt: stableFutureDate(4),
-      url: "#sync-playstation-weekend-1",
-      accent: "lime",
-      trending: true,
-    }),
-  ];
+      category: item.type === "DLC" ? "DLC" : "JEUX",
+      image: normalizeImageUrl(item.image),
+      originalPrice: parseWorth(item.worth),
+      expiresAt,
+      url: item.open_giveaway_url,
+      accent: "navy",
+      trending: item.type === "Game",
+    }));
+  }
+
+  return offers;
 }
 
 export const playstationProvider: OfferProvider = {
   key: "playstation",
   label: "PlayStation",
   store: "PlayStation",
-  mode: "simulated",
-  unavailableReason: "Le PlayStation Store n'expose pas d'API publique ; le catalogue n'est accessible que via le site/l'appli, dont le scraping est contraire aux CGU de Sony.",
+  mode: "real",
   fetchOffers,
 };

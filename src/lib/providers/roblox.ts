@@ -13,11 +13,11 @@ async function fetchOffers() {
       platform: "AUTRES",
       store: "Roblox",
       category: "ITEMS",
-      image: "/images/carbon-skin.svg",
+      image: "/images/roblox-blocks.svg",
       originalPrice: 5.99,
       expiresAt: stableFutureDate(10),
       url: "#sync-roblox-item-1",
-      accent: "blue",
+      accent: "red",
       isNew: true,
     }),
     buildOffer({
@@ -27,11 +27,11 @@ async function fetchOffers() {
       platform: "AUTRES",
       store: "Roblox",
       category: "ITEMS",
-      image: "/images/carbon-skin.svg",
+      image: "/images/roblox-blocks.svg",
       originalPrice: 3.99,
       expiresAt: stableFutureDate(10),
       url: "#sync-roblox-item-2",
-      accent: "blue",
+      accent: "red",
     }),
   ];
 }

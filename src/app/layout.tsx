@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Archivo } from "next/font/google";
 import { Suspense } from "react";
 import { siteConfig } from "@/lib/site-config";
 import { AnalyticsScripts } from "@/components/analytics-scripts";
@@ -9,6 +10,12 @@ import { ReferralCapture } from "@/components/referral-capture";
 import { ServiceWorkerRegister } from "@/components/sw-register";
 import { StreakTracker } from "@/components/streak-tracker";
 import "./globals.css";
+
+// Auto-hébergée par Next.js (aucune requête réseau à Google au chargement,
+// compatible avec la CSP stricte du site) — remplace Arial pour une
+// hiérarchie typographique plus affirmée, tout en gardant les mêmes
+// graisses (400 à 900) déjà utilisées partout dans globals.css.
+const archivo = Archivo({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], variable: "--font-sans", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -46,7 +53,7 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="fr"><body>
+  return <html lang="fr" className={archivo.variable}><body>
     <BetaBanner />
     <OfflineBanner />
     {children}

@@ -6,6 +6,7 @@ import { useState } from "react";
 import type { Offer } from "@/types/offer";
 import { trackEvent } from "@/lib/analytics/track";
 import { expiryProgress, formatPrice, formatRemaining, getOfferStatus, offerStartsAt } from "@/lib/offers";
+import { useTilt } from "@/lib/use-tilt";
 import { ArrowIcon, ClockIcon, HeartIcon } from "./icons";
 import { PlatformBadge } from "./platform-badge";
 
@@ -16,6 +17,7 @@ type Props = {
   favorite: boolean;
   onFavorite: () => void;
   onClaim: () => void;
+  featured?: boolean;
 };
 
 const claimLabel: Record<"upcoming" | "active" | "expired", string> = {
@@ -24,8 +26,9 @@ const claimLabel: Record<"upcoming" | "active" | "expired", string> = {
   expired: "EXPIRÉE",
 };
 
-export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim }: Props) {
+export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim, featured = false }: Props) {
   const [justFavorited, setJustFavorited] = useState(false);
+  const { tiltStyle, onMove, onLeave } = useTilt();
   const status = now !== null ? getOfferStatus(offer, now) : "active";
   const startsAt = offerStartsAt(offer);
   const remaining = expiresAt !== null && now !== null ? expiresAt - now : null;
@@ -48,8 +51,8 @@ export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim
     }
   }
 
-  return <article className={`offer-card offer-card--${offer.accent} offer-card--${status} reveal`}>
-    <div className="offer-art">
+  return <article className={`offer-card offer-card--${offer.accent} offer-card--${status} ${featured ? "offer-card--featured" : ""} reveal`}>
+    <div className="offer-art" onMouseMove={onMove} onMouseLeave={onLeave} style={tiltStyle}>
       <Link href={`/offres/${offer.id}`} className="offer-art-link" aria-label={`Voir ${offer.title}`}><Image src={offer.image} alt={offer.imageAlt} fill sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw" className="offer-art-image" /></Link>
       <div className="offer-tags"><span className="art-tag">{offer.category}</span>{offer.isNew && <span className="new-tag">NOUVEAU</span>}{status === "upcoming" && <span className="soon-tag">BIENTÔT</span>}</div>
       <button type="button" className={`favorite-button ${favorite ? "is-favorite" : ""} ${justFavorited ? "favorite-button--pop" : ""}`} onClick={handleFavorite} aria-label={`${favorite ? "Retirer" : "Ajouter"} ${offer.title} ${favorite ? "des" : "aux"} favoris`} aria-pressed={favorite}>
