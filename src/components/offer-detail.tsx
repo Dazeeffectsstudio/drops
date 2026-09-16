@@ -63,7 +63,7 @@ export function OfferDetail({ offer, user, initialFavorites, unreadCount = 0, re
         <div className="detail-countdown-card">
           <span className="micro-label">{remaining !== null && remaining <= 0 ? "OFFRE EXPIRÉE" : "EXPIRE DANS"}</span>
           <div className="detail-countdown-value"><ClockIcon className="clock-icon" />{remaining === null ? "—" : formatRemaining(remaining)}</div>
-          <div className="expiry-progress"><span style={{ width: `${progress}%` }} /></div>
+          <div className="expiry-progress" role="progressbar" aria-label="Temps restant avant expiration" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${progress}%` }} /></div>
         </div>
         <button type="button" className={`claim-button detail-claim ${claimed ? "is-claimed" : ""}`} onClick={handleClaim} disabled={remaining !== null && remaining <= 0}>
           {claimed ? "Récupéré" : "RÉCUPÉRER"} <ArrowIcon className="arrow-icon" />
