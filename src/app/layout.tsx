@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo } from "next/font/google";
+import { Archivo, Cormorant_Garamond } from "next/font/google";
 import { Suspense } from "react";
 import { siteConfig } from "@/lib/site-config";
 import { AnalyticsScripts } from "@/components/analytics-scripts";
@@ -16,6 +16,10 @@ import "./globals.css";
 // hiérarchie typographique plus affirmée, tout en gardant les mêmes
 // graisses (400 à 900) déjà utilisées partout dans globals.css.
 const archivo = Archivo({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], variable: "--font-sans", display: "swap" });
+// Touche éditoriale : un mot-clé en italique serif au milieu d'un titre
+// sans-serif (jamais une phrase entière) — voir `.accent-serif` dans
+// globals.css, utilisé avec parcimonie sur les mots à mettre en valeur.
+const cormorant = Cormorant_Garamond({ subsets: ["latin"], weight: ["500", "600"], style: ["italic"], variable: "--font-serif", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -53,7 +57,7 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="fr" className={archivo.variable}><body>
+  return <html lang="fr" className={`${archivo.variable} ${cormorant.variable}`}><body>
     <BetaBanner />
     <OfflineBanner />
     {children}

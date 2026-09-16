@@ -49,7 +49,7 @@ export function FeaturedHeroBanner({ offers, now, onClaim }: Props) {
 
   return <div className="featured-hero" onMouseMove={handleMove}>
     <Image src={offer.image} alt={offer.imageAlt} fill priority sizes="100vw" className="featured-hero-image" />
-    <div className="featured-hero-glow" style={{ background: `radial-gradient(circle at ${glow.x}% ${glow.y}%, rgba(212,252,113,.3), transparent 45%)` }} />
+    <div className="featured-hero-glow" style={{ background: `radial-gradient(circle at ${glow.x}% ${glow.y}%, rgba(77,240,224,.3), transparent 45%)` }} />
     <div className="featured-hero-vignette" />
     <div className="featured-hero-drops" aria-hidden="true">
       {Array.from({ length: DROP_COUNT }).map((_, i) => <span
