@@ -156,11 +156,16 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
         <UpcomingSection offers={upcomingOffers} now={now} userId={user?.id ?? null} subscribedOfferIds={subscribedOfferIds} onNotified={setNotice} />
         <Reveal><section className="why-section" aria-labelledby="why-title">
           <div className="section-heading"><div><h2 id="why-title">Pourquoi <em>DROPS</em> ?</h2></div></div>
-          <div className="why-grid">
-            <div className="why-card"><span className="why-icon" aria-hidden="true">✓</span><strong>100% gratuit</strong><p>DROPS ne vend rien et ne demande jamais ta carte bancaire — juste un annuaire des vraies offres gratuites.</p></div>
-            <div className="why-card"><span className="why-icon" aria-hidden="true">⚡</span><strong>Synchronisation automatique</strong><p>Les offres sont détectées directement depuis les sources officielles, pas de saisie manuelle qui prend du retard.</p></div>
-            <div className="why-card"><span className="why-icon" aria-hidden="true">🔔</span><strong>Notifications sur-mesure</strong><p>Choisis tes plateformes préférées et reçois un email dès qu&apos;une nouvelle offre correspond.</p></div>
-            <div className="why-card"><span className="why-icon" aria-hidden="true">🇧🇪</span><strong>Pensé pour la Belgique</strong><p>Prix en euros, fuseau horaire local, et une sélection qui privilégie les offres disponibles chez nous.</p></div>
+          <div className="why-layout">
+            <div className="why-lead">
+              <strong>100% gratuit.</strong>
+              <p>DROPS ne vend rien et ne demande jamais ta carte bancaire — juste un annuaire des vraies offres gratuites.</p>
+            </div>
+            <div className="why-list">
+              <div className="why-row"><span className="why-icon" aria-hidden="true">⚡</span><div><strong>Synchronisation automatique</strong><p>Les offres sont détectées directement depuis les sources officielles, pas de saisie manuelle qui prend du retard.</p></div></div>
+              <div className="why-row"><span className="why-icon" aria-hidden="true">🔔</span><div><strong>Notifications sur-mesure</strong><p>Choisis tes plateformes préférées et reçois un email dès qu&apos;une nouvelle offre correspond.</p></div></div>
+              <div className="why-row"><span className="why-icon" aria-hidden="true">🇧🇪</span><div><strong>Pensé pour la Belgique</strong><p>Prix en euros, fuseau horaire local, et une sélection qui privilégie les offres disponibles chez nous.</p></div></div>
+            </div>
           </div>
         </section></Reveal>
         <Reveal><section className="faq-section" aria-labelledby="faq-title">
