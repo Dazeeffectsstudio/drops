@@ -213,6 +213,8 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 /* Bannière immersive de la fiche d'offre (style Epic Games Store) + cartes
    d'information + panneau latéral compte à rebours/CTA. */
 .detail-hero { position:relative; height:clamp(320px,42vw,460px); margin-top:20px; border-radius:20px; overflow:hidden; box-shadow:0 40px 90px -30px #000c,0 0 110px -30px #5ec4b466; }
+.detail-hero-image { view-transition-name:offer-hero; }
+@media (prefers-reduced-motion:reduce) { ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*) { animation:none!important; } }
 .detail-hero-image { object-fit:cover; filter:var(--art-filter); }
 .detail-hero-vignette { position:absolute; inset:0; pointer-events:none; background:linear-gradient(0deg,#060705ea 0%,#06070580 36%,#0607050d 62%,transparent 80%); }
 .detail-hero-content { position:absolute; z-index:1; left:32px; right:32px; bottom:28px; }

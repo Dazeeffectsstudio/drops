@@ -31,6 +31,12 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Transition native (View Transitions API) entre la liste d'offres et la
+  // page detail — experimental mais gere par Next.js lui-meme la
+  // coordination delicate avec le streaming RSC (voir DIRECTION-VISUELLE-
+  // DROPS.md, geste 5). Degrade sans risque sur les navigateurs qui ne
+  // supportent pas l'API : navigation normale, sans animation.
+  experimental: { viewTransition: true },
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [

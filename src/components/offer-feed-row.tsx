@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import type { MouseEvent } from "react";
 import type { Offer } from "@/types/offer";
 import { trackEvent } from "@/lib/analytics/track";
 import { formatPrice, formatRemaining, getOfferStatus } from "@/lib/offers";
@@ -28,8 +29,18 @@ export function OfferFeedRow({ offer, expiresAt, now, favorite, onFavorite, onCl
   const remaining = expiresAt !== null && now !== null ? expiresAt - now : null;
   const urgent = remaining !== null && remaining > 0 && remaining < 24 * 3_600_000;
 
+  // Nomme l'image cliquee juste avant la navigation : la page detail donne
+  // le meme nom a sa propre image hero, ce qui fait morphir la vignette
+  // vers l'image plein cadre au lieu d'un changement de page instantane
+  // (View Transitions API, activee via next.config.ts). Sans effet si le
+  // navigateur ne supporte pas l'API ou si prefers-reduced-motion.
+  function markForTransition(event: MouseEvent<HTMLAnchorElement>) {
+    const image = event.currentTarget.querySelector("img");
+    if (image) image.style.viewTransitionName = "offer-hero";
+  }
+
   return <article className={`feed-row feed-row--${status} ${urgent ? "is-urgent" : ""} reveal`}>
-    <Link href={`/offres/${offer.id}`} className="feed-row-thumb" aria-label={offer.title}>
+    <Link href={`/offres/${offer.id}`} className="feed-row-thumb" aria-label={offer.title} onClick={markForTransition}>
       <Image src={offer.image} alt="" fill sizes="56px" className="feed-row-thumb-image" />
       {offer.isNew && <span className="feed-row-live" aria-hidden="true" />}
     </Link>
