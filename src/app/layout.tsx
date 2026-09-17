@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo } from "next/font/google";
+import { Archivo, Space_Grotesk } from "next/font/google";
 import { Suspense } from "react";
 import { siteConfig } from "@/lib/site-config";
 import { AnalyticsScripts } from "@/components/analytics-scripts";
@@ -16,6 +16,14 @@ import "./globals.css";
 // hiérarchie typographique plus affirmée, tout en gardant les mêmes
 // graisses (400 à 900) déjà utilisées partout dans globals.css.
 const archivo = Archivo({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], variable: "--font-sans", display: "swap" });
+
+// Police d'affichage distincte pour la marque, le hero et les grands titres
+// de section — le reste de l'interface (labels, boutons, corps de texte)
+// garde Archivo. Les proportions plus techniques/anguleuses de Space
+// Grotesk donnent du caractère aux quelques endroits qui portent
+// l'identité de la page, sans changer la police des centaines de petits
+// éléments d'UI partout ailleurs (risque de régression trop large).
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-display", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -53,7 +61,7 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="fr" className={archivo.variable}><body>
+  return <html lang="fr" className={`${archivo.variable} ${spaceGrotesk.variable}`}><body>
     <BetaBanner />
     <OfflineBanner />
     {children}
