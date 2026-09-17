@@ -1,7 +1,7 @@
 import type { Offer } from "@/types/offer";
 
 // Templates HTML repris de l'identité visuelle DROPS (fond sombre, accent
-// cyan #4df0e0) — écrits en HTML/CSS inline pour rester compatibles avec
+// cyan #5ec4b4) — écrits en HTML/CSS inline pour rester compatibles avec
 // les clients email, qui ignorent les feuilles de style externes.
 
 function emailShell(preheader: string, bodyHtml: string): string {
@@ -13,7 +13,7 @@ function emailShell(preheader: string, bodyHtml: string): string {
     <tr><td align="center">
       <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="background:#1b1e1a;border-radius:16px;overflow:hidden;">
         <tr><td style="padding:28px 32px 0;">
-          <span style="font-size:22px;font-weight:800;color:#f5f5ed;">DROPS<span style="color:#4df0e0;">.</span></span>
+          <span style="font-size:22px;font-weight:800;color:#f5f5ed;">DROPS<span style="color:#5ec4b4;">.</span></span>
         </td></tr>
         <tr><td style="padding:24px 32px 32px;">${bodyHtml}</td></tr>
         <tr><td style="padding:20px 32px;border-top:1px solid #30352e;">
@@ -27,10 +27,10 @@ function emailShell(preheader: string, bodyHtml: string): string {
 
 function offerBlock(offer: Offer): string {
   return `<div style="margin-top:16px;">
-    <span style="display:inline-block;background:#4df0e0;color:#10120f;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;">${offer.store}</span>
+    <span style="display:inline-block;background:#5ec4b4;color:#10120f;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;">${offer.store}</span>
     <h2 style="margin:12px 0 4px;font-size:20px;color:#f5f5ed;">${offer.title}</h2>
     <p style="margin:0 0 16px;font-size:14px;color:#b7bcb2;line-height:1.5;">${offer.description}</p>
-    <a href="${offer.url}" style="display:inline-block;background:#4df0e0;color:#10120f;font-weight:700;font-size:13px;padding:12px 20px;border-radius:999px;text-decoration:none;">VOIR L'OFFRE</a>
+    <a href="${offer.url}" style="display:inline-block;background:#5ec4b4;color:#10120f;font-weight:700;font-size:13px;padding:12px 20px;border-radius:999px;text-decoration:none;">VOIR L'OFFRE</a>
   </div>`;
 }
 

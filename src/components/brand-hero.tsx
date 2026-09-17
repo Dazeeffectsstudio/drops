@@ -21,7 +21,7 @@ export function BrandHero({ totalValueLabel, offerCount, onCtaClick, featuredOff
     <div className="brand-hero-content">
       <div className="brand-hero-kicker">
         <span className="brand-hero-dot" />
-        <span>{totalValueLabel} de jeux gratuits aujourd&apos;hui &middot; {offerCount} offres</span>
+        <span>{offerCount} offres gratuites en ce moment, pour {totalValueLabel}</span>
       </div>
 
       <h1 className="brand-hero-title">

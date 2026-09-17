@@ -58,7 +58,7 @@ export function UpcomingSection({ offers, now, userId, subscribedOfferIds, onNot
   return <Reveal>
     <section id="bientot" className="upcoming-section" aria-labelledby="upcoming-title">
       <div className="section-heading">
-        <div><span className="section-index">03 / À SURVEILLER</span><h2 id="upcoming-title">⏳ BIENTÔT <em>GRATUITS</em></h2></div>
+        <div><span className="section-index">À SURVEILLER</span><h2 id="upcoming-title">⏳ BIENTÔT <em>GRATUITS</em></h2></div>
         <p>Prépare-toi, ces offres<br />arrivent bientôt.</p>
       </div>
       <div className="upcoming-grid">
