@@ -110,6 +110,35 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 .filter-select { appearance:none; background:#171a16 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%239da49a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 13px center; border:1px solid #3b4238; border-radius:999px; color:var(--text); font-size:11px; font-weight:700; padding:10px 32px 10px 15px; cursor:pointer; transition:border-color .2s; }
 .filter-select:hover,.filter-select:focus-visible { border-color:#577a75; outline:0; }
 .results-line { display:flex; justify-content:space-between; color:#828a7e; font-size:10px; font-weight:800; letter-spacing:.15em; padding:25px 0 19px; }
+.results-live { display:flex; align-items:center; gap:7px; }
+.results-live .live-dot { animation:brandPulse 1.8s ease-in-out infinite; }
+@media (prefers-reduced-motion:reduce) { .results-live .live-dot,.feed-row-live,.clock-icon.is-urgent { animation:none; } }
+
+/* Flux "GRATUIT MAINTENANT" : liste dense triee par urgence plutot qu'une
+   grille de cartes-produits — chaque ligne privilegie la donnee (prix,
+   compte a rebours en police "ticker") sur la mise en scene de l'image,
+   pour que ca se lise comme quelque chose de vivant qui defile, pas un
+   rayon de magasin statique. */
+.offer-feed { display:flex; flex-direction:column; border-top:1px solid #2a2f27; }
+.feed-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; padding:14px 6px; border-bottom:1px solid #2a2f27; transition:background .2s; }
+.feed-row:hover { background:#12140f; }
+.feed-row-thumb { position:relative; width:52px; height:52px; border-radius:10px; overflow:hidden; flex:none; background:#1f2624; display:block; }
+.feed-row-thumb-image { object-fit:cover; filter:var(--art-filter); }
+.feed-row-live { position:absolute; top:3px; right:3px; width:7px; height:7px; border-radius:50%; background:var(--lime); box-shadow:0 0 0 2px #10120f; animation:brandPulse 1.6s ease-in-out infinite; }
+.feed-row-main { flex:1 1 200px; min-width:0; }
+.feed-row-meta { display:flex; align-items:center; gap:8px; color:var(--lime); font-size:10px; font-weight:900; letter-spacing:.1em; }
+.feed-row-main h3 { margin:3px 0 0; font-size:15px; letter-spacing:-.01em; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.feed-row-main h3 a { color:inherit; text-decoration:none; }
+.feed-row-main h3 a:hover { color:var(--lime); }
+.feed-row-price { flex:none; text-align:right; font-family:var(--font-mono); min-width:78px; }
+.feed-row-price s { display:block; color:#6b7266; font-size:11px; }
+.feed-row-price strong { color:var(--lime); font-size:13px; font-weight:600; }
+.feed-row-countdown { flex:none; display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:12px; color:#9da49a; font-variant-numeric:tabular-nums; min-width:104px; }
+.feed-row.is-urgent .feed-row-countdown { color:#ff8a72; }
+.feed-row-actions { flex:none; display:flex; align-items:center; gap:10px; margin-left:auto; }
+.feed-row-actions .favorite-button { position:static; width:30px; height:30px; }
+.feed-row-actions .claim-button { padding:9px 16px; }
+@media(max-width:640px) { .feed-row-price { order:1; margin-left:auto; } .feed-row-countdown { order:2; } .feed-row-actions { order:3; margin-left:0; } }
 .offer-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:20px; }
 .offer-card { position:relative; background:#151813; border:1px solid #2a2f27; border-radius:20px; padding:7px; overflow:hidden; min-width:0; transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .3s ease,box-shadow .5s cubic-bezier(.16,1,.3,1); }
 .offer-card:hover { transform:translateY(-4px); border-color:#3d5750; box-shadow:0 26px 50px #000a,0 0 0 1px #5ec4b422; }

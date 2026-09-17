@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Space_Grotesk } from "next/font/google";
+import { Archivo, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Suspense } from "react";
 import { siteConfig } from "@/lib/site-config";
 import { AnalyticsScripts } from "@/components/analytics-scripts";
@@ -24,6 +24,12 @@ const archivo = Archivo({ subsets: ["latin"], weight: ["400", "500", "600", "700
 // l'identité de la page, sans changer la police des centaines de petits
 // éléments d'UI partout ailleurs (risque de régression trop large).
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-display", display: "swap" });
+
+// Police pour les données qui changent en direct (prix, compte à rebours du
+// flux d'offres) — chiffres tabulaires façon terminal/ticker, pour que le
+// flux se lise comme quelque chose de vivant plutôt qu'une liste de
+// produits statique.
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -61,7 +67,7 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="fr" className={`${archivo.variable} ${spaceGrotesk.variable}`}><body>
+  return <html lang="fr" className={`${archivo.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}><body>
     <BetaBanner />
     <OfflineBanner />
     {children}

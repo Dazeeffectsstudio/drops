@@ -13,7 +13,7 @@ import { AccountNavLink } from "./account-nav-link";
 import { BrandHero } from "./brand-hero";
 import { ArrowIcon, SearchIcon } from "./icons";
 import { InstallPwaButton } from "./install-pwa-button";
-import { OfferCard } from "./offer-card";
+import { OfferFeedRow } from "./offer-feed-row";
 import { PlatformQuickNav } from "./platform-quicknav";
 import { Reveal } from "./reveal";
 import { UpcomingSection } from "./upcoming-section";
@@ -71,13 +71,18 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
   const availableOffers = useMemo(() => offers.filter((offer) => isOfferActive(offer, now ?? Date.now())), [offers, now]);
   const visibleOffers = useMemo(() => {
     const search = query.trim().toLocaleLowerCase("fr");
-    return availableOffers.filter((offer) =>
-      (store === "TOUT" || offer.store === store) &&
-      (category === "TOUT" || offer.category === category) &&
-      (!dropsAndItems || offer.category === "ITEMS" || offer.category === "TWITCH DROPS") &&
-      matchesQuickFilter(offer, quickFilter, now ?? Date.now()) &&
-      (!search || `${offer.title} ${offer.platform} ${offer.store} ${offer.category}`.toLocaleLowerCase("fr").includes(search)),
-    );
+    return availableOffers
+      .filter((offer) =>
+        (store === "TOUT" || offer.store === store) &&
+        (category === "TOUT" || offer.category === category) &&
+        (!dropsAndItems || offer.category === "ITEMS" || offer.category === "TWITCH DROPS") &&
+        matchesQuickFilter(offer, quickFilter, now ?? Date.now()) &&
+        (!search || `${offer.title} ${offer.platform} ${offer.store} ${offer.category}`.toLocaleLowerCase("fr").includes(search)),
+      )
+      // Flux trié par urgence : ce qui expire le plus tôt remonte en tête,
+      // pour que le haut de la liste soit toujours ce qui mérite le plus
+      // d'attention immédiate — pas un ordre arbitraire de synchronisation.
+      .sort((a, b) => offerExpiresAt(a) - offerExpiresAt(b));
   }, [availableOffers, store, category, dropsAndItems, quickFilter, query, now]);
 
   const searchSuggestions = useMemo(() => {
@@ -150,8 +155,8 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
               </select>
             </div>
           </div>
-          <div className="results-line"><span>{query ? `RÉSULTATS POUR « ${query} »` : dropsAndItems ? "DROPS & ITEMS" : "TOUTES LES OFFRES"}</span><span>{visibleOffers.length.toString().padStart(2, "0")} RÉSULTAT{visibleOffers.length > 1 ? "S" : ""}</span></div>
-          {visibleOffers.length > 0 ? <div className="offer-grid">{visibleOffers.map((offer, index) => <OfferCard key={offer.id} offer={offer} expiresAt={offerExpiresAt(offer)} now={now} favorite={favorites.includes(offer.id)} onFavorite={() => toggleFavorite(offer.id)} onClaim={() => showClaimNotice(offer)} featured={index === 0} />)}</div> : <div className="empty-state"><span>∅</span><h3>Aucune offre ici pour l&apos;instant.</h3><p>Essaie une autre recherche ou retire les filtres.</p><button type="button" onClick={() => { setStore("TOUT"); setCategory("TOUT"); setDropsAndItems(false); setQuickFilter("TOUT"); setQuery(""); }}>Voir toutes les offres <ArrowIcon className="arrow-icon" /></button></div>}
+          <div className="results-line"><span className="results-live"><span className="live-dot" aria-hidden="true" />EN DIRECT · {query ? `RÉSULTATS POUR « ${query} »` : dropsAndItems ? "DROPS & ITEMS" : "TOUTES LES OFFRES"}</span><span>{visibleOffers.length.toString().padStart(2, "0")} RÉSULTAT{visibleOffers.length > 1 ? "S" : ""}</span></div>
+          {visibleOffers.length > 0 ? <div className="offer-feed">{visibleOffers.map((offer) => <OfferFeedRow key={offer.id} offer={offer} expiresAt={offerExpiresAt(offer)} now={now} favorite={favorites.includes(offer.id)} onFavorite={() => toggleFavorite(offer.id)} onClaim={() => showClaimNotice(offer)} />)}</div> : <div className="empty-state"><span>∅</span><h3>Aucune offre ici pour l&apos;instant.</h3><p>Essaie une autre recherche ou retire les filtres.</p><button type="button" onClick={() => { setStore("TOUT"); setCategory("TOUT"); setDropsAndItems(false); setQuickFilter("TOUT"); setQuery(""); }}>Voir toutes les offres <ArrowIcon className="arrow-icon" /></button></div>}
         </section></Reveal>
         <UpcomingSection offers={upcomingOffers} now={now} userId={user?.id ?? null} subscribedOfferIds={subscribedOfferIds} onNotified={setNotice} />
         <Reveal><section className="why-section" aria-labelledby="why-title">
