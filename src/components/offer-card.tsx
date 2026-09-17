@@ -21,9 +21,9 @@ type Props = {
 };
 
 const claimLabel: Record<"upcoming" | "active" | "expired", string> = {
-  upcoming: "BIENTÔT DISPONIBLE",
-  active: "RÉCUPÉRER",
-  expired: "EXPIRÉE",
+  upcoming: "Bientôt disponible",
+  active: "Récupérer",
+  expired: "Expirée",
 };
 
 export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim, featured = false }: Props) {

@@ -44,9 +44,9 @@ function UpcomingCard({ offer, now, userId, subscribed, onNotified }: { offer: O
       <div className="countdown"><ClockIcon className="clock-icon" /><span><small>Dans</small><strong>{remaining === null ? "—" : formatRemaining(remaining)}</strong></span></div>
     </div>
     {!userId
-      ? <Link href="/login?next=/" className="notify-button">SE CONNECTER POUR ÊTRE PRÉVENU</Link>
+      ? <Link href="/login?next=/" className="notify-button">Se connecter pour être prévenu</Link>
       : <button type="button" className={`notify-button ${isSubscribed ? "is-notified" : ""}`} onClick={handleNotify} disabled={isSubscribed || pending}>
-          {isSubscribed ? "TU SERAS PRÉVENU ✓" : pending ? "…" : "ME PRÉVENIR"}
+          {isSubscribed ? "Tu seras prévenu ✓" : pending ? "…" : "Me prévenir"}
         </button>}
   </article>;
 }
@@ -58,7 +58,7 @@ export function UpcomingSection({ offers, now, userId, subscribedOfferIds, onNot
   return <Reveal>
     <section id="bientot" className="upcoming-section" aria-labelledby="upcoming-title">
       <div className="section-heading">
-        <div><span className="section-index">À SURVEILLER</span><h2 id="upcoming-title">⏳ BIENTÔT <em>GRATUITS</em></h2></div>
+        <div><h2 id="upcoming-title">⏳ BIENTÔT <em>GRATUITS</em></h2></div>
         <p>Prépare-toi, ces offres<br />arrivent bientôt.</p>
       </div>
       <div className="upcoming-grid">

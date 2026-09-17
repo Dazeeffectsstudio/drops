@@ -128,11 +128,11 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
       <main>
         <BrandHero totalValueLabel={formatPrice(total)} offerCount={availableOffers.length} onCtaClick={() => navigateToOffers()} featuredOffer={heroOffers[0]} />
         <Reveal><section id="tendance" className="trending-section" aria-labelledby="trending-title">
-          <div className="section-heading"><div><span className="section-index">SÉLECTION</span><h2 id="trending-title">🔥 EN <em>TENDANCE</em></h2></div><p>Les offres les plus regardées<br />en ce moment.</p></div>
+          <div className="section-heading"><div><h2 id="trending-title">🔥 EN <em>TENDANCE</em></h2></div><p>Les offres les plus regardées<br />en ce moment.</p></div>
           <div className="trending-grid">{trendingOffers.map((offer, index) => <Link href={`/offres/${offer.id}`} key={offer.id} className="trending-card reveal"><span className="trending-rank">0{index + 1}</span><Image src={offer.image} alt={offer.imageAlt} fill sizes="(max-width: 700px) 50vw, 25vw" className="trending-card-image" /><span className="trending-card-shade" /><span className="trending-card-content"><span>{offer.store}</span><strong>{offer.title}</strong><small>{offer.category} · GRATUIT</small></span></Link>)}</div>
         </section></Reveal>
         <Reveal><section id="offres" className="offers-section" aria-labelledby="offers-title">
-          <div className="section-heading"><div><span className="section-index">LE CATALOGUE</span><h2 id="offers-title">GRATUIT <em>MAINTENANT</em></h2></div><p>Des opportunités à saisir<br />avant qu&apos;elles disparaissent.</p></div>
+          <div className="section-heading"><div><h2 id="offers-title">GRATUIT <em>MAINTENANT</em></h2></div><p>Des opportunités à saisir<br />avant qu&apos;elles disparaissent.</p></div>
           <div className="search-row-wrap">
             <div className="search-row"><SearchIcon /><input id="offer-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Rechercher un jeu, une plateforme, une catégorie…" aria-label="Rechercher une offre" autoComplete="off" />{query && <button type="button" onClick={() => setQuery("")} aria-label="Effacer la recherche">×</button>}</div>
             {searchSuggestions.length > 0 && <ul className="search-suggestions" role="listbox">
@@ -151,11 +151,11 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
             </div>
           </div>
           <div className="results-line"><span>{query ? `RÉSULTATS POUR « ${query} »` : dropsAndItems ? "DROPS & ITEMS" : "TOUTES LES OFFRES"}</span><span>{visibleOffers.length.toString().padStart(2, "0")} RÉSULTAT{visibleOffers.length > 1 ? "S" : ""}</span></div>
-          {visibleOffers.length > 0 ? <div className="offer-grid">{visibleOffers.map((offer, index) => <OfferCard key={offer.id} offer={offer} expiresAt={offerExpiresAt(offer)} now={now} favorite={favorites.includes(offer.id)} onFavorite={() => toggleFavorite(offer.id)} onClaim={() => showClaimNotice(offer)} featured={index === 0} />)}</div> : <div className="empty-state"><span>∅</span><h3>Aucune offre ici pour l&apos;instant.</h3><p>Essaie une autre recherche ou retire les filtres.</p><button type="button" onClick={() => { setStore("TOUT"); setCategory("TOUT"); setDropsAndItems(false); setQuickFilter("TOUT"); setQuery(""); }}>VOIR TOUTES LES OFFRES <ArrowIcon className="arrow-icon" /></button></div>}
+          {visibleOffers.length > 0 ? <div className="offer-grid">{visibleOffers.map((offer, index) => <OfferCard key={offer.id} offer={offer} expiresAt={offerExpiresAt(offer)} now={now} favorite={favorites.includes(offer.id)} onFavorite={() => toggleFavorite(offer.id)} onClaim={() => showClaimNotice(offer)} featured={index === 0} />)}</div> : <div className="empty-state"><span>∅</span><h3>Aucune offre ici pour l&apos;instant.</h3><p>Essaie une autre recherche ou retire les filtres.</p><button type="button" onClick={() => { setStore("TOUT"); setCategory("TOUT"); setDropsAndItems(false); setQuickFilter("TOUT"); setQuery(""); }}>Voir toutes les offres <ArrowIcon className="arrow-icon" /></button></div>}
         </section></Reveal>
         <UpcomingSection offers={upcomingOffers} now={now} userId={user?.id ?? null} subscribedOfferIds={subscribedOfferIds} onNotified={setNotice} />
         <Reveal><section className="why-section" aria-labelledby="why-title">
-          <div className="section-heading"><div><span className="section-index">POURQUOI DROPS</span><h2 id="why-title">Pourquoi <em>DROPS</em> ?</h2></div></div>
+          <div className="section-heading"><div><h2 id="why-title">Pourquoi <em>DROPS</em> ?</h2></div></div>
           <div className="why-grid">
             <div className="why-card"><span className="why-icon" aria-hidden="true">✓</span><strong>100% gratuit</strong><p>DROPS ne vend rien et ne demande jamais ta carte bancaire — juste un annuaire des vraies offres gratuites.</p></div>
             <div className="why-card"><span className="why-icon" aria-hidden="true">⚡</span><strong>Synchronisation automatique</strong><p>Les offres sont détectées directement depuis les sources officielles, pas de saisie manuelle qui prend du retard.</p></div>
@@ -164,7 +164,6 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
           </div>
         </section></Reveal>
         <Reveal><section className="faq-section" aria-labelledby="faq-title">
-          <span className="section-index">FAQ</span>
           <h2 id="faq-title">Questions <em>fréquentes</em></h2>
           <div className="faq-list">
             {homeFaq.map((entry) => <details key={entry.question} className="faq-item">
