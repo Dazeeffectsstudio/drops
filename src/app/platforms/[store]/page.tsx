@@ -45,7 +45,6 @@ export default async function PlatformPage({ params }: { params: Promise<{ store
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd(platform.label, platform.description, `/platforms/${platform.slug}`, offers.length)) }} />
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faq)) }} />
     <CatalogPage
-      eyebrow="PLATEFORME"
       title={platform.label}
       description={platform.description}
       offers={offers}

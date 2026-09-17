@@ -55,7 +55,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd(category.label, category.description, `/categories/${category.slug}`, offers.length)) }} />
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faq)) }} />
     <CatalogPage
-      eyebrow="CATÉGORIE"
       title={category.label}
       description={category.description}
       offers={offers}

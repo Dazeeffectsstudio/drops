@@ -44,10 +44,9 @@ export default async function AccountPage() {
   return <main className="subpage site-shell">
     <header className="subpage-header">
       <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
-      <Link href="/" className="back-link">← RETOUR AU SITE</Link>
+      <Link href="/" className="back-link">← Retour au site</Link>
     </header>
     <section className="subpage-intro">
-      <span className="section-index">MON COMPTE</span>
       <h1>Salut, <em>{user.pseudo ?? user.email ?? "toi"}</em></h1>
       <p>Gère ton compte, tes favoris et tes préférences de notification.</p>
     </section>

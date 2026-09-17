@@ -38,7 +38,7 @@ export function OfferDetail({ offer, user, initialFavorites, unreadCount = 0, re
   }
 
   return <main className="subpage site-shell">
-    <header className="subpage-header"><Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link><div className="header-actions"><Link href="/" className="back-link">← RETOUR AUX OFFRES</Link><AccountNavLink user={user} unreadCount={unreadCount} /></div></header>
+    <header className="subpage-header"><Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link><div className="header-actions"><Link href="/" className="back-link">← Retour aux offres</Link><AccountNavLink user={user} unreadCount={unreadCount} /></div></header>
 
     <div className="detail-hero">
       <Image src={offer.image} alt={offer.imageAlt} fill priority sizes="100vw" className="detail-hero-image" />
@@ -66,7 +66,7 @@ export function OfferDetail({ offer, user, initialFavorites, unreadCount = 0, re
           <div className="expiry-progress" role="progressbar" aria-label="Temps restant avant expiration" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${progress}%` }} /></div>
         </div>
         <button type="button" className={`claim-button detail-claim ${claimed ? "is-claimed" : ""}`} onClick={handleClaim} disabled={remaining !== null && remaining <= 0}>
-          {claimed ? "Récupéré" : "RÉCUPÉRER"} <span className="cta-icon"><ArrowIcon className="arrow-icon" /></span>
+          {claimed ? "Récupéré" : "Récupérer"} <span className="cta-icon"><ArrowIcon className="arrow-icon" /></span>
           {claimed && burstDots.map((style, i) => <span key={i} className="claim-burst-dot" style={style} />)}
         </button>
         <div className="detail-side-actions">
@@ -79,7 +79,7 @@ export function OfferDetail({ offer, user, initialFavorites, unreadCount = 0, re
     <OfferPriceHistory offer={offer} history={priceHistory} />
 
     {relatedOffers.length > 0 && <section className="related-offers">
-      <div className="section-heading"><div><span className="section-index">OFFRES SIMILAIRES</span><h2>Tu aimeras <em>aussi</em></h2></div></div>
+      <div className="section-heading"><div><h2>Tu aimeras <em>aussi</em></h2></div></div>
       <div className="related-offers-grid">{relatedOffers.map((related) => <RelatedOfferCard key={related.id} offer={related} />)}</div>
     </section>}
   </main>;

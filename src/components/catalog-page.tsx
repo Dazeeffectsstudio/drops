@@ -13,7 +13,6 @@ import { OfferCard } from "./offer-card";
 import { Reveal } from "./reveal";
 
 type Props = {
-  eyebrow: string;
   title: string;
   description: string;
   offers: Offer[];
@@ -29,7 +28,7 @@ type Props = {
   faq?: Array<{ question: string; answer: string }>;
 };
 
-export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, emptyDescription, logoImage, logoIcon, categoryFilter = false, user, initialFavorites, unreadCount = 0, intro, faq }: Props) {
+export function CatalogPage({ title, description, offers, emptyTitle, emptyDescription, logoImage, logoIcon, categoryFilter = false, user, initialFavorites, unreadCount = 0, intro, faq }: Props) {
   const [now, setNow] = useState<number | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [category, setCategory] = useState<OfferCategory | "TOUT">("TOUT");
@@ -50,12 +49,11 @@ export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, e
     <main className="subpage site-shell">
       <header className="subpage-header">
         <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
-        <div className="header-actions"><Link href="/" className="back-link">← RETOUR AUX OFFRES</Link><AccountNavLink user={user} unreadCount={unreadCount} /></div>
+        <div className="header-actions"><Link href="/" className="back-link">← Retour aux offres</Link><AccountNavLink user={user} unreadCount={unreadCount} /></div>
       </header>
       <section className={`subpage-intro ${logoImage || logoIcon ? "subpage-intro--banner" : ""}`}>
         {logoImage && <span className="browse-logo subpage-logo" aria-hidden="true"><Image src={logoImage} alt="" width={84} height={84} unoptimized /></span>}
         {logoIcon && <span className="browse-logo browse-logo--icon subpage-logo" aria-hidden="true">{logoIcon}</span>}
-        <span className="section-index">{eyebrow}</span>
         <h1><em>{title}</em></h1>
         <p>{description}</p>
         <div className="subpage-stats">
@@ -88,11 +86,10 @@ export function CatalogPage({ eyebrow, title, description, offers, emptyTitle, e
             <span>∅</span>
             <h3>{emptyTitle}</h3>
             <p>{emptyDescription}</p>
-            <Link href="/" className="empty-link">VOIR TOUTES LES OFFRES <ArrowIcon /></Link>
+            <Link href="/" className="empty-link">Voir toutes les offres <ArrowIcon /></Link>
           </div>}
       {intro && <section className="seo-intro"><p>{intro}</p></section>}
       {faq && faq.length > 0 && <section className="faq-section">
-        <span className="section-index">FAQ</span>
         <h2>Questions <em>fréquentes</em></h2>
         <div className="faq-list">
           {faq.map((entry) => <details key={entry.question} className="faq-item">

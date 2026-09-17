@@ -30,7 +30,6 @@ export default async function CategoriesIndexPage() {
   }));
 
   return <BrowseIndex
-    eyebrow="EXPLORER"
     title="Catégories"
     description="Tous les types de contenu gratuit couverts par DROPS, catégorie par catégorie."
     entries={entries}

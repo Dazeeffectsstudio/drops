@@ -6,8 +6,8 @@ export const metadata: Metadata = { title: "Politique de confidentialité", desc
 
 export default function PrivacyPage() {
   return <main className="subpage site-shell legal-page">
-    <header className="subpage-header"><Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link><Link href="/" className="back-link">← RETOUR AU SITE</Link></header>
-    <section className="subpage-intro"><span className="section-index">LÉGAL</span><h1>Politique de <em>confidentialité</em></h1><p>Dernière mise à jour : {new Date().toLocaleDateString("fr-BE", { year: "numeric", month: "long" })}.</p></section>
+    <header className="subpage-header"><Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link><Link href="/" className="back-link">← Retour au site</Link></header>
+    <section className="subpage-intro"><h1>Politique de <em>confidentialité</em></h1><p>Dernière mise à jour : {new Date().toLocaleDateString("fr-BE", { year: "numeric", month: "long" })}.</p></section>
     <div className="legal-content">
       <h2>1. Qui sommes-nous ?</h2>
       <p>{siteConfig.name} ({siteConfig.tagline}) est un service qui recense des offres de jeux et contenus gratuits publiées par des plateformes tierces (Epic Games, Steam, PlayStation, Xbox, Twitch, Roblox, Prime Gaming). Nous sommes basés en {siteConfig.country} et cette politique est conçue pour respecter le Règlement Général sur la Protection des Données (RGPD).</p>

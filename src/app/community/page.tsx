@@ -25,10 +25,9 @@ export default async function CommunityPage() {
   return <main className="subpage site-shell">
     <header className="subpage-header">
       <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
-      <Link href="/" className="back-link">← RETOUR AU SITE</Link>
+      <Link href="/" className="back-link">← Retour au site</Link>
     </header>
     <section className="subpage-intro">
-      <span className="section-index">COMMUNAUTÉ</span>
       <h1>Classement <em>communautaire</em></h1>
       <p>100% anonymisé — jamais d&apos;email ni de pseudo réel affiché ici.</p>
     </section>

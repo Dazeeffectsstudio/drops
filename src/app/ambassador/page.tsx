@@ -25,10 +25,9 @@ export default async function AmbassadorPage() {
   return <main className="subpage site-shell">
     <header className="subpage-header">
       <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
-      <Link href="/account" className="back-link">← MON COMPTE</Link>
+      <Link href="/account" className="back-link">← Mon compte</Link>
     </header>
     <section className="subpage-intro">
-      <span className="section-index">PROGRAMME AMBASSADEURS</span>
       <h1>Deviens <em>ambassadeur</em> DROPS</h1>
       <p>Partage ton lien, débloque des récompenses à chaque palier d&apos;amis invités.</p>
     </section>

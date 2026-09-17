@@ -20,7 +20,6 @@ export default async function PlatformsIndexPage() {
   }));
 
   return <BrowseIndex
-    eyebrow="EXPLORER"
     title="Plateformes"
     description="Toutes les sources d'offres gratuites couvertes par DROPS, plateforme par plateforme."
     entries={entries}

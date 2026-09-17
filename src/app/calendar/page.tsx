@@ -26,12 +26,11 @@ export default async function CalendarPage() {
     <header className="subpage-header">
       <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
       <div className="header-actions">
-        <Link href="/" className="back-link">← RETOUR AU SITE</Link>
+        <Link href="/" className="back-link">← Retour au site</Link>
         <AccountNavLink user={user} unreadCount={unreadCount} />
       </div>
     </header>
     <section className="subpage-intro">
-      <span className="section-index">CALENDRIER</span>
       <h1>Le <em>calendrier</em> des offres</h1>
       <p>Visualise les débuts et fins d&apos;offres, filtre par plateforme ou catégorie, et repère celles que tu suis.</p>
     </section>

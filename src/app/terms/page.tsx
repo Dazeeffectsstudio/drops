@@ -6,8 +6,8 @@ export const metadata: Metadata = { title: "Conditions d'utilisation", descripti
 
 export default function TermsPage() {
   return <main className="subpage site-shell legal-page">
-    <header className="subpage-header"><Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link><Link href="/" className="back-link">← RETOUR AU SITE</Link></header>
-    <section className="subpage-intro"><span className="section-index">LÉGAL</span><h1>Conditions <em>d&apos;utilisation</em></h1><p>Dernière mise à jour : {new Date().toLocaleDateString("fr-BE", { year: "numeric", month: "long" })}.</p></section>
+    <header className="subpage-header"><Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link><Link href="/" className="back-link">← Retour au site</Link></header>
+    <section className="subpage-intro"><h1>Conditions <em>d&apos;utilisation</em></h1><p>Dernière mise à jour : {new Date().toLocaleDateString("fr-BE", { year: "numeric", month: "long" })}.</p></section>
     <div className="legal-content">
       <h2>1. Objet du service</h2>
       <p>{siteConfig.name} est un annuaire qui recense des offres de jeux et contenus gratuits publiées par des plateformes tierces. {siteConfig.name} ne vend, n&apos;héberge et ne distribue aucun jeu : chaque offre redirige vers le site officiel de la plateforme concernée pour la récupérer.</p>

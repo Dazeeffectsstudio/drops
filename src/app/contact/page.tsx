@@ -6,8 +6,8 @@ export const metadata: Metadata = { title: "Contact", description: `Contacter l'
 
 export default function ContactPage() {
   return <main className="subpage site-shell legal-page">
-    <header className="subpage-header"><Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link><Link href="/" className="back-link">← RETOUR AU SITE</Link></header>
-    <section className="subpage-intro"><span className="section-index">CONTACT</span><h1>Une <em>question</em> ?</h1><p>Signalement d&apos;offre expirée, question sur ton compte, partenariat — écris-nous.</p></section>
+    <header className="subpage-header"><Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link><Link href="/" className="back-link">← Retour au site</Link></header>
+    <section className="subpage-intro"><h1>Une <em>question</em> ?</h1><p>Signalement d&apos;offre expirée, question sur ton compte, partenariat — écris-nous.</p></section>
     <div className="legal-content">
       <h2>Nous contacter</h2>
       <p>Pour toute question générale, demande liée à ton compte ou à tes données personnelles, écris-nous à :</p>

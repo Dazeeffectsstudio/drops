@@ -18,10 +18,9 @@ export default async function AccountNotificationsPage() {
   return <main className="subpage site-shell">
     <header className="subpage-header">
       <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
-      <Link href="/account" className="back-link">← MON COMPTE</Link>
+      <Link href="/account" className="back-link">← Mon compte</Link>
     </header>
     <section className="subpage-intro">
-      <span className="section-index">MON COMPTE</span>
       <h1>Réglages des <em>notifications</em></h1>
       <p>Choisis ce que tu veux recevoir, et comment.</p>
     </section>

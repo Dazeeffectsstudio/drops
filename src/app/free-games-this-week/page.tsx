@@ -56,10 +56,9 @@ export default async function FreeGamesThisWeekPage() {
     <main className="subpage site-shell">
       <header className="subpage-header">
         <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
-        <div className="header-actions"><Link href="/" className="back-link">← RETOUR AU SITE</Link><AccountNavLink user={user} unreadCount={unreadCount} /></div>
+        <div className="header-actions"><Link href="/" className="back-link">← Retour au site</Link><AccountNavLink user={user} unreadCount={unreadCount} /></div>
       </header>
       <section className="subpage-intro">
-        <span className="section-index">ÉDITION DE LA SEMAINE</span>
         <h1>Jeux gratuits <em>cette semaine</em></h1>
         <p>{active.length} offre{active.length > 1 ? "s" : ""} actives, mises à jour automatiquement.</p>
         <ShareMenu url={url} title="Jeux gratuits cette semaine sur DROPS" text="Tous les jeux gratuits de la semaine, en un seul endroit 🎮" />
@@ -81,7 +80,6 @@ export default async function FreeGamesThisWeekPage() {
       </section>
 
       <section className="faq-section">
-        <span className="section-index">FAQ</span>
         <h2>Questions <em>fréquentes</em></h2>
         <div className="faq-list">
           {faq.map((entry) => <details key={entry.question} className="faq-item"><summary>{entry.question}</summary><p>{entry.answer}</p></details>)}

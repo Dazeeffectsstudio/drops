@@ -10,10 +10,9 @@ export default async function RegisterPage() {
   return <main className="subpage site-shell auth-page">
     <header className="subpage-header">
       <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
-      <Link href="/" className="back-link">← RETOUR AU SITE</Link>
+      <Link href="/" className="back-link">← Retour au site</Link>
     </header>
     <section className="auth-panel">
-      <span className="section-index">CRÉER UN COMPTE</span>
       <h1>Rejoins <em>DROPS</em></h1>
       {!isSupabaseConfigured
         ? <p className="admin-notice">Supabase n&apos;est pas encore configuré — les comptes ne sont pas disponibles pour l&apos;instant.</p>

@@ -4,14 +4,13 @@ import type { ReactNode } from "react";
 
 type Entry = { href: string; label: string; description: string; count: number; logoImage?: string; icon?: ReactNode };
 
-export function BrowseIndex({ eyebrow, title, description, entries }: { eyebrow: string; title: string; description: string; entries: Entry[] }) {
+export function BrowseIndex({ title, description, entries }: { title: string; description: string; entries: Entry[] }) {
   return <main className="subpage site-shell">
     <header className="subpage-header">
       <Link href="/" className="brand">DROPS<span className="brand-period">.</span></Link>
-      <Link href="/" className="back-link">← RETOUR AUX OFFRES</Link>
+      <Link href="/" className="back-link">← Retour aux offres</Link>
     </header>
     <section className="subpage-intro">
-      <span className="section-index">{eyebrow}</span>
       <h1><em>{title}</em></h1>
       <p>{description}</p>
     </section>
