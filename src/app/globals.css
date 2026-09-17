@@ -48,7 +48,9 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 .brand-hero-content { position:relative; z-index:2; width:100%; max-width:760px; padding:0 clamp(20px,4.4vw,72px) 48px; }
 .brand-hero-kicker { display:flex; align-items:center; gap:9px; margin-bottom:20px; font-size:11px; font-weight:800; letter-spacing:.16em; color:var(--lime); text-transform:uppercase; opacity:0; animation:brandUp .7s ease forwards; animation-delay:.3s; }
 .brand-hero-dot { width:6px; height:6px; border-radius:50%; background:var(--lime); animation:brandPulse 2.4s ease-in-out infinite; animation-delay:1s; }
-.brand-hero-title { margin:0 0 18px; line-height:.98; letter-spacing:-.04em; font-weight:900; font-size:clamp(38px,5.6vw,72px); }
+.brand-hero-title { margin:0 0 18px; line-height:.98; letter-spacing:-.04em; }
+.brand-hero-title-strong { display:block; font-weight:900; font-size:clamp(38px,5.6vw,72px); }
+.brand-hero-title-light { display:block; font-weight:400; color:#c3c9bc; font-size:clamp(28px,4vw,52px); margin-top:2px; }
 .brand-hero-word { display:inline-block; opacity:0; animation:brandUp .7s ease forwards; margin-right:.2em; }
 .brand-hero-description { font-size:16px; color:#c3c9bc; max-width:440px; margin:0 0 32px; line-height:1.5; opacity:0; animation:brandUp .7s ease forwards; animation-delay:.7s; }
 .brand-hero-bottom { display:flex; align-items:center; gap:18px; flex-wrap:wrap; opacity:0; animation:brandUp .7s ease forwards; animation-delay:.8s; }

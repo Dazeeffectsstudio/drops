@@ -25,7 +25,12 @@ export function BrandHero({ totalValueLabel, offerCount, onCtaClick, featuredOff
       </div>
 
       <h1 className="brand-hero-title">
-        {"Don't pay. Just play.".split(" ").map((word, i) => <span key={i} className="brand-hero-word" style={{ animationDelay: `${.5 + i * .06}s` }}>{word}</span>)}
+        <span className="brand-hero-title-strong">
+          {"Don't pay.".split(" ").map((word, i) => <span key={i} className="brand-hero-word" style={{ animationDelay: `${.5 + i * .06}s` }}>{word}</span>)}
+        </span>
+        <span className="brand-hero-title-light">
+          {"Just play.".split(" ").map((word, i) => <span key={i} className="brand-hero-word" style={{ animationDelay: `${.62 + i * .06}s` }}>{word}</span>)}
+        </span>
       </h1>
 
       <p className="brand-hero-description">Epic Games, Steam et cinq autres plateformes, réunies chaque jour au même endroit.</p>

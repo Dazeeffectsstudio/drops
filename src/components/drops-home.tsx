@@ -41,9 +41,9 @@ function matchesQuickFilter(offer: Offer, filter: QuickFilter, now: number): boo
   return true;
 }
 
-type Props = { offers: Offer[]; user: AuthUser | null; initialFavorites: string[]; subscribedOfferIds: string[]; unreadCount?: number; lastEpicSyncAt?: string | null };
+type Props = { offers: Offer[]; user: AuthUser | null; initialFavorites: string[]; subscribedOfferIds: string[]; unreadCount?: number };
 
-export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, unreadCount = 0, lastEpicSyncAt = null }: Props) {
+export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, unreadCount = 0 }: Props) {
   const [store, setStore] = useState<OfferStore | "TOUT">("TOUT");
   const [category, setCategory] = useState<OfferCategory | "TOUT">("TOUT");
   const [dropsAndItems, setDropsAndItems] = useState(false);
@@ -91,20 +91,6 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
   const heroOffers = (featuredOffers.length > 0 ? featuredOffers : trendingOffers.length > 0 ? trendingOffers : availableOffers).slice(0, 4);
   const upcomingOffers = useMemo(() => offers.filter((offer) => isOfferUpcoming(offer, now ?? Date.now())), [offers, now]);
   const total = totalFreeValue(availableOffers);
-  const games = availableOffers.filter((offer) => offer.category === "JEUX").length;
-  const mostActivePlatform = useMemo(() => {
-    const counts = new Map<string, number>();
-    for (const offer of availableOffers) counts.set(offer.store, (counts.get(offer.store) ?? 0) + 1);
-    let top: string | null = null;
-    let topCount = 0;
-    for (const [store, count] of counts) if (count > topCount) { top = store; topCount = count; }
-    return top;
-  }, [availableOffers]);
-  // `now !== null` signale que le premier rendu client (après montage) a eu
-  // lieu — avant ça, on affiche "—" des deux côtés (serveur et client) pour
-  // éviter un hydration mismatch : Intl.DateTimeFormat sans `timeZone` utilise
-  // le fuseau du serveur (UTC sur Vercel), différent du fuseau du visiteur.
-  const lastEpicSyncLabel = now !== null && lastEpicSyncAt ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(lastEpicSyncAt)) : "—";
   function navigateToOffers(nextCategory: OfferCategory | "TOUT" = "TOUT") {
     setStore("TOUT"); setCategory(nextCategory); setDropsAndItems(false); setQuickFilter("TOUT");
     document.getElementById("offres")?.scrollIntoView({ behavior: "smooth" });
@@ -139,15 +125,6 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
         </div>
       </header>
       <PlatformQuickNav active={store} onSelect={filterByPlatform} />
-      <section className="live-stats" aria-label="Disponible aujourd'hui">
-        <span className="live-stats-label"><span className="live-dot" /> DISPONIBLE AUJOURD&apos;HUI</span>
-        <div className="live-stats-grid">
-          <div><strong>{games}</strong><span>jeux gratuits</span></div>
-          <div><strong>{formatPrice(total)}</strong><span>économisés aujourd&apos;hui</span></div>
-          <div><strong>{mostActivePlatform ?? "—"}</strong><span>plateforme la plus active</span></div>
-          <div><strong>{lastEpicSyncLabel}</strong><span>dernière synchro Epic Games</span></div>
-        </div>
-      </section>
       <main>
         <BrandHero totalValueLabel={formatPrice(total)} offerCount={availableOffers.length} onCtaClick={() => navigateToOffers()} featuredOffer={heroOffers[0]} />
         <Reveal><section id="tendance" className="trending-section" aria-labelledby="trending-title">
