@@ -9,6 +9,7 @@ import { homeFaq } from "@/lib/seo-content";
 import { isOfferActive, isOfferUpcoming, offerExpiresAt, totalFreeValue } from "@/lib/offers";
 import type { AuthUser } from "@/lib/auth";
 import type { Offer, OfferCategory, OfferStore } from "@/types/offer";
+import { AccessibilityControls } from "./accessibility-controls";
 import { AccountNavLink } from "./account-nav-link";
 import { BrandHero } from "./brand-hero";
 import { ArrowIcon, SearchIcon } from "./icons";
@@ -183,7 +184,10 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
           </div>
         </section></Reveal>
       </main>
-      <footer className="site-footer"><span className="footer-brand">DROPS<span>.</span></span><span>DON&apos;T PAY. JUST PLAY.</span><nav className="footer-links" aria-label="Liens du site"><Link href="/free-games-this-week">Jeux de la semaine</Link><Link href="/community">Communauté</Link><Link href="/feedback">Feedback</Link><Link href="/privacy">Confidentialité</Link><Link href="/terms">Conditions</Link><Link href="/contact">Contact</Link></nav></footer>
+      <footer className="site-footer">
+        <div className="footer-row"><span className="footer-brand">DROPS<span>.</span></span><span>DON&apos;T PAY. JUST PLAY.</span><nav className="footer-links" aria-label="Liens du site"><Link href="/free-games-this-week">Jeux de la semaine</Link><Link href="/community">Communauté</Link><Link href="/feedback">Feedback</Link><Link href="/privacy">Confidentialité</Link><Link href="/terms">Conditions</Link><Link href="/contact">Contact</Link></nav></div>
+        <AccessibilityControls />
+      </footer>
     </div>
     {notice && <div className="notice" role="status"><p>{notice}</p><button type="button" onClick={() => setNotice(null)} aria-label="Fermer le message">×</button></div>}
   </>;

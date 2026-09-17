@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Archivo, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { Suspense } from "react";
 import { siteConfig } from "@/lib/site-config";
+import { AccessibilityInit } from "@/components/accessibility-init";
 import { AnalyticsScripts } from "@/components/analytics-scripts";
 import { BetaBanner } from "@/components/beta-banner";
 import { MobileNav } from "@/components/mobile-nav";
@@ -68,6 +69,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="fr" className={`${archivo.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}><body>
+    <AccessibilityInit />
     <BetaBanner />
     <OfflineBanner />
     {children}
