@@ -113,7 +113,6 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 .offer-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:20px; }
 .offer-card { position:relative; background:#151813; border:1px solid #2a2f27; border-radius:20px; padding:7px; overflow:hidden; min-width:0; transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .3s ease,box-shadow .5s cubic-bezier(.16,1,.3,1); }
 .offer-card:hover { transform:translateY(-4px); border-color:#3d5750; box-shadow:0 26px 50px #000a,0 0 0 1px #5ec4b422; }
-.offer-card--featured { padding:0; }
 .offer-art { aspect-ratio:16/10; border-radius:14px; position:relative; overflow:hidden; background:#1f2624; transition:transform .2s ease-out; transform-style:preserve-3d; will-change:transform; }.offer-art::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg,#10120f22 0%,#10120f00 24%,#10120f00 55%,#10120f8c 100%); pointer-events:none; }.offer-art-link { position:absolute; inset:0; display:block; }
 .offer-art-image { object-fit:cover; transition:transform .6s; filter:var(--art-filter); }.offer-card:hover .offer-art-image { transform:scale(1.035); }
 .offer-tags { position:absolute; top:12px; left:12px; z-index:1; display:flex; align-items:center; gap:6px; }
@@ -126,26 +125,20 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 @keyframes heart-pop { 0% { transform:scale(1); } 45% { transform:scale(1.3); } 100% { transform:scale(1); } }
 .offer-body { padding:14px 11px 10px; }
 /* La première offre de la grille "GRATUIT MAINTENANT" sort du gabarit
-   standard : pleine largeur sur 2 colonnes, image cinématique, titre posé
-   directement sur l'image (comme la bannière vedette) plutôt qu'une simple
-   version agrandie de la carte normale — pour casser la répétition d'une
-   grille uniforme sans retomber sur un bento générique. */
-.offer-card--featured { grid-column:span 2; background:transparent; border:0; position:relative; }
-.offer-card--featured .offer-art { aspect-ratio:21/9; border-radius:18px; }
-.offer-card--featured .offer-art::after { background:linear-gradient(180deg,#10120f00 0%,#10120f00 30%,#10120fb3 60%,#10120fed 100%); }
-.offer-card--featured .offer-body { position:absolute; inset:auto 0 0 0; z-index:1; background:transparent; padding:28px 32px; }
-.offer-card--featured .offer-meta { color:var(--text); }
-.offer-card--featured h3 { font-size:clamp(26px,3vw,40px); letter-spacing:-.02em; margin:8px 0; text-shadow:0 4px 20px rgba(0,0,0,.6); }
+   standard : pleine largeur sur 2 colonnes, image plus cinématique, titre
+   agrandi — mais le texte reste toujours sous l'image, jamais superposé,
+   comme les vraies vitrines de jeu (Epic Games Store) plutôt qu'un
+   habillage dont la lisibilité dépend de chaque jaquette mise en avant. */
+.offer-card--featured { grid-column:span 2; }
+.offer-card--featured .offer-art { aspect-ratio:21/9; border-radius:14px; }
+.offer-card--featured .offer-body { padding:20px 14px 12px; }
+.offer-card--featured h3 { font-size:clamp(24px,2.6vw,34px); letter-spacing:-.02em; margin:8px 0; white-space:normal; overflow:visible; text-overflow:clip; }
 .offer-card--featured .offer-kind,.offer-card--featured .offer-divider { display:none; }
-.offer-card--featured .offer-values { margin-bottom:16px; text-shadow:0 2px 12px rgba(0,0,0,.6); }
-.offer-card--featured .countdown { text-shadow:0 2px 12px rgba(0,0,0,.6); }
-.offer-card--featured .expiry-progress { display:none; }
 @media(max-width:720px) { .offer-card--featured { grid-column:span 1; } .offer-card--featured .offer-art { aspect-ratio:4/3; } .offer-card--featured h3 { font-size:22px; } }
 .offer-meta { display:flex; align-items:center; gap:8px; color:var(--lime); font-size:10px; font-weight:900; letter-spacing:.13em; }.offer-card--violet .offer-meta { color:#cab6ff; }.offer-card--blue .offer-meta { color:#6fa8dc; }.offer-card--amber .offer-meta { color:#f0c674; }.offer-card--green .offer-meta { color:#7bc97e; }.offer-card--navy .offer-meta { color:#5b7fc7; }.offer-card--red .offer-meta { color:#e2726a; }.offer-card--skyblue .offer-meta { color:#8ecae6; }
 .meta-dot { width:3px; height:3px; background:currentColor; border-radius:50%; }
 .offer-body h3 { font-size:18px; letter-spacing:-.04em; margin:8px 0 3px; line-height:1.15; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }.offer-kind { margin:0; color:#a1a89d; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .offer-body h3 a { color:inherit; text-decoration:none; transition:color .2s; }.offer-body h3 a:hover { color:var(--lime); }
-.offer-card--featured h3 { font-size:clamp(26px,3vw,40px); white-space:normal; overflow:visible; text-overflow:clip; }
 .platform-badge { display:inline-flex; align-items:center; gap:7px; color:#dde5d4; border:1px solid #4a5345; border-radius:999px; padding:4px 10px 4px 4px; font-size:10px; font-weight:850; letter-spacing:.04em; white-space:nowrap; background:#242a21; }.platform-mark { width:20px; height:20px; flex:none; display:grid; place-items:center; border-radius:50%; background:#f5f5ed; padding:3px; }.platform-badge--compact { padding:3px 7px 3px 3px; font-size:9px; }.platform-badge--compact .platform-mark { width:17px; height:17px; padding:2.5px; }.platform-mark-icon { width:100%; height:100%; object-fit:contain; }
 .offer-divider { height:1px; background:#343a32; margin:14px 0 12px; }
 .offer-values { display:flex; justify-content:space-between; gap:15px; }.micro-label { display:block; color:#7f887b; font-size:9px; font-weight:900; letter-spacing:.12em; margin-bottom:6px; }
