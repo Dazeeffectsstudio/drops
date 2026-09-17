@@ -132,11 +132,13 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
    grille uniforme sans retomber sur un bento générique. */
 .offer-card--featured { grid-column:span 2; background:transparent; border:0; position:relative; }
 .offer-card--featured .offer-art { aspect-ratio:21/9; border-radius:18px; }
+.offer-card--featured .offer-art::after { background:linear-gradient(180deg,#10120f00 0%,#10120f00 30%,#10120fb3 60%,#10120fed 100%); }
 .offer-card--featured .offer-body { position:absolute; inset:auto 0 0 0; z-index:1; background:transparent; padding:28px 32px; }
 .offer-card--featured .offer-meta { color:var(--text); }
-.offer-card--featured h3 { font-size:clamp(26px,3vw,40px); letter-spacing:-.02em; margin:8px 0; }
+.offer-card--featured h3 { font-size:clamp(26px,3vw,40px); letter-spacing:-.02em; margin:8px 0; text-shadow:0 4px 20px rgba(0,0,0,.6); }
 .offer-card--featured .offer-kind,.offer-card--featured .offer-divider { display:none; }
-.offer-card--featured .offer-values { margin-bottom:16px; }
+.offer-card--featured .offer-values { margin-bottom:16px; text-shadow:0 2px 12px rgba(0,0,0,.6); }
+.offer-card--featured .countdown { text-shadow:0 2px 12px rgba(0,0,0,.6); }
 .offer-card--featured .expiry-progress { display:none; }
 @media(max-width:720px) { .offer-card--featured { grid-column:span 1; } .offer-card--featured .offer-art { aspect-ratio:4/3; } .offer-card--featured h3 { font-size:22px; } }
 .offer-meta { display:flex; align-items:center; gap:8px; color:var(--lime); font-size:10px; font-weight:900; letter-spacing:.13em; }.offer-card--violet .offer-meta { color:#cab6ff; }.offer-card--blue .offer-meta { color:#6fa8dc; }.offer-card--amber .offer-meta { color:#f0c674; }.offer-card--green .offer-meta { color:#7bc97e; }.offer-card--navy .offer-meta { color:#5b7fc7; }.offer-card--red .offer-meta { color:#e2726a; }.offer-card--skyblue .offer-meta { color:#8ecae6; }
