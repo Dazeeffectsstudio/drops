@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HeartIcon, SearchIcon } from "./icons";
+import { BellIcon, HeartIcon, HomeIcon, SearchIcon, UserIcon } from "./icons";
 
 // Barre de navigation mobile fixe (Accueil / Recherche / Favoris /
 // Notifications / Compte) — cachée sur desktop (CSS) et sur /admin (déjà
@@ -21,23 +21,23 @@ export function MobileNav() {
 
   return <nav className="mobile-nav" aria-label="Navigation mobile">
     <Link href="/" className={isActive("/") ? "active" : ""}>
-      <span className="mobile-nav-icon" aria-hidden="true">⌂</span>
+      <span className="mobile-nav-icon"><HomeIcon /></span>
       <span>Accueil</span>
     </Link>
     <Link href="/#offer-search" className={isActive("/categories") ? "active" : ""}>
-      <SearchIcon className="mobile-nav-icon" />
+      <span className="mobile-nav-icon"><SearchIcon /></span>
       <span>Recherche</span>
     </Link>
     <Link href="/favoris" className={isActive("/favoris") ? "active" : ""}>
-      <HeartIcon className="mobile-nav-icon" />
+      <span className="mobile-nav-icon"><HeartIcon /></span>
       <span>Favoris</span>
     </Link>
     <Link href="/notifications" className={isActive("/notifications") ? "active" : ""}>
-      <span className="mobile-nav-icon" aria-hidden="true">🔔</span>
+      <span className="mobile-nav-icon"><BellIcon /></span>
       <span>Alertes</span>
     </Link>
     <Link href="/account" className={isActive("/account") || isActive("/login") ? "active" : ""}>
-      <span className="mobile-nav-icon" aria-hidden="true">○</span>
+      <span className="mobile-nav-icon"><UserIcon /></span>
       <span>Compte</span>
     </Link>
   </nav>;
