@@ -145,6 +145,13 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 .price-line { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }.old-price { color:#818a7e; text-decoration:line-through; font-size:12px; }.price-line strong { color:var(--lime); font-size:15px; font-weight:900; }
 .expires { text-align:right; }.expiry-date { font-size:12px; color:#d7dcd2; white-space:nowrap; }
 .offer-actions { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px; }.countdown { display:flex; align-items:center; gap:7px; color:#ccd1c7; }.clock-icon { width:15px; height:15px; color:#8c9882; }.countdown span { display:flex; flex-direction:column; gap:2px; }.countdown small { color:#8d9688; font-size:10px; }.countdown strong { font-size:13px; font-weight:850; font-variant-numeric:tabular-nums; }
+/* Moins de 24h avant expiration : l'urgence (coeur du concept "don't pay,
+   just play") devient une vraie couleur d'alerte plutot qu'un detail
+   technique traite comme les autres — jamais l'accent normal du site. */
+.countdown.is-urgent small { color:#ffb199; }.countdown.is-urgent strong { color:#ff8a72; }
+.clock-icon.is-urgent { color:#ff8a72; animation:urgentPulse 1.6s ease-in-out infinite; }
+@keyframes urgentPulse { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+@media (prefers-reduced-motion:reduce) { .clock-icon.is-urgent { animation:none; } }
 .claim-button { display:flex; align-items:center; justify-content:center; gap:10px; background:var(--text); color:var(--bg); border:1px solid var(--text); border-radius:999px; padding:10px 14px; font-size:11px; font-weight:900; letter-spacing:.06em; transition:background .3s ease,border-color .3s ease,transform .35s cubic-bezier(.16,1,.3,1); white-space:nowrap; }.claim-button:hover { transform:translateY(-2px); background:var(--lime); border-color:var(--lime); }.claim-button:disabled { opacity:.5; cursor:not-allowed; transform:none; }
 .claim-button .arrow-icon { width:15px; height:15px; }
 .expiry-progress { height:3px; overflow:hidden; margin-top:18px; border-radius:999px; background:#30372d; }.expiry-progress span { display:block; height:100%; border-radius:inherit; background:var(--lime); transition:width .4s ease; }.offer-card--violet .expiry-progress span { background:#cdb8ff; }.offer-card--blue .expiry-progress span { background:#6fa8dc; }.offer-card--amber .expiry-progress span { background:#f0c674; }.offer-card--green .expiry-progress span { background:#7bc97e; }.offer-card--navy .expiry-progress span { background:#5b7fc7; }.offer-card--red .expiry-progress span { background:#e2726a; }.offer-card--skyblue .expiry-progress span { background:#8ecae6; }
@@ -180,6 +187,8 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 .detail-countdown-card { border:1px solid #2a2f27; border-radius:16px; background:#151813; padding:18px 20px; display:flex; flex-direction:column; gap:10px; }
 .detail-countdown-value { display:flex; align-items:center; gap:10px; font-size:24px; font-weight:800; letter-spacing:-.02em; color:var(--text); }
 .detail-countdown-value .clock-icon { width:20px; height:20px; color:var(--lime); flex:none; }
+.detail-countdown-card.is-urgent .micro-label,.detail-countdown-card.is-urgent .detail-countdown-value { color:#ff8a72; }
+.detail-countdown-value .clock-icon.is-urgent { color:#ff8a72; }
 .detail-claim { width:100%; justify-content:center; padding:16px; font-size:13px; position:relative; }
 .detail-claim.is-claimed { background:#20241f; color:var(--text); border-color:#40473b; }
 .detail-side-actions { display:flex; align-items:center; gap:10px; }

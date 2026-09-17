@@ -33,6 +33,7 @@ export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim
   const startsAt = offerStartsAt(offer);
   const remaining = expiresAt !== null && now !== null ? expiresAt - now : null;
   const progress = expiryProgress(remaining);
+  const urgent = remaining !== null && remaining > 0 && remaining < 24 * 3_600_000;
   // Formater une date dépend du fuseau horaire d'exécution : sans `now !==
   // null` (signal que le composant a fini son premier rendu côté client),
   // le serveur (UTC sur Vercel) et le navigateur du visiteur (heure locale)
@@ -69,10 +70,10 @@ export function OfferCard({ offer, expiresAt, now, favorite, onFavorite, onClaim
         <div className="expires"><span className="micro-label">{status === "upcoming" ? "DISPONIBLE LE" : "EXPIRE LE"}</span><span className="expiry-date">{status === "upcoming" && startsAt !== null ? (now !== null ? new Intl.DateTimeFormat("fr-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(startsAt) : "Chargement…") : dateLabel}</span></div>
       </div>
       <div className="offer-actions">
-        <div className="countdown"><ClockIcon className="clock-icon" /><span><small>Expire dans</small><strong>{remaining === null ? "—" : formatRemaining(remaining)}</strong></span></div>
+        <div className={`countdown ${urgent ? "is-urgent" : ""}`}><ClockIcon className={`clock-icon ${urgent ? "is-urgent" : ""}`} /><span><small>Expire dans</small><strong>{remaining === null ? "—" : formatRemaining(remaining)}</strong></span></div>
         <button type="button" className="claim-button" onClick={() => { trackEvent("claim_click", { store: offer.store, offerId: offer.id }); onClaim(); }} disabled={status !== "active"}>{claimLabel[status]}</button>
       </div>
-      <div className="expiry-progress" role="progressbar" aria-label="Temps restant avant expiration" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${progress}%` }} /></div>
+      <div className="expiry-progress" role="progressbar" aria-label="Temps restant avant expiration" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${progress}%`, ...(urgent ? { background: "#ff6b5b" } : {}) }} /></div>
     </div>
   </article>;
 }

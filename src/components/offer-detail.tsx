@@ -30,6 +30,7 @@ export function OfferDetail({ offer, user, initialFavorites, unreadCount = 0, re
   const expiration = offerExpiresAt(offer);
   const remaining = expiration !== null && now !== null ? expiration - now : null;
   const progress = expiryProgress(remaining);
+  const urgent = remaining !== null && remaining > 0 && remaining < 24 * 3_600_000;
   const favorite = favorites.includes(offer.id);
 
   function handleClaim() {
@@ -60,10 +61,10 @@ export function OfferDetail({ offer, user, initialFavorites, unreadCount = 0, re
         </div>
       </div>
       <aside className="detail-side">
-        <div className="detail-countdown-card">
+        <div className={`detail-countdown-card ${urgent ? "is-urgent" : ""}`}>
           <span className="micro-label">{remaining !== null && remaining <= 0 ? "OFFRE EXPIRÉE" : "EXPIRE DANS"}</span>
-          <div className="detail-countdown-value"><ClockIcon className="clock-icon" />{remaining === null ? "—" : formatRemaining(remaining)}</div>
-          <div className="expiry-progress" role="progressbar" aria-label="Temps restant avant expiration" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${progress}%` }} /></div>
+          <div className="detail-countdown-value"><ClockIcon className={`clock-icon ${urgent ? "is-urgent" : ""}`} />{remaining === null ? "—" : formatRemaining(remaining)}</div>
+          <div className="expiry-progress" role="progressbar" aria-label="Temps restant avant expiration" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${progress}%`, ...(urgent ? { background: "#ff6b5b" } : {}) }} /></div>
         </div>
         <button type="button" className={`claim-button detail-claim ${claimed ? "is-claimed" : ""}`} onClick={handleClaim} disabled={remaining !== null && remaining <= 0}>
           {claimed ? "Récupéré" : "Récupérer"} <span className="cta-icon"><ArrowIcon className="arrow-icon" /></span>
