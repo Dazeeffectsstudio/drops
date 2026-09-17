@@ -163,9 +163,15 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
             </ul>}
           </div>
           <div className="filters" aria-label="Filtres des offres">
-            <div className="filter-group" role="group" aria-label="Filtre rapide"><span className="filter-label">RAPIDE</span><div className="filter-options">{quickFilters.map((entry) => <button key={entry.key} type="button" className={quickFilter === entry.key ? "selected" : ""} onClick={() => setQuickFilter(entry.key)} aria-pressed={quickFilter === entry.key}>{entry.label}</button>)}</div></div>
-            <div className="filter-group" role="group" aria-label="Plateforme"><span className="filter-label">PLATEFORME</span><div className="filter-options">{stores.map((item) => <button key={item} type="button" className={store === item ? "selected" : ""} onClick={() => setStore(item)} aria-pressed={store === item}>{item}</button>)}</div></div>
-            <div className="filter-group" role="group" aria-label="Catégorie"><span className="filter-label">TYPE</span><div className="filter-options">{categories.map((item) => <button key={item} type="button" className={category === item && !dropsAndItems ? "selected" : ""} onClick={() => { setDropsAndItems(false); setCategory(item); }} aria-pressed={category === item && !dropsAndItems}>{item}</button>)}</div></div>
+            <div className="filter-options filter-options--quick" role="group" aria-label="Filtre rapide">{quickFilters.map((entry) => <button key={entry.key} type="button" className={quickFilter === entry.key ? "selected" : ""} onClick={() => setQuickFilter(entry.key)} aria-pressed={quickFilter === entry.key}>{entry.label}</button>)}</div>
+            <div className="filter-selects">
+              <select className="filter-select" value={store} onChange={(event) => setStore(event.target.value as OfferStore | "TOUT")} aria-label="Filtrer par plateforme">
+                {stores.map((item) => <option key={item} value={item}>{item === "TOUT" ? "Toutes les plateformes" : item}</option>)}
+              </select>
+              <select className="filter-select" value={dropsAndItems ? "" : category} onChange={(event) => { setDropsAndItems(false); setCategory(event.target.value as OfferCategory | "TOUT"); }} aria-label="Filtrer par catégorie">
+                {categories.map((item) => <option key={item} value={item}>{item === "TOUT" ? "Toutes les catégories" : item}</option>)}
+              </select>
+            </div>
           </div>
           <div className="results-line"><span>{query ? `RÉSULTATS POUR « ${query} »` : dropsAndItems ? "DROPS & ITEMS" : "TOUTES LES OFFRES"}</span><span>{visibleOffers.length.toString().padStart(2, "0")} RÉSULTAT{visibleOffers.length > 1 ? "S" : ""}</span></div>
           {visibleOffers.length > 0 ? <div className="offer-grid">{visibleOffers.map((offer, index) => <OfferCard key={offer.id} offer={offer} expiresAt={offerExpiresAt(offer)} now={now} favorite={favorites.includes(offer.id)} onFavorite={() => toggleFavorite(offer.id)} onClaim={() => showClaimNotice(offer)} featured={index === 0} />)}</div> : <div className="empty-state"><span>∅</span><h3>Aucune offre ici pour l&apos;instant.</h3><p>Essaie une autre recherche ou retire les filtres.</p><button type="button" onClick={() => { setStore("TOUT"); setCategory("TOUT"); setDropsAndItems(false); setQuickFilter("TOUT"); setQuery(""); }}>VOIR TOUTES LES OFFRES <ArrowIcon className="arrow-icon" /></button></div>}
