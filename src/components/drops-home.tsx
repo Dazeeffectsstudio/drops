@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { categories as categoryEntries, platforms as platformEntries } from "@/lib/catalog";
 import { useFavorites } from "@/lib/favorites";
 import { homeFaq } from "@/lib/seo-content";
-import { formatPrice, isOfferActive, isOfferUpcoming, offerExpiresAt, totalFreeValue } from "@/lib/offers";
+import { isOfferActive, isOfferUpcoming, offerExpiresAt, totalFreeValue } from "@/lib/offers";
 import type { AuthUser } from "@/lib/auth";
 import type { Offer, OfferCategory, OfferStore } from "@/types/offer";
 import { AccountNavLink } from "./account-nav-link";
@@ -131,7 +131,7 @@ export function DropsHome({ offers, user, initialFavorites, subscribedOfferIds, 
       </header>
       <PlatformQuickNav active={store} onSelect={filterByPlatform} />
       <main>
-        <BrandHero totalValueLabel={formatPrice(total)} offerCount={availableOffers.length} onCtaClick={() => navigateToOffers()} featuredOffer={heroOffers[0]} />
+        <BrandHero totalValue={total} offerCount={availableOffers.length} onCtaClick={() => navigateToOffers()} featuredOffer={heroOffers[0]} />
         <Reveal><section id="tendance" className="trending-section" aria-labelledby="trending-title">
           <div className="section-heading"><div><h2 id="trending-title">🔥 EN <em>TENDANCE</em></h2></div><p>Les offres les plus regardées<br />en ce moment.</p></div>
           <div className="trending-grid">{trendingOffers.map((offer, index) => <Link href={`/offres/${offer.id}`} key={offer.id} className="trending-card reveal"><span className="trending-rank">0{index + 1}</span><Image src={offer.image} alt={offer.imageAlt} fill sizes="(max-width: 700px) 50vw, 25vw" className="trending-card-image" /><span className="trending-card-shade" /><span className="trending-card-content"><span>{offer.store}</span><strong>{offer.title}</strong><small>{offer.category} · GRATUIT</small></span></Link>)}</div>

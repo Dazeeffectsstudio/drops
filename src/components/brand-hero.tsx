@@ -3,17 +3,23 @@
 import Image from "next/image";
 import type { Offer } from "@/types/offer";
 import { formatPrice } from "@/lib/offers";
+import { useCountUp } from "@/lib/use-count-up";
 import { ArrowIcon } from "./icons";
 import { PlatformBadge } from "./platform-badge";
 
-type Props = { totalValueLabel: string; offerCount: number; onCtaClick: () => void; featuredOffer?: Offer };
+type Props = { totalValue: number; offerCount: number; onCtaClick: () => void; featuredOffer?: Offer };
 
 // Hero plein cadre façon store de jeu (Epic Games Store / Xbox / Steam) :
 // la jaquette du jeu en vedette remplit tout le cadre, le texte est posé
 // dessus avec un voile de lisibilité — jamais une petite image flottante
 // avec du vide autour. Une seule ligne d'action, pas deux CTA qui se
 // disputent l'attention.
-export function BrandHero({ totalValueLabel, offerCount, onCtaClick, featuredOffer }: Props) {
+export function BrandHero({ totalValue, offerCount, onCtaClick, featuredOffer }: Props) {
+  const animatedCount = useCountUp(offerCount);
+  // Anime en centimes (entiers) puis reconvertit, sinon l'arrondi de
+  // l'animation coupe les centimes du prix affiché (98,40 € -> 98,00 €).
+  const animatedValueCents = useCountUp(Math.round(totalValue * 100));
+
   return <div className="brand-hero">
     {featuredOffer && <Image src={featuredOffer.image} alt="" fill priority sizes="100vw" className="brand-hero-bg" />}
     <div className="brand-hero-scrim" />
@@ -21,7 +27,7 @@ export function BrandHero({ totalValueLabel, offerCount, onCtaClick, featuredOff
     <div className="brand-hero-content">
       <div className="brand-hero-kicker">
         <span className="brand-hero-dot" />
-        <span>{offerCount} offres gratuites en ce moment, pour {totalValueLabel}</span>
+        <span>{animatedCount} offres gratuites en ce moment, pour {formatPrice(animatedValueCents / 100)}</span>
       </div>
 
       <h1 className="brand-hero-title">
