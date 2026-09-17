@@ -44,7 +44,13 @@ button:focus-visible, a:focus-visible { outline:2px solid var(--lime); outline-o
 @keyframes brandPulse { 0%,100% { opacity:.45; } 50% { opacity:1; } }
 
 .brand-hero { position:relative; min-height:min(84vh,780px); display:flex; align-items:flex-end; overflow:hidden; border-bottom:1px solid var(--line); background:#08090a; }
-.brand-hero-bg { object-fit:cover; filter:var(--art-filter) brightness(.8); animation:heroZoom 22s ease-out forwards; transform-origin:center; }
+.brand-hero-bg { object-fit:cover; filter:saturate(.5) contrast(1.08) brightness(.72); animation:heroZoom 22s ease-out forwards; transform-origin:center; }
+/* Etalonnage colorimetrique : quelle que soit la jaquette mise en avant
+   (couleurs et style varient enormement d'un jeu a l'autre), ce voile
+   teinte tout dans la meme famille de couleur que le reste du site — sans
+   ca, une jaquette vive (rose, jaune...) domine visuellement le hero et
+   fait plus de bruit que la marque elle-meme. */
+.brand-hero-grade { position:absolute; inset:0; background:#0d3a34; mix-blend-mode:color; opacity:.55; }
 .brand-hero-scrim { position:absolute; inset:0; background:linear-gradient(0deg,#06070a 0%,#06070ae6 40%,#06070ab8 65%,#06070a70 85%,#06070a30 100%),linear-gradient(90deg,#06070ad9 0%,#06070a80 40%,transparent 68%); }
 .brand-hero-content { position:relative; z-index:2; width:100%; max-width:760px; padding:0 clamp(20px,4.4vw,72px) 60px; }
 .brand-hero-kicker { display:flex; align-items:center; gap:9px; margin-bottom:24px; font-size:11px; font-weight:800; letter-spacing:.16em; color:var(--lime); text-transform:uppercase; opacity:0; animation:brandUp .9s cubic-bezier(.16,1,.3,1) forwards; animation-delay:.3s; text-shadow:0 2px 14px rgba(0,0,0,.6); }

@@ -22,6 +22,7 @@ export function BrandHero({ totalValue, offerCount, onCtaClick, featuredOffer }:
 
   return <div className="brand-hero">
     {featuredOffer && <Image src={featuredOffer.image} alt="" fill priority sizes="100vw" className="brand-hero-bg" />}
+    <div className="brand-hero-grade" />
     <div className="brand-hero-scrim" />
 
     <div className="brand-hero-content">
