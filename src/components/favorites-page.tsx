@@ -9,6 +9,7 @@ import { getOfferStatus, offerExpiresAt } from "@/lib/offers";
 import { AccountNavLink } from "./account-nav-link";
 import { ArrowIcon } from "./icons";
 import { OfferCard } from "./offer-card";
+import { Reveal } from "./reveal";
 
 type Tab = "active" | "upcoming" | "expired";
 const tabs: Array<{ key: Tab; label: string }> = [
@@ -39,6 +40,6 @@ export function FavoritesPage({ offers, user, initialFavorites, unreadCount = 0 
     {allItems.length > 0 && <div className="admin-sync-filters" role="tablist" aria-label="Filtrer mes favoris">
       {tabs.map((entry) => <button key={entry.key} type="button" role="tab" aria-selected={tab === entry.key} className={tab === entry.key ? "selected" : ""} onClick={() => setTab(entry.key)}>{entry.label}{counts && ` (${counts[entry.key]})`}</button>)}
     </div>}
-    {!ready ? <div className="empty-state">Chargement des favoris…</div> : allItems.length === 0 ? <div className="empty-state"><span>♡</span><h3>Ta collection est vide.</h3><p>Ajoute des offres depuis l’accueil pour les garder sous la main.</p><Link href="/" className="empty-link">Découvrir les offres <ArrowIcon /></Link></div> : items.length > 0 ? <div className="offer-grid">{items.map((offer) => <OfferCard key={offer.id} offer={offer} expiresAt={offerExpiresAt(offer)} now={now} favorite onFavorite={() => toggleFavorite(offer.id)} onClaim={() => undefined} />)}</div> : <div className="empty-state"><span>∅</span><h3>Rien ici pour l&apos;instant.</h3><p>Aucun favori dans cette catégorie.</p></div>}
+    {!ready ? <div className="empty-state">Chargement des favoris…</div> : allItems.length === 0 ? <div className="empty-state"><span>♡</span><h3>Ta collection est vide.</h3><p>Ajoute des offres depuis l’accueil pour les garder sous la main.</p><Link href="/" className="empty-link">Découvrir les offres <ArrowIcon /></Link></div> : items.length > 0 ? <Reveal><div className="offer-grid">{items.map((offer) => <OfferCard key={offer.id} offer={offer} expiresAt={offerExpiresAt(offer)} now={now} favorite onFavorite={() => toggleFavorite(offer.id)} onClaim={() => undefined} />)}</div></Reveal> : <div className="empty-state"><span>∅</span><h3>Rien ici pour l&apos;instant.</h3><p>Aucun favori dans cette catégorie.</p></div>}
   </main>;
 }

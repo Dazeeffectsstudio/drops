@@ -16,6 +16,7 @@ import { ArrowIcon, ClockIcon, HeartIcon } from "./icons";
 import { OfferPriceHistory } from "./offer-price-history";
 import { PlatformBadge } from "./platform-badge";
 import { RelatedOfferCard } from "./related-offer-card";
+import { Reveal } from "./reveal";
 import { ShareMenu } from "./share-menu";
 
 type Props = { offer: Offer; user: AuthUser | null; initialFavorites: string[]; unreadCount?: number; relatedOffers?: Offer[]; priceHistory?: PriceHistoryEntry[] };
@@ -79,9 +80,9 @@ export function OfferDetail({ offer, user, initialFavorites, unreadCount = 0, re
 
     <OfferPriceHistory offer={offer} history={priceHistory} />
 
-    {relatedOffers.length > 0 && <section className="related-offers">
+    {relatedOffers.length > 0 && <Reveal><section className="related-offers">
       <div className="section-heading"><div><h2>Tu aimeras <em>aussi</em></h2></div></div>
       <div className="related-offers-grid">{relatedOffers.map((related) => <RelatedOfferCard key={related.id} offer={related} />)}</div>
-    </section>}
+    </section></Reveal>}
   </main>;
 }

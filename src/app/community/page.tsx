@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getCommunityStats, type LeaderboardEntry } from "@/lib/community-stats-repository";
 import { formatPrice } from "@/lib/offers";
+import { Reveal } from "@/components/reveal";
 
 export const metadata: Metadata = { title: "Classement communautaire", description: "Les classements anonymisés de la communauté DROPS : économies, streaks, favoris et plateformes les plus populaires." };
 export const dynamic = "force-dynamic";
@@ -32,11 +33,11 @@ export default async function CommunityPage() {
       <p>100% anonymisé — jamais d&apos;email ni de pseudo réel affiché ici.</p>
     </section>
 
-    <div className="leaderboard-grid">
+    <Reveal><div className="leaderboard-grid">
       <Leaderboard title="💰 Le plus économisé" entries={stats.topSavers} formatValue={formatPrice} />
       <Leaderboard title="🔥 Plus gros streaks" entries={stats.topStreaks} formatValue={(v) => `${v} jours`} />
       <Leaderboard title="⭐ Plus de favoris" entries={stats.topCollectors} formatValue={(v) => `${v}`} />
       <Leaderboard title="🎮 Plateformes populaires" entries={stats.popularPlatforms} formatValue={(v) => `${v} favoris`} />
-    </div>
+    </div></Reveal>
   </main>;
 }
